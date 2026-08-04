@@ -1,7 +1,6 @@
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 
 plugins {
-    java
     id("org.springframework.boot") version "3.5.0" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
 }

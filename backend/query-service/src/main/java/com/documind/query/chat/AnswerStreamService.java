@@ -54,7 +54,8 @@ public class AnswerStreamService {
             return respondWithoutGrounding(session);
         }
 
-        List<Citation> citations = chunks.stream().map(RetrievedChunk::toCitation).toList();
+        List<Citation> citations =
+                chunks.stream().map(chunk -> chunk.toCitation()).toList();
         List<Message> prompt = promptFactory.create(
                 question,
                 chunks,
