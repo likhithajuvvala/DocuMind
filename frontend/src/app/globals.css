@@ -49,6 +49,24 @@ body {
   color: var(--accent);
 }
 
+.session-email {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.link-button {
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font: inherit;
+}
+
+.link-button:hover {
+  color: var(--accent);
+}
+
 .app-main {
   max-width: 68rem;
   margin: 0 auto;
