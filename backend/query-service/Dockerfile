@@ -5,6 +5,7 @@ RUN ./gradlew --no-daemon :query-service:bootJar
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
+RUN apk upgrade --no-cache
 RUN addgroup -S documind && adduser -S documind -G documind
 COPY --from=build /workspace/query-service/build/libs/*.jar app.jar
 USER documind
