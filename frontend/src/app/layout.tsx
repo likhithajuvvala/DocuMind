@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { SessionNav } from "@/components/SessionNav";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <Link href="/documents">Documents</Link>
             <Link href="/chat">Chat</Link>
             <Link href="/admin">Admin</Link>
-            <Link href="/login">Sign in</Link>
+            <SessionNav />
           </nav>
         </header>
         <main className="app-main">{children}</main>
