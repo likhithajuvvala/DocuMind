@@ -49,6 +49,12 @@ public class IngestionJobTracker {
     }
 
     @Transactional
+    public void recordTransientFailure(IngestionJobEntity job, String reason) {
+        job.noteRetryableError(reason);
+        jobRepository.save(job);
+    }
+
+    @Transactional
     public void fail(DocumentEntity document, IngestionJobEntity job, String reason) {
         job.fail(reason, Instant.now());
         jobRepository.save(job);

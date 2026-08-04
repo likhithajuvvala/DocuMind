@@ -93,6 +93,10 @@ public class IngestionJobEntity {
         this.finishedAt = finishedAt;
     }
 
+    public void noteRetryableError(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
     public void fail(String errorMessage, Instant finishedAt) {
         this.status = IngestionStatus.FAILED;
         this.errorMessage = errorMessage;

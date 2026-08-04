@@ -21,6 +21,8 @@ spring:
       max-request-size: 50MB
 
 documind:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}
   jwt:
     secret: ${JWT_SECRET:change-me-in-every-environment-with-a-long-random-value}
     issuer: documind
