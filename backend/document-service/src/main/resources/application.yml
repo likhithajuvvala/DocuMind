@@ -1,0 +1,55 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: document-service
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/documind}
+    username: ${DATABASE_USER:documind}
+    password: ${DATABASE_PASSWORD:documind}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: false
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: document-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.documind.common.messaging
+
+documind:
+  jwt:
+    secret: ${JWT_SECRET:change-me-in-every-environment-with-a-long-random-value}
+    issuer: documind
+    access-token-ttl: ${JWT_EXPIRY_MINUTES:60}m
+  storage:
+    enabled: true
+    endpoint: ${S3_ENDPOINT:http://localhost:9000}
+    access-key: ${S3_ACCESS_KEY:documind}
+    secret-key: ${S3_SECRET_KEY:documind-secret}
+    bucket: ${S3_BUCKET:documind-documents}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+logging:
+  level:
+    root: INFO
+    com.documind: DEBUG

@@ -1,0 +1,74 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: ingestion-worker
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/documind}
+    username: ${DATABASE_USER:documind}
+    password: ${DATABASE_PASSWORD:documind}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: false
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: ingestion-worker
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.documind.common.messaging
+  ai:
+    model:
+      chat: none
+      embedding: ${EMBEDDING_PROVIDER:openai}
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      embedding:
+        options:
+          model: ${EMBEDDING_MODEL:text-embedding-3-small}
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      embedding:
+        options:
+          model: ${OLLAMA_EMBEDDING_MODEL:nomic-embed-text}
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        dimensions: ${EMBEDDING_DIMENSIONS:1536}
+        index-type: hnsw
+        distance-type: cosine_distance
+
+documind:
+  jwt:
+    secret: ${JWT_SECRET:change-me-in-every-environment-with-a-long-random-value}
+  storage:
+    enabled: true
+    endpoint: ${S3_ENDPOINT:http://localhost:9000}
+    access-key: ${S3_ACCESS_KEY:documind}
+    secret-key: ${S3_SECRET_KEY:documind-secret}
+    bucket: ${S3_BUCKET:documind-documents}
+  ingestion:
+    chunking:
+      chunk-size: 900
+      overlap: 150
+      minimum-chunk-length: 40
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+logging:
+  level:
+    root: INFO
+    com.documind: DEBUG

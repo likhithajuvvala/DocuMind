@@ -1,0 +1,75 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: query-service
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/documind}
+    username: ${DATABASE_USER:documind}
+    password: ${DATABASE_PASSWORD:documind}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: false
+  ai:
+    model:
+      chat: ${LLM_PROVIDER:openai}
+      embedding: ${EMBEDDING_PROVIDER:openai}
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      chat:
+        options:
+          model: ${OPENAI_CHAT_MODEL:gpt-4o-mini}
+          temperature: 0.2
+      embedding:
+        options:
+          model: ${EMBEDDING_MODEL:text-embedding-3-small}
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY:}
+      chat:
+        options:
+          model: ${ANTHROPIC_CHAT_MODEL:claude-sonnet-5}
+          temperature: 0.2
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      chat:
+        options:
+          model: ${OLLAMA_CHAT_MODEL:llama3.1}
+      embedding:
+        options:
+          model: ${OLLAMA_EMBEDDING_MODEL:nomic-embed-text}
+    vectorstore:
+      pgvector:
+        initialize-schema: false
+        dimensions: ${EMBEDDING_DIMENSIONS:1536}
+        index-type: hnsw
+        distance-type: cosine_distance
+
+documind:
+  jwt:
+    secret: ${JWT_SECRET:change-me-in-every-environment-with-a-long-random-value}
+    issuer: documind
+    access-token-ttl: ${JWT_EXPIRY_MINUTES:60}m
+  retrieval:
+    top-k: 6
+    similarity-threshold: 0.7
+    history-message-limit: 10
+  usage:
+    model-name: ${OPENAI_CHAT_MODEL:gpt-4o-mini}
+    characters-per-token: 4
+    prompt-cost-per-thousand-tokens: 0.0005
+    completion-cost-per-thousand-tokens: 0.0015
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+logging:
+  level:
+    root: INFO
+    com.documind: DEBUG

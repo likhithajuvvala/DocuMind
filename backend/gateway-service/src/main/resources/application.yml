@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/documind}
+    username: ${DATABASE_USER:documind}
+    password: ${DATABASE_PASSWORD:documind}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+documind:
+  jwt:
+    secret: ${JWT_SECRET:change-me-in-every-environment-with-a-long-random-value}
+    issuer: documind
+    access-token-ttl: ${JWT_EXPIRY_MINUTES:60}m
+    refresh-token-ttl: 14d
+  gateway:
+    downstream:
+      document-service: ${DOCUMENT_SERVICE_URL:http://localhost:8081}
+      query-service: ${QUERY_SERVICE_URL:http://localhost:8083}
+    rate-limit:
+      enabled: true
+      requests-per-window: 120
+      window: 1m
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+logging:
+  level:
+    root: INFO
+    com.documind: DEBUG
