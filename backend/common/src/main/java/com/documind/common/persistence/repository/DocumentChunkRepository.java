@@ -9,5 +9,7 @@ public interface DocumentChunkRepository extends JpaRepository<DocumentChunkEnti
 
     List<DocumentChunkEntity> findByEmbeddingIdInAndWorkspaceId(List<String> embeddingIds, UUID workspaceId);
 
+    List<DocumentChunkEntity> findByDocumentId(UUID documentId);
+
     void deleteByDocumentId(UUID documentId);
 }

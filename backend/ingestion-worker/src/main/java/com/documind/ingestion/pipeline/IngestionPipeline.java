@@ -1,15 +1,18 @@
 package com.documind.ingestion.pipeline;
 
+import com.documind.common.domain.DocumentStatus;
 import com.documind.common.domain.IngestionStatus;
 import com.documind.common.error.ResourceNotFoundException;
 import com.documind.common.messaging.DocumentUploadedEvent;
 import com.documind.common.persistence.entity.DocumentEntity;
 import com.documind.common.persistence.entity.IngestionJobEntity;
 import com.documind.common.persistence.repository.DocumentRepository;
+import com.documind.common.persistence.repository.IngestionJobRepository;
 import com.documind.common.storage.ObjectStorage;
 import com.documind.ingestion.chunking.TextChunk;
 import com.documind.ingestion.chunking.TextChunker;
 import com.documind.ingestion.extraction.ExtractedPage;
+import com.documind.ingestion.extraction.TextExtractionException;
 import com.documind.ingestion.extraction.TextExtractor;
 import com.documind.ingestion.indexing.ChunkIndexer;
 import java.io.InputStream;
@@ -24,6 +27,7 @@ public class IngestionPipeline {
     private static final Logger LOGGER = LoggerFactory.getLogger(IngestionPipeline.class);
 
     private final DocumentRepository documentRepository;
+    private final IngestionJobRepository jobRepository;
     private final IngestionJobTracker jobTracker;
     private final ObjectStorage objectStorage;
     private final TextExtractor textExtractor;
@@ -33,6 +37,7 @@ public class IngestionPipeline {
 
     public IngestionPipeline(
             DocumentRepository documentRepository,
+            IngestionJobRepository jobRepository,
             IngestionJobTracker jobTracker,
             ObjectStorage objectStorage,
             TextExtractor textExtractor,
@@ -40,6 +45,7 @@ public class IngestionPipeline {
             ChunkIndexer chunkIndexer,
             IngestionEventPublisher eventPublisher) {
         this.documentRepository = documentRepository;
+        this.jobRepository = jobRepository;
         this.jobTracker = jobTracker;
         this.objectStorage = objectStorage;
         this.textExtractor = textExtractor;
@@ -52,6 +58,12 @@ public class IngestionPipeline {
         DocumentEntity document = documentRepository
                 .findById(event.documentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Document " + event.documentId() + " was not found"));
+
+        if (alreadyIndexed(document)) {
+            LOGGER.info("Skipping document {} because it is already indexed", document.getId());
+            return;
+        }
+
         IngestionJobEntity job = jobTracker.start(document);
 
         try {
@@ -70,10 +82,24 @@ public class IngestionPipeline {
             jobTracker.complete(document, job, indexedChunks);
             eventPublisher.publishIndexed(document, indexedChunks);
             LOGGER.info("Indexed document {} into {} chunks", document.getId(), indexedChunks);
-        } catch (Exception exception) {
+        } catch (TextExtractionException exception) {
             jobTracker.fail(document, job, exception.getMessage());
             eventPublisher.publishFailed(document, exception.getMessage());
-            LOGGER.error("Ingestion failed for document {}", document.getId(), exception);
+            LOGGER.error("Document {} cannot be parsed and will not be retried", document.getId(), exception);
+        } catch (Exception exception) {
+            jobTracker.recordTransientFailure(job, exception.getMessage());
+            LOGGER.warn("Ingestion of document {} failed and will be retried", document.getId(), exception);
+            throw new RetryableIngestionException("Ingestion failed for document " + document.getId(), exception);
         }
+    }
+
+    private boolean alreadyIndexed(DocumentEntity document) {
+        if (document.getStatus() != DocumentStatus.INDEXED) {
+            return false;
+        }
+        return jobRepository
+                .findFirstByDocumentIdOrderByStartedAtDesc(document.getId())
+                .filter(job -> job.getStatus() == IngestionStatus.COMPLETED)
+                .isPresent();
     }
 }
