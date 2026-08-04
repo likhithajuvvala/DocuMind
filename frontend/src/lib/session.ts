@@ -21,3 +21,11 @@ export function clearSession(): void {
 export function readAccessToken(): string | null {
   return readSession()?.accessToken ?? null;
 }
+
+export function readRefreshToken(): string | null {
+  return readSession()?.refreshToken ?? null;
+}
+
+export function hasSession(): boolean {
+  return readSession() !== null;
+}

@@ -1,5 +1,5 @@
-import { messageStreamUrl } from "@/lib/apiClient";
-import { readAccessToken } from "@/lib/session";
+import { messageStreamUrl, refreshSession } from "@/lib/apiClient";
+import { clearSession, readAccessToken } from "@/lib/session";
 import type { Citation } from "@/lib/types";
 
 interface StreamHandlers {
@@ -15,17 +15,17 @@ export async function streamAnswer(
   handlers: StreamHandlers,
   signal?: AbortSignal
 ): Promise<void> {
-  const token = readAccessToken();
-  const response = await fetch(messageStreamUrl(sessionId), {
-    method: "POST",
-    signal,
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "text/event-stream",
-      ...(token ? { Authorization: `Bearer ${token}` } : {})
-    },
-    body: JSON.stringify({ content })
-  });
+  let response = await openStream(sessionId, content, signal);
+
+  if (response.status === 401) {
+    if (await refreshSession()) {
+      response = await openStream(sessionId, content, signal);
+    } else {
+      clearSession();
+      handlers.onFailed("Your session has expired, please sign in again");
+      return;
+    }
+  }
 
   if (!response.ok || !response.body) {
     handlers.onFailed(`The assistant could not be reached (${response.status})`);
@@ -47,6 +47,20 @@ export async function streamAnswer(
     buffer = frames.pop() ?? "";
     frames.forEach((frame) => dispatchFrame(frame, handlers));
   }
+}
+
+function openStream(sessionId: string, content: string, signal?: AbortSignal): Promise<Response> {
+  const token = readAccessToken();
+  return fetch(messageStreamUrl(sessionId), {
+    method: "POST",
+    signal,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "text/event-stream",
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body: JSON.stringify({ content })
+  });
 }
 
 export interface StreamFrame {

@@ -1,4 +1,4 @@
-import { readAccessToken } from "@/lib/session";
+import { clearSession, readAccessToken, readRefreshToken, storeSession } from "@/lib/session";
 import type {
   AuthenticationResult,
   ChatMessage,
@@ -21,7 +21,28 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+async function request<T>(path: string, init: RequestInit = {}, allowRetry = true): Promise<T> {
+  const response = await send(path, init);
+
+  if (response.status === 401 && allowRetry && (await refreshSession())) {
+    return request<T>(path, init, false);
+  }
+
+  if (response.status === 401) {
+    clearSession();
+    throw new ApiError(401, "Your session has expired, please sign in again");
+  }
+
+  if (!response.ok) {
+    throw new ApiError(response.status, await readErrorMessage(response));
+  }
+  if (response.status === 204) {
+    return undefined as T;
+  }
+  return (await response.json()) as T;
+}
+
+async function send(path: string, init: RequestInit): Promise<Response> {
   const token = readAccessToken();
   const headers = new Headers(init.headers);
   if (token) {
@@ -30,15 +51,27 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   if (init.body && !(init.body instanceof FormData)) {
     headers.set("Content-Type", "application/json");
   }
+  return fetch(`${API_BASE_URL}${path}`, { ...init, headers });
+}
 
-  const response = await fetch(`${API_BASE_URL}${path}`, { ...init, headers });
+export async function refreshSession(): Promise<boolean> {
+  const refreshToken = readRefreshToken();
+  if (!refreshToken) {
+    return false;
+  }
+
+  const response = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refreshToken })
+  });
+
   if (!response.ok) {
-    throw new ApiError(response.status, await readErrorMessage(response));
+    return false;
   }
-  if (response.status === 204) {
-    return undefined as T;
-  }
-  return (await response.json()) as T;
+
+  storeSession((await response.json()) as AuthenticationResult);
+  return true;
 }
 
 async function readErrorMessage(response: Response): Promise<string> {
