@@ -9,6 +9,7 @@ import com.documind.common.security.AuthenticatedUser;
 import com.documind.common.storage.ObjectStorage;
 import com.documind.common.storage.ObjectStorageException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Instant;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -39,21 +40,32 @@ public class DocumentUploadService {
     @Transactional
     public DocumentEntity upload(MultipartFile file, AuthenticatedUser user) {
         uploadValidator.validate(file);
+        return ingest(
+                openStream(file),
+                file.getSize(),
+                file.getOriginalFilename(),
+                file.getContentType(),
+                user.workspaceId(),
+                user.userId());
+    }
 
+    @Transactional
+    public DocumentEntity ingest(
+            InputStream content, long size, String filename, String contentType, UUID workspaceId, UUID uploadedBy) {
         UUID documentId = UUID.randomUUID();
-        String storagePath = buildStoragePath(user.workspaceId(), documentId, file.getOriginalFilename());
-        storeContent(file, storagePath);
+        String storagePath = buildStoragePath(workspaceId, documentId, filename);
+        objectStorage.store(storagePath, content, size, contentType);
 
         Instant now = Instant.now();
         DocumentEntity document = documentRepository.save(new DocumentEntity(
                 documentId,
-                user.workspaceId(),
-                file.getOriginalFilename(),
-                file.getContentType(),
-                file.getSize(),
+                workspaceId,
+                filename,
+                contentType,
+                size,
                 storagePath,
                 DocumentStatus.PENDING,
-                user.userId(),
+                uploadedBy,
                 now));
 
         eventPublisher.publishUploaded(new DocumentUploadedEvent(
@@ -80,9 +92,9 @@ public class DocumentUploadService {
                 .orElseThrow(() -> new ResourceNotFoundException("Document " + documentId + " was not found"));
     }
 
-    private void storeContent(MultipartFile file, String storagePath) {
+    private InputStream openStream(MultipartFile file) {
         try {
-            objectStorage.store(storagePath, file.getInputStream(), file.getSize(), file.getContentType());
+            return file.getInputStream();
         } catch (IOException exception) {
             throw new ObjectStorageException("Unable to read the uploaded file stream", exception);
         }

@@ -44,6 +44,14 @@ The root `compose.yaml` includes `infra/docker-compose.yml`, so the stack can be
 
 Backend tests run with `cd backend && ./gradlew test`, frontend tests with `cd frontend && npm run test`.
 
+## Demo workspace seeding
+
+`document-service` seeds a demo workspace once, on the first startup where `documind.demo.enabled` is true. It creates the workspace, an admin user, and uploads the sample documents bundled in `document-service/src/main/resources/demo-documents/` through the same ingestion path a real upload takes, so the seeded files are stored in object storage and published to Kafka like any other document.
+
+Seeding is off by default and enabled only in Docker Compose, so a production deployment never creates the demo account unless it is asked to. The default credentials are `demo@documind.test` / `demo-password-2026`, overridable with `DEMO_USER_EMAIL` and `DEMO_USER_PASSWORD`.
+
+The seeder skips silently when the demo user already exists, which covers both restarts and a second replica starting at the same time. Seeded documents remain `PENDING` until `ingestion-worker` runs with an embedding provider configured; the seeder's job ends once the upload events are published.
+
 ## Java toolchain
 
 The Gradle wrapper is pinned to 9.1.0 and every module targets a Java 21 toolchain, so a real JDK 21 must be resolvable. A JRE is not sufficient, because the build needs a compiler. When the only Java on the machine is a JRE, Gradle fails with `does not provide the required capabilities: [JAVA_COMPILER]`, the IDE's Gradle sync fails with it, and every import in the project is then reported as unresolved.
