@@ -32,6 +32,11 @@ spring:
         spring.json.trusted.packages: com.documind.common.messaging
 
 documind:
+  demo:
+    enabled: ${DEMO_SEED_ENABLED:false}
+    workspace-name: ${DEMO_WORKSPACE_NAME:Demo Workspace}
+    email: ${DEMO_USER_EMAIL:demo@documind.test}
+    password: ${DEMO_USER_PASSWORD:demo-password-2026}
   jwt:
     secret: ${JWT_SECRET:change-me-in-every-environment-with-a-long-random-value}
     issuer: documind
