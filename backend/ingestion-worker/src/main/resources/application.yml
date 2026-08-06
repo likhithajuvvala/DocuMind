@@ -30,6 +30,11 @@ spring:
     model:
       chat: none
       embedding: ${EMBEDDING_PROVIDER:openai}
+      image: none
+      moderation: none
+      audio:
+        speech: none
+        transcription: none
     openai:
       api-key: ${OPENAI_API_KEY:}
       embedding:
@@ -67,6 +72,12 @@ management:
     web:
       exposure:
         include: health,info,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
 
 logging:
   level:

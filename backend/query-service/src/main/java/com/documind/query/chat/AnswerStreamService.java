@@ -9,6 +9,7 @@ import com.documind.query.rag.GroundedPromptFactory;
 import com.documind.query.rag.RetrievalProperties;
 import com.documind.query.rag.RetrievedChunk;
 import com.documind.query.usage.UsageRecorder;
+import io.micrometer.core.instrument.MeterRegistry;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ public class AnswerStreamService {
     private final GroundedPromptFactory promptFactory;
     private final RetrievalProperties retrievalProperties;
     private final UsageRecorder usageRecorder;
+    private final MeterRegistry meterRegistry;
 
     public AnswerStreamService(
             ChatClient chatClient,
@@ -36,30 +38,39 @@ public class AnswerStreamService {
             ChunkRetriever chunkRetriever,
             GroundedPromptFactory promptFactory,
             RetrievalProperties retrievalProperties,
-            UsageRecorder usageRecorder) {
+            UsageRecorder usageRecorder,
+            MeterRegistry meterRegistry) {
         this.chatClient = chatClient;
         this.sessionService = sessionService;
         this.chunkRetriever = chunkRetriever;
         this.promptFactory = promptFactory;
         this.retrievalProperties = retrievalProperties;
         this.usageRecorder = usageRecorder;
+        this.meterRegistry = meterRegistry;
     }
 
     public Flux<AnswerStreamEvent> streamAnswer(ChatSessionEntity session, String question, AuthenticatedUser user) {
         sessionService.recordUserMessage(session.getId(), question);
 
-        List<RetrievedChunk> chunks =
-                chunkRetriever.retrieve(question, session.getWorkspaceId(), session.getDocumentId());
-        if (chunks.isEmpty()) {
-            return respondWithoutGrounding(session);
-        }
+        List<RetrievedChunk> chunks;
+        List<Message> prompt;
+        List<Citation> citations;
+        try {
+            chunks = chunkRetriever.retrieve(question, session.getWorkspaceId(), session.getDocumentId());
+            if (chunks.isEmpty()) {
+                return respondWithoutGrounding(session);
+            }
 
-        List<Citation> citations =
-                chunks.stream().map(chunk -> chunk.toCitation()).toList();
-        List<Message> prompt = promptFactory.create(
-                question,
-                chunks,
-                sessionService.loadRecentHistory(session.getId(), retrievalProperties.getHistoryMessageLimit()));
+            citations = chunks.stream().map(chunk -> chunk.toCitation()).toList();
+            prompt = promptFactory.create(
+                    question,
+                    chunks,
+                    sessionService.loadRecentHistory(session.getId(), retrievalProperties.getHistoryMessageLimit()));
+        } catch (RuntimeException exception) {
+            countAnswer("failed");
+            LOGGER.error("Retrieval failed for session {}", session.getId(), exception);
+            return Flux.just(new AnswerStreamEvent.Failed(exception.getMessage()));
+        }
 
         StringBuilder answer = new StringBuilder();
         Flux<AnswerStreamEvent> tokens = chatClient.prompt().messages(prompt).stream().content().map(text -> {
@@ -70,6 +81,7 @@ public class AnswerStreamService {
         return tokens.cast(AnswerStreamEvent.class)
                 .concatWith(Flux.defer(() -> persistAnswer(session, user, question, answer.toString(), citations)))
                 .onErrorResume(exception -> {
+                    countAnswer("failed");
                     LOGGER.error("Streaming failed for session {}", session.getId(), exception);
                     return Flux.just(new AnswerStreamEvent.Failed(exception.getMessage()));
                 });
@@ -83,14 +95,20 @@ public class AnswerStreamService {
             List<Citation> citations) {
         ChatMessageEntity stored = sessionService.recordAssistantMessage(session.getId(), answer, citations);
         int tokenCount = usageRecorder.record(user, question, answer);
+        countAnswer("grounded");
         return Flux.just(
                 new AnswerStreamEvent.Citations(citations),
                 new AnswerStreamEvent.Completed(stored.getId(), tokenCount));
     }
 
+    private void countAnswer(String outcome) {
+        meterRegistry.counter("documind.chat.answers", "outcome", outcome).increment();
+    }
+
     private Flux<AnswerStreamEvent> respondWithoutGrounding(ChatSessionEntity session) {
         ChatMessageEntity stored =
                 sessionService.recordAssistantMessage(session.getId(), NO_ANSWER_RESPONSE, List.of());
+        countAnswer("not_found");
         return Flux.just(
                 new AnswerStreamEvent.Token(NO_ANSWER_RESPONSE),
                 new AnswerStreamEvent.Citations(List.of()),

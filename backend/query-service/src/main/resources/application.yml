@@ -18,6 +18,11 @@ spring:
     model:
       chat: ${LLM_PROVIDER:openai}
       embedding: ${EMBEDDING_PROVIDER:openai}
+      image: none
+      moderation: none
+      audio:
+        speech: none
+        transcription: none
     openai:
       api-key: ${OPENAI_API_KEY:}
       chat:
@@ -54,9 +59,9 @@ documind:
     issuer: documind
     access-token-ttl: ${JWT_EXPIRY_MINUTES:60}m
   retrieval:
-    top-k: 6
-    similarity-threshold: 0.7
-    history-message-limit: 10
+    top-k: ${RETRIEVAL_TOP_K:6}
+    similarity-threshold: ${RETRIEVAL_SIMILARITY_THRESHOLD:0.7}
+    history-message-limit: ${RETRIEVAL_HISTORY_LIMIT:10}
   usage:
     model-name: ${OPENAI_CHAT_MODEL:gpt-4o-mini}
     characters-per-token: 4
@@ -68,6 +73,12 @@ management:
     web:
       exposure:
         include: health,info,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
 
 logging:
   level:
