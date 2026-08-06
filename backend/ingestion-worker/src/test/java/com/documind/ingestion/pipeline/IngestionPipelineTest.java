@@ -22,6 +22,9 @@ import com.documind.ingestion.chunking.TextChunker;
 import com.documind.ingestion.extraction.TextExtractionException;
 import com.documind.ingestion.extraction.TextExtractor;
 import com.documind.ingestion.indexing.ChunkIndexer;
+import com.documind.ingestion.metrics.IngestionMetrics;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import java.io.ByteArrayInputStream;
 import java.time.Instant;
 import java.util.Optional;
@@ -63,6 +66,8 @@ class IngestionPipelineTest {
 
     @Mock
     private IngestionEventPublisher eventPublisher;
+
+    private final MeterRegistry meterRegistry = new SimpleMeterRegistry();
 
     @Test
     void skipsDocumentsThatAreAlreadyIndexed() {
@@ -114,7 +119,8 @@ class IngestionPipelineTest {
                 textExtractor,
                 textChunker,
                 chunkIndexer,
-                eventPublisher);
+                eventPublisher,
+                new IngestionMetrics(meterRegistry));
     }
 
     private DocumentUploadedEvent event() {

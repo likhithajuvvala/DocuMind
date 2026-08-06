@@ -15,7 +15,9 @@ import com.documind.ingestion.extraction.ExtractedPage;
 import com.documind.ingestion.extraction.TextExtractionException;
 import com.documind.ingestion.extraction.TextExtractor;
 import com.documind.ingestion.indexing.ChunkIndexer;
+import com.documind.ingestion.metrics.IngestionMetrics;
 import java.io.InputStream;
+import java.time.Duration;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,7 @@ public class IngestionPipeline {
     private final TextChunker textChunker;
     private final ChunkIndexer chunkIndexer;
     private final IngestionEventPublisher eventPublisher;
+    private final IngestionMetrics metrics;
 
     public IngestionPipeline(
             DocumentRepository documentRepository,
@@ -43,7 +46,8 @@ public class IngestionPipeline {
             TextExtractor textExtractor,
             TextChunker textChunker,
             ChunkIndexer chunkIndexer,
-            IngestionEventPublisher eventPublisher) {
+            IngestionEventPublisher eventPublisher,
+            IngestionMetrics metrics) {
         this.documentRepository = documentRepository;
         this.jobRepository = jobRepository;
         this.jobTracker = jobTracker;
@@ -52,6 +56,7 @@ public class IngestionPipeline {
         this.textChunker = textChunker;
         this.chunkIndexer = chunkIndexer;
         this.eventPublisher = eventPublisher;
+        this.metrics = metrics;
     }
 
     public void process(DocumentUploadedEvent event) {
@@ -65,6 +70,7 @@ public class IngestionPipeline {
         }
 
         IngestionJobEntity job = jobTracker.start(document);
+        long startedAt = System.nanoTime();
 
         try {
             jobTracker.advance(job, IngestionStatus.EXTRACTING);
@@ -81,16 +87,23 @@ public class IngestionPipeline {
 
             jobTracker.complete(document, job, indexedChunks);
             eventPublisher.publishIndexed(document, indexedChunks);
+            metrics.recordIndexed(indexedChunks, elapsedSince(startedAt));
             LOGGER.info("Indexed document {} into {} chunks", document.getId(), indexedChunks);
         } catch (TextExtractionException exception) {
             jobTracker.fail(document, job, exception.getMessage());
             eventPublisher.publishFailed(document, exception.getMessage());
+            metrics.recordPermanentFailure(elapsedSince(startedAt));
             LOGGER.error("Document {} cannot be parsed and will not be retried", document.getId(), exception);
         } catch (Exception exception) {
             jobTracker.recordTransientFailure(job, exception.getMessage());
+            metrics.recordTransientFailure(elapsedSince(startedAt));
             LOGGER.warn("Ingestion of document {} failed and will be retried", document.getId(), exception);
             throw new RetryableIngestionException("Ingestion failed for document " + document.getId(), exception);
         }
+    }
+
+    private Duration elapsedSince(long startedAt) {
+        return Duration.ofNanos(System.nanoTime() - startedAt);
     }
 
     private boolean alreadyIndexed(DocumentEntity document) {
