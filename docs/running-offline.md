@@ -35,7 +35,19 @@ OLLAMA_EMBEDDING_MODEL=nomic-embed-text
 EMBEDDING_DIMENSIONS=768
 ```
 
-`EMBEDDING_DIMENSIONS` is the setting most likely to bite. `nomic-embed-text` produces 768 values per vector while the OpenAI default is 1536, and the `vector_store` table is created once with whatever dimension is configured on first startup. If the two disagree, every embedding insert fails with `expected 1536 dimensions, not 768`, the document is retried until the dead letter topic accepts it, and it lands in `FAILED`.
+`EMBEDDING_DIMENSIONS` is the setting most likely to bite. `nomic-embed-text` produces 768 values per vector while the OpenAI default is 1536, and the `vector_store` table is created once with whatever dimension is configured on first startup.
+
+`ingestion-worker` and `query-service` now check this on startup and refuse to run rather than corrupting a batch of uploads one document at a time:
+
+```
+com.documind.common.rag.EmbeddingDimensionMismatchException:
+The vector_store table stores 768-dimension vectors but this service is configured for 1536.
+Every embedding write would fail with "expected 768 dimensions, not 1536".
+Either set EMBEDDING_DIMENSIONS=768 to match the existing data, or drop the table and re-index:
+  drop table vector_store; truncate document_chunks;
+```
+
+The check compares the configured dimension against the existing table and, when the provider is reachable, against the dimension the model actually returns. An unreachable provider only logs a warning, so a briefly offline Ollama does not stop the service from booting. Set `documind.rag.validate-dimensions=false` to disable it.
 
 Switching embedding model or provider therefore means recreating the table and re-indexing:
 
