@@ -67,7 +67,27 @@ RETRIEVAL_SIMILARITY_THRESHOLD=0.55
 RETRIEVAL_TOP_K=6
 ```
 
-Raising it makes the guardrail stricter; lowering it admits weaker matches. Measure before choosing, for example by embedding a question and ranking the stored chunks:
+Raising it makes the guardrail stricter; lowering it admits weaker matches.
+
+You no longer have to guess. When every candidate is rejected, the retriever logs the score it would have needed:
+
+```
+No chunk cleared the similarity threshold 0.7 for workspace dda29216-….
+The closest was 0.633 in employee-handbook.md at 227ac9d9-….
+Lower documind.retrieval.similarity-threshold if answers are being missed.
+```
+
+That case was a genuine false negative: the handbook does say "twenty-five (25) days of paid annual leave", but at 0.633 it lost to a 0.7 threshold and the user saw only "The answer was not found in your documents." Re-running the same question at 0.55 answered it correctly with citations.
+
+Three outcomes are distinguished, both in the log and in the `documind.retrieval.results` counter, so an empty workspace never looks like a tuning problem:
+
+| Outcome | Meaning |
+|---|---|
+| `grounded` | chunks cleared the threshold and were sent to the model |
+| `below_threshold` | the workspace held a near match that the threshold rejected |
+| `no_documents` | nothing indexed for that workspace at all |
+
+The **Retrieval outcomes** and **Closest chunk similarity** panels on the DocuMind Overview dashboard show both, so a threshold that is too strict shows up as a rising `below_threshold` rate rather than as silent user frustration. To pick a value, compare the p50/p95 of the closest-chunk similarity against your threshold, or measure directly:
 
 ```sql
 select metadata->>'document_name', 1 - (embedding <=> '[...]') as similarity
