@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "documind.configMapName" . }}
+  labels:
+    {{- include "documind.labels" . | nindent 4 }}
+data:
+  DATABASE_URL: {{ .Values.config.databaseUrl | quote }}
+  KAFKA_BOOTSTRAP_SERVERS: {{ .Values.config.kafkaBootstrapServers | quote }}
+  LOG_FORMAT: {{ .Values.config.logFormat | quote }}
+  S3_ENDPOINT: {{ .Values.config.storage.endpoint | quote }}
+  S3_BUCKET: {{ .Values.config.storage.bucket | quote }}
+  VECTOR_STORE: {{ .Values.config.vectorStore | quote }}
+  QDRANT_HOST: {{ .Values.config.qdrant.host | quote }}
+  QDRANT_PORT: {{ .Values.config.qdrant.port | quote }}
+  QDRANT_COLLECTION: {{ .Values.config.qdrant.collection | quote }}
+  LLM_PROVIDER: {{ .Values.config.llm.provider | quote }}
+  EMBEDDING_PROVIDER: {{ .Values.config.llm.embeddingProvider | quote }}
+  EMBEDDING_MODEL: {{ .Values.config.llm.embeddingModel | quote }}
+  EMBEDDING_DIMENSIONS: {{ .Values.config.llm.embeddingDimensions | quote }}
+  OPENAI_CHAT_MODEL: {{ .Values.config.llm.openaiChatModel | quote }}
+  ANTHROPIC_CHAT_MODEL: {{ .Values.config.llm.anthropicChatModel | quote }}
+  OLLAMA_BASE_URL: {{ .Values.config.llm.ollamaBaseUrl | quote }}
+  OLLAMA_CHAT_MODEL: {{ .Values.config.llm.ollamaChatModel | quote }}
+  OLLAMA_EMBEDDING_MODEL: {{ .Values.config.llm.ollamaEmbeddingModel | quote }}
+  RETRIEVAL_TOP_K: {{ .Values.config.retrieval.topK | quote }}
+  RETRIEVAL_SIMILARITY_THRESHOLD: {{ .Values.config.retrieval.similarityThreshold | quote }}
+  CORS_ALLOWED_ORIGINS: {{ .Values.config.cors.allowedOrigins | quote }}
+  DOCUMENT_SERVICE_URL: {{ printf "http://%s-document-service:%v" (include "documind.fullname" .) (index .Values.services "document-service").port | quote }}
+  QUERY_SERVICE_URL: {{ printf "http://%s-query-service:%v" (include "documind.fullname" .) (index .Values.services "query-service").port | quote }}
