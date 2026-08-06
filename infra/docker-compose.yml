@@ -95,6 +95,7 @@ services:
       DATABASE_USER: ${DATABASE_USER:-documind}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-documind}
       JWT_SECRET: ${JWT_SECRET:-change-me-in-every-environment-with-a-long-random-value}
+      LOG_FORMAT: ${LOG_FORMAT:-ecs}
       JWT_EXPIRY_MINUTES: ${JWT_EXPIRY_MINUTES:-60}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000}
       DOCUMENT_SERVICE_URL: http://document-service:8081
@@ -114,6 +115,7 @@ services:
       DATABASE_USER: ${DATABASE_USER:-documind}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-documind}
       JWT_SECRET: ${JWT_SECRET:-change-me-in-every-environment-with-a-long-random-value}
+      LOG_FORMAT: ${LOG_FORMAT:-ecs}
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       S3_ENDPOINT: http://minio:9000
       S3_ACCESS_KEY: ${S3_ACCESS_KEY:-documind}
@@ -142,6 +144,7 @@ services:
       DATABASE_USER: ${DATABASE_USER:-documind}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-documind}
       JWT_SECRET: ${JWT_SECRET:-change-me-in-every-environment-with-a-long-random-value}
+      LOG_FORMAT: ${LOG_FORMAT:-ecs}
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       S3_ENDPOINT: http://minio:9000
       S3_ACCESS_KEY: ${S3_ACCESS_KEY:-documind}
@@ -179,6 +182,7 @@ services:
       DATABASE_USER: ${DATABASE_USER:-documind}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-documind}
       JWT_SECRET: ${JWT_SECRET:-change-me-in-every-environment-with-a-long-random-value}
+      LOG_FORMAT: ${LOG_FORMAT:-ecs}
       LLM_PROVIDER: ${LLM_PROVIDER:-openai}
       VECTOR_STORE: ${VECTOR_STORE:-pgvector}
       QDRANT_HOST: ${QDRANT_HOST:-qdrant}

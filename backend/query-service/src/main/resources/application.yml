@@ -89,6 +89,9 @@ management:
         http.server.requests: true
 
 logging:
+  structured:
+    format:
+      console: ${LOG_FORMAT:}
   level:
     root: INFO
     com.documind: DEBUG
