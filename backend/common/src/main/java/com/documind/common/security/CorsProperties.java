@@ -6,11 +6,20 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "documind.cors")
 public class CorsProperties {
 
+    private boolean enabled = false;
     private List<String> allowedOrigins = List.of("http://localhost:3000");
     private List<String> allowedMethods = List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS");
     private List<String> allowedHeaders = List.of("*");
     private boolean allowCredentials = false;
     private long maxAgeSeconds = 3600;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public List<String> getAllowedOrigins() {
         return allowedOrigins;

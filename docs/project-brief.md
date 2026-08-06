@@ -44,6 +44,20 @@ The root `compose.yaml` includes `infra/docker-compose.yml`, so the stack can be
 
 Backend tests run with `cd backend && ./gradlew test`, frontend tests with `cd frontend && npm run test`.
 
+## CORS is answered only at the gateway
+
+`documind.cors.enabled` defaults to false and is switched on only in `gateway-service`. That is deliberate: the browser only ever talks to the gateway, and downstream services are reached through it.
+
+When the shared security configuration enabled CORS everywhere, a proxied response carried the header from both the downstream service and the gateway:
+
+```
+Access-Control-Allow-Origin: http://localhost:3000, http://localhost:3000
+```
+
+Browsers reject a duplicated value outright, so `/api/documents` failed in the UI while `/api/auth/login` worked, because login is served by the gateway itself and never proxied. Command line clients ignore the duplicate, so this only reproduces in a browser or by counting response headers.
+
+If a downstream service ever needs to be called directly from a browser, enable CORS on that service alone and keep it off at the gateway for those routes, rather than turning it on in both.
+
 ## Demo workspace seeding
 
 `document-service` seeds a demo workspace once, on the first startup where `documind.demo.enabled` is true. It creates the workspace, an admin user, and uploads the sample documents bundled in `document-service/src/main/resources/demo-documents/` through the same ingestion path a real upload takes, so the seeded files are stored in object storage and published to Kafka like any other document.
