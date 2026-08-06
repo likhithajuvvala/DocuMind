@@ -21,12 +21,15 @@ import java.time.Duration;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
 public class IngestionPipeline {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IngestionPipeline.class);
+    private static final String DOCUMENT_ID_KEY = "document_id";
+    private static final String WORKSPACE_ID_KEY = "workspace_id";
 
     private final DocumentRepository documentRepository;
     private final IngestionJobRepository jobRepository;
@@ -60,6 +63,17 @@ public class IngestionPipeline {
     }
 
     public void process(DocumentUploadedEvent event) {
+        MDC.put(DOCUMENT_ID_KEY, event.documentId().toString());
+        MDC.put(WORKSPACE_ID_KEY, event.workspaceId().toString());
+        try {
+            processDocument(event);
+        } finally {
+            MDC.remove(DOCUMENT_ID_KEY);
+            MDC.remove(WORKSPACE_ID_KEY);
+        }
+    }
+
+    private void processDocument(DocumentUploadedEvent event) {
         DocumentEntity document = documentRepository
                 .findById(event.documentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Document " + event.documentId() + " was not found"));
