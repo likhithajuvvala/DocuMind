@@ -1,0 +1,15 @@
+DocuMind {{ .Chart.AppVersion }} is installed as release {{ .Release.Name }}.
+
+Services:
+{{- range $name, $service := .Values.services }}
+  {{ $name }} on port {{ $service.port }}{{ if $service.autoscaling.enabled }} (autoscaling {{ $service.autoscaling.minReplicas }}-{{ $service.autoscaling.maxReplicas }}){{ end }}
+{{- end }}
+
+Reach the UI without an ingress:
+
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "documind.fullname" . }}-frontend {{ (index .Values.services "frontend").port }}
+
+Embeddings are configured for {{ .Values.config.llm.embeddingProvider }} at {{ .Values.config.llm.embeddingDimensions }} dimensions.
+{{- if eq .Values.config.vectorStore "pgvector" }}
+The vector_store table is created once at that size, so changing the embedding model later means dropping the table and re-indexing.
+{{- end }}
