@@ -76,6 +76,54 @@ class ChunkRetrieverTest {
     }
 
     @Test
+    void numbersCitationsAfterReRankingSoTheBestChunkIsCitationOne() {
+        when(vectorStore.similaritySearch(any(SearchRequest.class)))
+                .thenReturn(List.of(chunk("renewal wording", 0.80), chunk("termination clause wording", 0.72)));
+
+        List<RetrievedChunk> chunks =
+                retriever(0.7, new LexicalOverlapReranker(0.6)).retrieve("termination clause", WORKSPACE_ID, null);
+
+        assertThat(chunks.get(0).text()).isEqualTo("termination clause wording");
+        assertThat(chunks.get(0).reference()).isEqualTo(1);
+        assertThat(chunks.get(1).reference()).isEqualTo(2);
+    }
+
+    @Test
+    void recordsWhenReRankingChangedTheTopChunk() {
+        when(vectorStore.similaritySearch(any(SearchRequest.class)))
+                .thenReturn(List.of(chunk("renewal wording", 0.80), chunk("termination clause wording", 0.72)));
+
+        retriever(0.7, new LexicalOverlapReranker(0.6)).retrieve("termination clause", WORKSPACE_ID, null);
+
+        assertThat(meterRegistry
+                        .find("documind.retrieval.reranked")
+                        .tag("changed_top", "true")
+                        .tag("changed_order", "true")
+                        .counter()
+                        .count())
+                .isEqualTo(1);
+    }
+
+    @Test
+    void recordsReorderingThatDidNotReachTheTopChunk() {
+        when(vectorStore.similaritySearch(any(SearchRequest.class)))
+                .thenReturn(List.of(
+                        chunk("lease termination notice wording", 0.90),
+                        chunk("unrelated filler", 0.70),
+                        chunk("more lease termination wording", 0.60)));
+
+        retriever(0.5, new LexicalOverlapReranker(0.6)).retrieve("lease termination", WORKSPACE_ID, null);
+
+        assertThat(meterRegistry
+                        .find("documind.retrieval.reranked")
+                        .tag("changed_order", "true")
+                        .tag("changed_top", "false")
+                        .counter()
+                        .count())
+                .isEqualTo(1);
+    }
+
+    @Test
     void numbersCitationsFromTheFilteredResults() {
         when(vectorStore.similaritySearch(any(SearchRequest.class)))
                 .thenReturn(List.of(chunk("first", 0.9), chunk("weak", 0.2), chunk("second", 0.75)));
@@ -97,10 +145,14 @@ class ChunkRetrieverTest {
     }
 
     private ChunkRetriever retriever(double threshold) {
+        return retriever(threshold, new PassThroughReranker());
+    }
+
+    private ChunkRetriever retriever(double threshold, ChunkReranker reranker) {
         RetrievalProperties properties = new RetrievalProperties();
         properties.setSimilarityThreshold(threshold);
         properties.setTopK(6);
-        return new ChunkRetriever(vectorStore, properties, meterRegistry);
+        return new ChunkRetriever(vectorStore, properties, meterRegistry, reranker);
     }
 
     private Document chunk(String text, double score) {
