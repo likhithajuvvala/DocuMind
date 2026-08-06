@@ -70,6 +70,8 @@ documind:
     top-k: ${RETRIEVAL_TOP_K:6}
     similarity-threshold: ${RETRIEVAL_SIMILARITY_THRESHOLD:0.7}
     history-message-limit: ${RETRIEVAL_HISTORY_LIMIT:10}
+    reranker: ${RETRIEVAL_RERANKER:lexical}
+    rerank-vector-weight: ${RETRIEVAL_RERANK_WEIGHT:0.6}
   usage:
     model-name: ${OPENAI_CHAT_MODEL:gpt-4o-mini}
     characters-per-token: 4
