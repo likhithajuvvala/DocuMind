@@ -55,6 +55,9 @@ management:
         enabled: true
 
 logging:
+  structured:
+    format:
+      console: ${LOG_FORMAT:}
   level:
     root: INFO
     com.documind: DEBUG
