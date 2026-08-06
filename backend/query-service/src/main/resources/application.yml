@@ -72,6 +72,8 @@ documind:
     history-message-limit: ${RETRIEVAL_HISTORY_LIMIT:10}
     reranker: ${RETRIEVAL_RERANKER:lexical}
     rerank-vector-weight: ${RETRIEVAL_RERANK_WEIGHT:0.6}
+  pii:
+    mode: ${PII_REDACTION_MODE:THIRD_PARTY_ONLY}
   usage:
     model-name: ${OPENAI_CHAT_MODEL:gpt-4o-mini}
     characters-per-token: 4
