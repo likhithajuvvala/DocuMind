@@ -9,6 +9,7 @@ dependencies {
     implementation("org.springframework.ai:spring-ai-starter-model-openai")
     implementation("org.springframework.ai:spring-ai-starter-model-ollama")
     implementation("org.springframework.ai:spring-ai-starter-vector-store-pgvector")
+    implementation("org.springframework.ai:spring-ai-starter-vector-store-qdrant")
     implementation("org.apache.tika:tika-core:3.3.2")
     implementation("org.apache.tika:tika-parsers-standard-package:3.3.2")
     testImplementation("org.springframework.kafka:spring-kafka-test")
