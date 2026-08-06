@@ -1,0 +1,133 @@
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  registry: ghcr.io/documind
+  tag: ""
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+# Non-secret settings shared by every backend service.
+config:
+  databaseUrl: jdbc:postgresql://postgres:5432/documind
+  kafkaBootstrapServers: kafka:9092
+  logFormat: ecs
+  vectorStore: pgvector
+  qdrant:
+    host: qdrant
+    port: 6334
+    collection: documind
+  storage:
+    endpoint: http://minio:9000
+    bucket: documind-documents
+  llm:
+    provider: openai
+    embeddingProvider: openai
+    embeddingModel: text-embedding-3-small
+    embeddingDimensions: 1536
+    openaiChatModel: gpt-4o-mini
+    anthropicChatModel: claude-sonnet-5
+    ollamaBaseUrl: http://ollama:11434
+    ollamaChatModel: llama3.1
+    ollamaEmbeddingModel: nomic-embed-text
+  retrieval:
+    topK: 6
+    similarityThreshold: 0.7
+  cors:
+    allowedOrigins: https://documind.example.com
+
+# Credentials. Prefer existingSecret so nothing sensitive lives in values.
+secrets:
+  existingSecret: ""
+  databaseUser: documind
+  databasePassword: ""
+  jwtSecret: ""
+  s3AccessKey: ""
+  s3SecretKey: ""
+  openaiApiKey: ""
+  anthropicApiKey: ""
+  qdrantApiKey: ""
+
+frontend:
+  apiBaseUrl: https://api.documind.example.com
+
+# Ingestion is CPU and IO bound, querying is latency sensitive and waits on the
+# model provider, so they scale on different curves.
+services:
+  gateway-service:
+    port: 8080
+    replicas: 2
+    edge: true
+    resources:
+      requests: { cpu: 200m, memory: 512Mi }
+      limits: { cpu: "1", memory: 1Gi }
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 6
+      targetCPUUtilizationPercentage: 70
+
+  document-service:
+    port: 8081
+    replicas: 2
+    resources:
+      requests: { cpu: 200m, memory: 512Mi }
+      limits: { cpu: "1", memory: 1Gi }
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 6
+      targetCPUUtilizationPercentage: 70
+
+  ingestion-worker:
+    port: 8082
+    replicas: 2
+    resources:
+      requests: { cpu: 500m, memory: 1Gi }
+      limits: { cpu: "2", memory: 2Gi }
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 12
+      targetCPUUtilizationPercentage: 65
+
+  query-service:
+    port: 8083
+    replicas: 3
+    resources:
+      requests: { cpu: 300m, memory: 768Mi }
+      limits: { cpu: "1", memory: 1536Mi }
+    autoscaling:
+      enabled: true
+      minReplicas: 3
+      maxReplicas: 10
+      targetCPUUtilizationPercentage: 70
+
+  frontend:
+    port: 3000
+    replicas: 2
+    java: false
+    resources:
+      requests: { cpu: 100m, memory: 256Mi }
+      limits: { cpu: 500m, memory: 512Mi }
+    autoscaling:
+      enabled: false
+
+serviceAccount:
+  create: true
+  name: ""
+
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop: ["ALL"]
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
