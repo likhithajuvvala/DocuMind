@@ -1,0 +1,16 @@
+# Fully self-hosted profile: no external model provider, nothing leaves the cluster.
+# helm install documind ./documind -f values-ollama.yaml --set secrets.jwtSecret=... --set secrets.databasePassword=...
+config:
+  llm:
+    provider: ollama
+    embeddingProvider: ollama
+    ollamaBaseUrl: http://ollama:11434
+    ollamaChatModel: qwen3:14b
+    ollamaEmbeddingModel: nomic-embed-text
+    # nomic-embed-text returns 768 values, not the OpenAI default of 1536.
+    # pgvector sizes its column once from this number.
+    embeddingDimensions: 768
+  retrieval:
+    # Cosine scores are not comparable across embedding models. Locally hosted
+    # models score lower, and 0.7 silently rejected answers that were present.
+    similarityThreshold: 0.55

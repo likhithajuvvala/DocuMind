@@ -1,0 +1,10 @@
+apiVersion: v2
+name: documind
+description: Multi-tenant retrieval-augmented generation platform with an asynchronous ingestion pipeline
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - rag
+  - documents
+  - spring-boot

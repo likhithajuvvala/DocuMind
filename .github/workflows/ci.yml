@@ -44,6 +44,31 @@ jobs:
         working-directory: frontend
         run: npm run build
 
+  helm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: azure/setup-helm@v4
+      - name: Lint chart
+        run: helm lint infra/k8s/helm/documind --set secrets.jwtSecret=ci --set secrets.databasePassword=ci
+      - name: Render and validate against Kubernetes schemas
+        run: |
+          curl -sL https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz \
+            | tar -xz -C /usr/local/bin kubeconform
+          helm template documind infra/k8s/helm/documind \
+            --set secrets.jwtSecret=ci --set secrets.databasePassword=ci \
+            | kubeconform -strict -summary -kubernetes-version 1.31.0
+          helm template documind infra/k8s/helm/documind \
+            -f infra/k8s/helm/documind/values-ollama.yaml \
+            --set secrets.jwtSecret=ci --set secrets.databasePassword=ci \
+            | kubeconform -strict -summary -kubernetes-version 1.31.0
+      - name: Refuse to render without a signing key
+        run: |
+          if helm template documind infra/k8s/helm/documind --set secrets.databasePassword=ci >/dev/null 2>&1; then
+            echo "chart rendered without a JWT secret, the credential guard is broken"
+            exit 1
+          fi
+
   images:
     runs-on: ubuntu-latest
     needs: [backend, frontend]
