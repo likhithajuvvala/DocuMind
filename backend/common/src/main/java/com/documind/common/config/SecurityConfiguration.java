@@ -40,6 +40,14 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+    private HttpSecurity applyCors(HttpSecurity http, CorsProperties properties, CorsConfigurationSource source)
+            throws Exception {
+        if (!properties.isEnabled()) {
+            return http.cors(cors -> cors.disable());
+        }
+        return http.cors(cors -> cors.configurationSource(source));
+    }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource(CorsProperties properties) {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -58,9 +66,10 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             JwtAuthenticationFilter jwtAuthenticationFilter,
+            CorsProperties corsProperties,
             @Qualifier("corsConfigurationSource") CorsConfigurationSource corsSource)
             throws Exception {
-        return http.cors(cors -> cors.configurationSource(corsSource))
+        return applyCors(http, corsProperties, corsSource)
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
