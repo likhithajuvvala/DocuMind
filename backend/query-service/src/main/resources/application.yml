@@ -47,6 +47,14 @@ spring:
         options:
           model: ${OLLAMA_EMBEDDING_MODEL:nomic-embed-text}
     vectorstore:
+      type: ${VECTOR_STORE:pgvector}
+      qdrant:
+        host: ${QDRANT_HOST:localhost}
+        port: ${QDRANT_PORT:6334}
+        use-tls: ${QDRANT_USE_TLS:false}
+        api-key: ${QDRANT_API_KEY:}
+        collection-name: ${QDRANT_COLLECTION:documind}
+        initialize-schema: ${QDRANT_INITIALIZE_SCHEMA:false}
       pgvector:
         initialize-schema: false
         dimensions: ${EMBEDDING_DIMENSIONS:1536}

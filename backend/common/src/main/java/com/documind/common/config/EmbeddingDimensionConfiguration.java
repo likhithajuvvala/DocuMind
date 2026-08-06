@@ -20,24 +20,37 @@ public class EmbeddingDimensionConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddingDimensionConfiguration.class);
 
+    private static final String PGVECTOR = "pgvector";
+
     private final ObjectProvider<JdbcTemplate> jdbcTemplateProvider;
     private final ObjectProvider<EmbeddingModel> embeddingModelProvider;
+    private final String vectorStoreType;
     private final String tableName;
     private final int configuredDimensions;
 
     public EmbeddingDimensionConfiguration(
             ObjectProvider<JdbcTemplate> jdbcTemplateProvider,
             ObjectProvider<EmbeddingModel> embeddingModelProvider,
+            @Value("${spring.ai.vectorstore.type:pgvector}") String vectorStoreType,
             @Value("${spring.ai.vectorstore.pgvector.table-name:vector_store}") String tableName,
             @Value("${spring.ai.vectorstore.pgvector.dimensions:1536}") int configuredDimensions) {
         this.jdbcTemplateProvider = jdbcTemplateProvider;
         this.embeddingModelProvider = embeddingModelProvider;
+        this.vectorStoreType = vectorStoreType;
         this.tableName = tableName;
         this.configuredDimensions = configuredDimensions;
     }
 
     @EventListener(ApplicationReadyEvent.class)
     public void validateOnStartup() {
+        if (!PGVECTOR.equalsIgnoreCase(vectorStoreType)) {
+            LOGGER.info(
+                    "Skipping the pgvector dimension check because the active vector store is {}, which sizes its "
+                            + "collection from the embedding model itself",
+                    vectorStoreType);
+            return;
+        }
+
         JdbcTemplate jdbcTemplate = jdbcTemplateProvider.getIfAvailable();
         EmbeddingModel embeddingModel = embeddingModelProvider.getIfAvailable();
 
