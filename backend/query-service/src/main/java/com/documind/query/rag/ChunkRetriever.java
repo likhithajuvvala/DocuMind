@@ -22,17 +22,25 @@ public class ChunkRetriever {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkRetriever.class);
     private static final String OUTCOME_METRIC = "documind.retrieval.results";
     private static final String SCORE_METRIC = "documind.retrieval.best.score";
+    private static final String RERANK_METRIC = "documind.retrieval.reranked";
+    private static final int UNNUMBERED = 0;
     private static final double NO_SCORE = 0.0;
 
     private final VectorStore vectorStore;
     private final RetrievalProperties properties;
     private final DistributionSummary bestScores;
     private final MeterRegistry meterRegistry;
+    private final ChunkReranker reranker;
 
-    public ChunkRetriever(VectorStore vectorStore, RetrievalProperties properties, MeterRegistry meterRegistry) {
+    public ChunkRetriever(
+            VectorStore vectorStore,
+            RetrievalProperties properties,
+            MeterRegistry meterRegistry,
+            ChunkReranker reranker) {
         this.vectorStore = vectorStore;
         this.properties = properties;
         this.meterRegistry = meterRegistry;
+        this.reranker = reranker;
         this.bestScores = DistributionSummary.builder(SCORE_METRIC)
                 .description("Similarity of the closest chunk found for a question")
                 .publishPercentileHistogram()
@@ -75,11 +83,54 @@ public class ChunkRetriever {
         }
 
         countOutcome("grounded");
-        List<RetrievedChunk> chunks = new ArrayList<>(relevant.size());
-        for (int index = 0; index < relevant.size(); index++) {
-            chunks.add(toRetrievedChunk(relevant.get(index), index + 1));
+        List<RetrievedChunk> bySimilarity = new ArrayList<>(relevant.size());
+        for (Document match : relevant) {
+            bySimilarity.add(toRetrievedChunk(match, UNNUMBERED));
         }
-        return List.copyOf(chunks);
+
+        return numberCitations(reorder(question, bySimilarity));
+    }
+
+    private List<RetrievedChunk> reorder(String question, List<RetrievedChunk> chunks) {
+        List<RetrievedChunk> reranked = reranker.rerank(question, chunks);
+        boolean orderChanged = !reranked.equals(chunks);
+        boolean topChanged = !reranked.isEmpty()
+                && !chunks.isEmpty()
+                && !reranked.get(0).equals(chunks.get(0));
+
+        meterRegistry
+                .counter(
+                        RERANK_METRIC,
+                        "changed_order",
+                        Boolean.toString(orderChanged),
+                        "changed_top",
+                        Boolean.toString(topChanged))
+                .increment();
+
+        if (topChanged) {
+            LOGGER.info(
+                    "Re-ranking promoted {} (similarity {}) above {} (similarity {})",
+                    reranked.get(0).documentName(),
+                    String.format("%.3f", reranked.get(0).relevance()),
+                    chunks.get(0).documentName(),
+                    String.format("%.3f", chunks.get(0).relevance()));
+        }
+        return reranked;
+    }
+
+    private List<RetrievedChunk> numberCitations(List<RetrievedChunk> chunks) {
+        List<RetrievedChunk> numbered = new ArrayList<>(chunks.size());
+        for (int index = 0; index < chunks.size(); index++) {
+            RetrievedChunk chunk = chunks.get(index);
+            numbered.add(new RetrievedChunk(
+                    index + 1,
+                    chunk.documentId(),
+                    chunk.documentName(),
+                    chunk.pageNumber(),
+                    chunk.text(),
+                    chunk.relevance()));
+        }
+        return List.copyOf(numbered);
     }
 
     private void countOutcome(String outcome) {

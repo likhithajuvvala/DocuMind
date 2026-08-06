@@ -8,6 +8,8 @@ public class RetrievalProperties {
     private int topK = 6;
     private double similarityThreshold = 0.7;
     private int historyMessageLimit = 10;
+    private String reranker = "lexical";
+    private double rerankVectorWeight = 0.6;
 
     public int getTopK() {
         return topK;
@@ -23,6 +25,22 @@ public class RetrievalProperties {
 
     public void setSimilarityThreshold(double similarityThreshold) {
         this.similarityThreshold = similarityThreshold;
+    }
+
+    public String getReranker() {
+        return reranker;
+    }
+
+    public void setReranker(String reranker) {
+        this.reranker = reranker;
+    }
+
+    public double getRerankVectorWeight() {
+        return rerankVectorWeight;
+    }
+
+    public void setRerankVectorWeight(double rerankVectorWeight) {
+        this.rerankVectorWeight = rerankVectorWeight;
     }
 
     public int getHistoryMessageLimit() {
