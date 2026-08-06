@@ -52,6 +52,27 @@ Seeding is off by default and enabled only in Docker Compose, so a production de
 
 The seeder skips silently when the demo user already exists, which covers both restarts and a second replica starting at the same time. Seeded documents remain `PENDING` until `ingestion-worker` runs with an embedding provider configured; the seeder's job ends once the upload events are published.
 
+## Dashboards and metrics
+
+Grafana provisions both a Prometheus datasource (uid `documind-prometheus`) and the **DocuMind Overview** dashboard from `infra/observability/`, so a fresh `docker compose up` lands on a populated dashboard with no manual import.
+
+The panels cover what the README promises — request latency, ingestion throughput and failure rate, and per-workspace token usage — which required instrumenting the application, because none of those metrics existed before:
+
+| Metric | Emitted by | Tags |
+|---|---|---|
+| `documind.ingestion.documents` | `IngestionMetrics` | `result`, `failure` |
+| `documind.ingestion.chunks` | `IngestionMetrics` | — |
+| `documind.ingestion.duration` | `IngestionMetrics` | histogram |
+| `documind.llm.tokens` | `UsageRecorder` | `workspace`, `model`, `kind` |
+| `documind.llm.cost` | `UsageRecorder` | `workspace`, `model` |
+| `documind.chat.answers` | `AnswerStreamService` | `outcome` |
+
+Every meter sharing a name must carry the same tag keys, or Micrometer silently drops the inconsistent ones — which is why the indexed counter carries `failure="none"`. `IngestionMetricsTest` and `UsageRecorderTest` assert the exact Prometheus series names the dashboard queries, so renaming a metric without updating the dashboard fails the build rather than producing an empty panel.
+
+Latency percentiles depend on `management.metrics.distribution.percentiles-histogram.http.server.requests`, enabled in every service; without it the p95 panel has no buckets to query.
+
+The `workspace` tag on token metrics is per-tenant by design. It is fine at demo scale but is unbounded cardinality, so a large deployment should aggregate or drop that tag before shipping these metrics to long-term storage.
+
 ## Java toolchain
 
 The Gradle wrapper is pinned to 9.1.0 and every module targets a Java 21 toolchain, so a real JDK 21 must be resolvable. A JRE is not sufficient, because the build needs a compiler. When the only Java on the machine is a JRE, Gradle fails with `does not provide the required capabilities: [JAVA_COMPILER]`, the IDE's Gradle sync fails with it, and every import in the project is then reported as unresolved.

@@ -66,7 +66,7 @@ services:
   prometheus:
     image: prom/prometheus:v3.0.1
     volumes:
-      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro,z
     ports:
       - "9090:9090"
 
@@ -76,7 +76,9 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-documind}
       GF_USERS_ALLOW_SIGN_UP: "false"
     volumes:
-      - ./observability/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+      - ./observability/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro,z
+      - ./observability/grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro,z
+      - ./observability/dashboards:/etc/grafana/provisioning/dashboards/documind:ro,z
       - grafana-data:/var/lib/grafana
     ports:
       - "3001:3000"
@@ -144,10 +146,15 @@ services:
       S3_ACCESS_KEY: ${S3_ACCESS_KEY:-documind}
       S3_SECRET_KEY: ${S3_SECRET_KEY:-documind-secret}
       EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-openai}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-text-embedding-3-small}
+      EMBEDDING_DIMENSIONS: ${EMBEDDING_DIMENSIONS:-1536}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-nomic-embed-text}
     ports:
       - "8082:8082"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       postgres:
         condition: service_healthy
@@ -169,11 +176,21 @@ services:
       JWT_SECRET: ${JWT_SECRET:-change-me-in-every-environment-with-a-long-random-value}
       LLM_PROVIDER: ${LLM_PROVIDER:-openai}
       EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-openai}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-text-embedding-3-small}
+      EMBEDDING_DIMENSIONS: ${EMBEDDING_DIMENSIONS:-1536}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-4o-mini}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_CHAT_MODEL: ${ANTHROPIC_CHAT_MODEL:-claude-sonnet-5}
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_CHAT_MODEL: ${OLLAMA_CHAT_MODEL:-llama3.1}
+      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-nomic-embed-text}
+      RETRIEVAL_TOP_K: ${RETRIEVAL_TOP_K:-6}
+      RETRIEVAL_SIMILARITY_THRESHOLD: ${RETRIEVAL_SIMILARITY_THRESHOLD:-0.7}
     ports:
       - "8083:8083"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       postgres:
         condition: service_healthy
