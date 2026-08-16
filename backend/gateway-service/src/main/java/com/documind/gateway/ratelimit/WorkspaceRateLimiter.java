@@ -1,20 +1,32 @@
 package com.documind.gateway.ratelimit;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Component;
 
 @Component
 public class WorkspaceRateLimiter {
 
-    private final RateLimitProperties properties;
-    private final Map<UUID, Window> windows = new ConcurrentHashMap<>();
+    // INCR and, only on the first hit of a window (current == 1), PEXPIRE — done as one Lua
+    // script so the two commands are atomic. This anchors each workspace's window to whenever
+    // its first request lands in Redis, the same fixed-window semantics as the previous
+    // in-memory version, except every gateway-service replica now shares the one counter instead
+    // of each pod keeping its own, which silently multiplied the real limit under autoscaling.
+    private static final DefaultRedisScript<Long> INCREMENT_SCRIPT = new DefaultRedisScript<>(
+            "local current = redis.call('INCR', KEYS[1]) "
+                    + "if current == 1 then redis.call('PEXPIRE', KEYS[1], ARGV[1]) end "
+                    + "return current",
+            Long.class);
 
-    public WorkspaceRateLimiter(RateLimitProperties properties) {
+    private static final String KEY_PREFIX = "documind:rate-limit:workspace:";
+
+    private final StringRedisTemplate redisTemplate;
+    private final RateLimitProperties properties;
+
+    public WorkspaceRateLimiter(StringRedisTemplate redisTemplate, RateLimitProperties properties) {
+        this.redisTemplate = redisTemplate;
         this.properties = properties;
     }
 
@@ -23,18 +35,10 @@ public class WorkspaceRateLimiter {
             return true;
         }
 
-        Duration windowLength = properties.getWindow();
-        Window window = windows.compute(workspaceId, (key, existing) -> {
-            Instant now = Instant.now();
-            if (existing == null || existing.startedAt().plus(windowLength).isBefore(now)) {
-                return new Window(now, new AtomicInteger());
-            }
-            return existing;
-        });
+        String key = KEY_PREFIX + workspaceId;
+        Long count = redisTemplate.execute(
+                INCREMENT_SCRIPT, List.of(key), String.valueOf(properties.getWindow().toMillis()));
 
-        return window.counter().incrementAndGet() <= properties.getRequestsPerWindow();
-    }
-
-    private record Window(Instant startedAt, AtomicInteger counter) {
+        return count != null && count <= properties.getRequestsPerWindow();
     }
 }

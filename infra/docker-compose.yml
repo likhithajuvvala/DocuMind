@@ -64,6 +64,18 @@ services:
     volumes:
       - qdrant-data:/qdrant/storage
 
+  redis:
+    image: redis:7.4-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
   prometheus:
     image: prom/prometheus:v3.0.1
     volumes:
@@ -100,10 +112,14 @@ services:
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000}
       DOCUMENT_SERVICE_URL: http://document-service:8081
       QUERY_SERVICE_URL: http://query-service:8083
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
     ports:
       - "8080:8080"
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   document-service:
@@ -228,4 +244,5 @@ volumes:
   minio-data:
   kafka-data:
   qdrant-data:
+  redis-data:
   grafana-data:
