@@ -1,5 +1,9 @@
 .env
 .env.local
+*~
+*.bak
+*.orig
+*.swp
 
 backend/.gradle/
 backend/build/
