@@ -39,12 +39,15 @@ public class DocumentUploadService {
 
     @Transactional
     public DocumentEntity upload(MultipartFile file, AuthenticatedUser user) {
-        uploadValidator.validate(file);
+        // The persisted contentType is the sniffed one, not the client-declared header, so
+        // everything downstream (storage metadata, extraction, the DocumentEntity itself) reflects
+        // what the file actually is rather than what the upload request merely claimed.
+        String contentType = uploadValidator.detectAndValidate(file);
         return ingest(
                 openStream(file),
                 file.getSize(),
                 file.getOriginalFilename(),
-                file.getContentType(),
+                contentType,
                 user.workspaceId(),
                 user.userId());
     }
