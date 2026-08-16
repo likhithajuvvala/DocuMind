@@ -62,12 +62,21 @@ public class ChunkIndexer {
                 .map(DocumentChunkEntity::getEmbeddingId)
                 .toList();
 
-        if (!staleEmbeddingIds.isEmpty()) {
-            vectorStore.delete(staleEmbeddingIds);
-            LOGGER.info("Removed {} stale embeddings for document {}", staleEmbeddingIds.size(), source.getId());
-        }
-
+        purgeEmbeddings(staleEmbeddingIds);
         chunkRepository.deleteByDocumentId(source.getId());
+    }
+
+    /** Removes the given embeddings from the vector store. Used both when re-indexing a document
+     * (via {@link #discardPreviousIndex}) and when a document is deleted outright — the caller in
+     * that second case already knows the embedding ids because document-service captured them
+     * before the owning Postgres chunk rows cascade-deleted along with the document row. */
+    @Transactional
+    public void purgeEmbeddings(List<String> embeddingIds) {
+        if (embeddingIds.isEmpty()) {
+            return;
+        }
+        vectorStore.delete(embeddingIds);
+        LOGGER.info("Removed {} embeddings", embeddingIds.size());
     }
 
     private Map<String, Object> buildMetadata(DocumentEntity source, TextChunk chunk) {
