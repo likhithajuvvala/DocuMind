@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generate:api-types": "bash scripts/generate-api-types.sh"
   },
   "dependencies": {
     "next": "15.5.22",
@@ -22,6 +23,7 @@
     "@types/react-dom": "19.0.3",
     "eslint": "9.18.0",
     "eslint-config-next": "15.5.22",
+    "openapi-typescript": "^7.4.3",
     "typescript": "5.7.3",
     "vitest": "2.1.8"
   }
