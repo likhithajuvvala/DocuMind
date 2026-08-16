@@ -16,8 +16,7 @@ import org.hibernate.annotations.Filter;
 @Filter(name = "workspaceFilter")
 public class IngestionJobEntity {
 
-    @Id
-    private UUID id;
+    @Id private UUID id;
 
     @Column(name = "document_id", nullable = false)
     private UUID documentId;
@@ -41,10 +40,10 @@ public class IngestionJobEntity {
     @Column(name = "finished_at")
     private Instant finishedAt;
 
-    protected IngestionJobEntity() {
-    }
+    protected IngestionJobEntity() {}
 
-    public IngestionJobEntity(UUID id, UUID documentId, UUID workspaceId, IngestionStatus status, Instant startedAt) {
+    public IngestionJobEntity(
+            UUID id, UUID documentId, UUID workspaceId, IngestionStatus status, Instant startedAt) {
         this.id = id;
         this.documentId = documentId;
         this.workspaceId = workspaceId;

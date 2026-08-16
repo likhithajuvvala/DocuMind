@@ -43,29 +43,21 @@ class IngestionPipelineTest {
     private static final UUID DOCUMENT_ID = UUID.randomUUID();
     private static final UUID WORKSPACE_ID = UUID.randomUUID();
 
-    @Mock
-    private DocumentRepository documentRepository;
+    @Mock private DocumentRepository documentRepository;
 
-    @Mock
-    private IngestionJobRepository jobRepository;
+    @Mock private IngestionJobRepository jobRepository;
 
-    @Mock
-    private IngestionJobTracker jobTracker;
+    @Mock private IngestionJobTracker jobTracker;
 
-    @Mock
-    private ObjectStorage objectStorage;
+    @Mock private ObjectStorage objectStorage;
 
-    @Mock
-    private TextExtractor textExtractor;
+    @Mock private TextExtractor textExtractor;
 
-    @Mock
-    private TextChunker textChunker;
+    @Mock private TextChunker textChunker;
 
-    @Mock
-    private ChunkIndexer chunkIndexer;
+    @Mock private ChunkIndexer chunkIndexer;
 
-    @Mock
-    private IngestionEventPublisher eventPublisher;
+    @Mock private IngestionEventPublisher eventPublisher;
 
     private final MeterRegistry meterRegistry = new SimpleMeterRegistry();
 
@@ -87,9 +79,11 @@ class IngestionPipelineTest {
         DocumentEntity document = document(DocumentStatus.PENDING);
         when(documentRepository.findById(DOCUMENT_ID)).thenReturn(Optional.of(document));
         when(jobTracker.start(document)).thenReturn(queuedJob());
-        when(objectStorage.read(anyString())).thenThrow(new ObjectStorageException("bucket offline", null));
+        when(objectStorage.read(anyString()))
+                .thenThrow(new ObjectStorageException("bucket offline", null));
 
-        assertThatThrownBy(() -> pipeline().process(event())).isInstanceOf(RetryableIngestionException.class);
+        assertThatThrownBy(() -> pipeline().process(event()))
+                .isInstanceOf(RetryableIngestionException.class);
 
         verify(jobTracker).recordTransientFailure(any(), anyString());
         verify(eventPublisher, never()).publishFailed(any(), anyString());
@@ -100,8 +94,10 @@ class IngestionPipelineTest {
         DocumentEntity document = document(DocumentStatus.PENDING);
         when(documentRepository.findById(DOCUMENT_ID)).thenReturn(Optional.of(document));
         when(jobTracker.start(document)).thenReturn(queuedJob());
-        when(objectStorage.read(anyString())).thenReturn(new ByteArrayInputStream(new byte[] {1, 2}));
-        when(textExtractor.extract(any())).thenThrow(new TextExtractionException("corrupt file", null));
+        when(objectStorage.read(anyString()))
+                .thenReturn(new ByteArrayInputStream(new byte[] {1, 2}));
+        when(textExtractor.extract(any()))
+                .thenThrow(new TextExtractionException("corrupt file", null));
 
         pipeline().process(event());
 
@@ -155,6 +151,10 @@ class IngestionPipelineTest {
 
     private IngestionJobEntity queuedJob() {
         return new IngestionJobEntity(
-                UUID.randomUUID(), DOCUMENT_ID, WORKSPACE_ID, IngestionStatus.QUEUED, Instant.now());
+                UUID.randomUUID(),
+                DOCUMENT_ID,
+                WORKSPACE_ID,
+                IngestionStatus.QUEUED,
+                Instant.now());
     }
 }

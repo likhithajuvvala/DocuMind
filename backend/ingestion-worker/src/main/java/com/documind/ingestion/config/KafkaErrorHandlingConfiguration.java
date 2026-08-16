@@ -21,16 +21,21 @@ public class KafkaErrorHandlingConfiguration {
 
     @Bean
     public DefaultErrorHandler ingestionErrorHandler(KafkaTemplate<String, Object> kafkaTemplate) {
-        DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(
-                kafkaTemplate,
-                (record, exception) ->
-                        new TopicPartition(KafkaTopics.DOCUMENT_UPLOADED_DEAD_LETTER, record.partition()));
+        DeadLetterPublishingRecoverer recoverer =
+                new DeadLetterPublishingRecoverer(
+                        kafkaTemplate,
+                        (record, exception) ->
+                                new TopicPartition(
+                                        KafkaTopics.DOCUMENT_UPLOADED_DEAD_LETTER,
+                                        record.partition()));
 
-        ExponentialBackOff backOff = new ExponentialBackOff(INITIAL_RETRY_INTERVAL_MILLIS, RETRY_MULTIPLIER);
+        ExponentialBackOff backOff =
+                new ExponentialBackOff(INITIAL_RETRY_INTERVAL_MILLIS, RETRY_MULTIPLIER);
         backOff.setMaxElapsedTime(MAX_RETRY_ELAPSED_TIME.toMillis());
 
         DefaultErrorHandler errorHandler = new DefaultErrorHandler(recoverer, backOff);
-        errorHandler.addNotRetryableExceptions(ResourceNotFoundException.class, TextExtractionException.class);
+        errorHandler.addNotRetryableExceptions(
+                ResourceNotFoundException.class, TextExtractionException.class);
         return errorHandler;
     }
 }

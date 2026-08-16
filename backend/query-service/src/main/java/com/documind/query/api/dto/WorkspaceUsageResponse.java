@@ -7,5 +7,8 @@ import java.util.List;
 import java.util.UUID;
 
 public record WorkspaceUsageResponse(
-        UUID workspaceId, Instant since, long totalTokens, BigDecimal totalCost, List<UsageSummary> perUser) {
-}
+        UUID workspaceId,
+        Instant since,
+        long totalTokens,
+        BigDecimal totalCost,
+        List<UsageSummary> perUser) {}

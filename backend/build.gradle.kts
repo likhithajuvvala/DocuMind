@@ -3,6 +3,7 @@ import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 plugins {
     id("org.springframework.boot") version "3.5.16" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
+    id("com.diffplug.spotless") version "7.0.2" apply false
 }
 
 allprojects {
@@ -33,6 +34,7 @@ subprojects {
     apply(plugin = "java")
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "jacoco")
+    apply(plugin = "com.diffplug.spotless")
 
     configure<JavaPluginExtension> {
         toolchain {
@@ -42,6 +44,20 @@ subprojects {
 
     configure<JacocoPluginExtension> {
         toolVersion = "0.8.12"
+    }
+
+    configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+        java {
+            // AOSP, not the Google default, since it's 4-space-indented — matching this codebase's
+            // existing style keeps the one-time adoption diff to formatting only, not a wholesale
+            // 2-space reindent of every file.
+            googleJavaFormat().aosp()
+            importOrder()
+            removeUnusedImports()
+            trimTrailingWhitespace()
+            endWithNewline()
+            target("src/*/java/**/*.java")
+        }
     }
 
     configure<DependencyManagementExtension> {

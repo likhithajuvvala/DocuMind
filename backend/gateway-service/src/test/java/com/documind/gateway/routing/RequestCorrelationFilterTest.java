@@ -22,8 +22,7 @@ class RequestCorrelationFilterTest {
 
         filter.doFilter(request, response, new MockFilterChain());
 
-        assertThat(response.getHeader(RequestCorrelationFilter.REQUEST_ID_HEADER))
-                .isNotBlank();
+        assertThat(response.getHeader(RequestCorrelationFilter.REQUEST_ID_HEADER)).isNotBlank();
     }
 
     @Test
@@ -36,10 +35,13 @@ class RequestCorrelationFilterTest {
         filter.doFilter(request, response, chain);
 
         assertThat(response.getHeader(RequestCorrelationFilter.REQUEST_ID_HEADER))
-                .as("a proxied response already carries the header set by the service that minted the id, "
-                        + "so setting it again returns it twice")
+                .as(
+                        "a proxied response already carries the header set by the service that minted the id, "
+                                + "so setting it again returns it twice")
                 .isNull();
-        assertThat(((HttpServletRequest) chain.getRequest()).getHeader(RequestCorrelationFilter.REQUEST_ID_HEADER))
+        assertThat(
+                        ((HttpServletRequest) chain.getRequest())
+                                .getHeader(RequestCorrelationFilter.REQUEST_ID_HEADER))
                 .isEqualTo("abc-123");
     }
 
@@ -53,7 +55,8 @@ class RequestCorrelationFilterTest {
 
         HttpServletRequest forwarded = (HttpServletRequest) chain.getRequest();
         String forwardedId = forwarded.getHeader(RequestCorrelationFilter.REQUEST_ID_HEADER);
-        assertThat(forwardedId).isEqualTo(response.getHeader(RequestCorrelationFilter.REQUEST_ID_HEADER));
+        assertThat(forwardedId)
+                .isEqualTo(response.getHeader(RequestCorrelationFilter.REQUEST_ID_HEADER));
         assertThat(Collections.list(forwarded.getHeaderNames()))
                 .contains(RequestCorrelationFilter.REQUEST_ID_HEADER);
     }

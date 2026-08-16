@@ -50,7 +50,10 @@ public class PiiRedactor {
 
             while (matcher.find()) {
                 String candidate = matcher.group();
-                String replacement = category.confirms(candidate) ? placeholderFor(category, candidate) : candidate;
+                String replacement =
+                        category.confirms(candidate)
+                                ? placeholderFor(category, candidate)
+                                : candidate;
                 matcher.appendReplacement(rewritten, Matcher.quoteReplacement(replacement));
             }
             matcher.appendTail(rewritten);
@@ -58,10 +61,12 @@ public class PiiRedactor {
         }
 
         private String placeholderFor(PiiCategory category, String value) {
-            return placeholdersByValue.computeIfAbsent(value, ignored -> {
-                int next = counts.merge(category, 1, Integer::sum);
-                return "[%s_%d]".formatted(category.label(), next);
-            });
+            return placeholdersByValue.computeIfAbsent(
+                    value,
+                    ignored -> {
+                        int next = counts.merge(category, 1, Integer::sum);
+                        return "[%s_%d]".formatted(category.label(), next);
+                    });
         }
     }
 }

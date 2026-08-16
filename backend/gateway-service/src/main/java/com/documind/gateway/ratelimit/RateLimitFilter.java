@@ -28,7 +28,8 @@ public class RateLimitFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    protected void doFilterInternal(
+            HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         var user = CurrentUser.find();
         if (user.isPresent() && !rateLimiter.tryConsume(user.get().workspaceId())) {
@@ -43,6 +44,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         objectMapper.writeValue(
                 response.getOutputStream(),
-                ApiErrorResponse.of("rate_limit_exceeded", "Workspace request quota exhausted, retry shortly"));
+                ApiErrorResponse.of(
+                        "rate_limit_exceeded", "Workspace request quota exhausted, retry shortly"));
     }
 }

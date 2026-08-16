@@ -12,8 +12,8 @@ import org.springframework.ai.embedding.EmbeddingResponse;
 /**
  * A deterministic stand-in for a real embedding provider, so integration tests exercise the real
  * vector store without calling out to OpenAI or Ollama. Text is hashed into a fixed-size
- * bag-of-words vector: texts that share vocabulary end up with a higher cosine similarity, which
- * is enough to make similarity search behave meaningfully without needing a trained model.
+ * bag-of-words vector: texts that share vocabulary end up with a higher cosine similarity, which is
+ * enough to make similarity search behave meaningfully without needing a trained model.
  */
 public class HashingEmbeddingModel implements EmbeddingModel {
 

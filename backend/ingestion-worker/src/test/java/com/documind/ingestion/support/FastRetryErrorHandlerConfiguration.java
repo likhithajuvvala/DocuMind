@@ -14,8 +14,8 @@ import org.springframework.util.backoff.FixedBackOff;
 
 /**
  * Replaces the production error handler's five-minute exponential backoff with a fixed, sub-second
- * one, so a test can observe a message actually reach the dead letter topic without waiting for
- * the real retry budget to run out.
+ * one, so a test can observe a message actually reach the dead letter topic without waiting for the
+ * real retry budget to run out.
  */
 @TestConfiguration
 public class FastRetryErrorHandlerConfiguration {
@@ -25,15 +25,21 @@ public class FastRetryErrorHandlerConfiguration {
 
     @Bean
     @Primary
-    public DefaultErrorHandler fastRetryIngestionErrorHandler(KafkaTemplate<String, Object> kafkaTemplate) {
-        DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(
-                kafkaTemplate,
-                (record, exception) ->
-                        new TopicPartition(KafkaTopics.DOCUMENT_UPLOADED_DEAD_LETTER, record.partition()));
+    public DefaultErrorHandler fastRetryIngestionErrorHandler(
+            KafkaTemplate<String, Object> kafkaTemplate) {
+        DeadLetterPublishingRecoverer recoverer =
+                new DeadLetterPublishingRecoverer(
+                        kafkaTemplate,
+                        (record, exception) ->
+                                new TopicPartition(
+                                        KafkaTopics.DOCUMENT_UPLOADED_DEAD_LETTER,
+                                        record.partition()));
 
         DefaultErrorHandler errorHandler =
-                new DefaultErrorHandler(recoverer, new FixedBackOff(RETRY_INTERVAL_MILLIS, MAX_RETRIES));
-        errorHandler.addNotRetryableExceptions(ResourceNotFoundException.class, TextExtractionException.class);
+                new DefaultErrorHandler(
+                        recoverer, new FixedBackOff(RETRY_INTERVAL_MILLIS, MAX_RETRIES));
+        errorHandler.addNotRetryableExceptions(
+                ResourceNotFoundException.class, TextExtractionException.class);
         return errorHandler;
     }
 }

@@ -6,7 +6,8 @@ import java.util.Set;
  * Decides whether a prompt must be redacted before it leaves the process.
  *
  * <p>The default keys off the provider: a locally hosted model never sends the text anywhere, so
- * redacting it only degrades the answer, while a hosted provider receives whatever is in the prompt.
+ * redacting it only degrades the answer, while a hosted provider receives whatever is in the
+ * prompt.
  */
 public class PiiRedactionPolicy {
 
@@ -29,6 +30,7 @@ public class PiiRedactionPolicy {
     }
 
     public String describe() {
-        return "mode=%s provider=%s redacting=%s".formatted(properties.getMode(), chatProvider, shouldRedact());
+        return "mode=%s provider=%s redacting=%s"
+                .formatted(properties.getMode(), chatProvider, shouldRedact());
     }
 }

@@ -18,7 +18,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @ConditionalOnProperty(prefix = "documind.rag", name = "validate-dimensions", matchIfMissing = true)
 public class EmbeddingDimensionConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddingDimensionConfiguration.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(EmbeddingDimensionConfiguration.class);
 
     private static final String PGVECTOR = "pgvector";
 
@@ -55,10 +56,13 @@ public class EmbeddingDimensionConfiguration {
         EmbeddingModel embeddingModel = embeddingModelProvider.getIfAvailable();
 
         if (jdbcTemplate == null || embeddingModel == null) {
-            LOGGER.debug("Skipping embedding dimension validation because this service does not embed documents");
+            LOGGER.debug(
+                    "Skipping embedding dimension validation because this service does not embed documents");
             return;
         }
 
-        new EmbeddingDimensionValidator(jdbcTemplate, embeddingModel, tableName, configuredDimensions).validate();
+        new EmbeddingDimensionValidator(
+                        jdbcTemplate, embeddingModel, tableName, configuredDimensions)
+                .validate();
     }
 }

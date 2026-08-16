@@ -36,8 +36,13 @@ class DocumentLifecycleServiceTest {
     private final DocumentChunkRepository chunkRepository = mock(DocumentChunkRepository.class);
     private final ObjectStorage objectStorage = mock(ObjectStorage.class);
     private final DocumentEventPublisher eventPublisher = mock(DocumentEventPublisher.class);
-    private final DocumentLifecycleService service = new DocumentLifecycleService(
-            uploadService, documentRepository, chunkRepository, objectStorage, eventPublisher);
+    private final DocumentLifecycleService service =
+            new DocumentLifecycleService(
+                    uploadService,
+                    documentRepository,
+                    chunkRepository,
+                    objectStorage,
+                    eventPublisher);
 
     @Test
     void deleteRemovesTheDocumentTheStorageObjectAndPublishesTheEmbeddingIdsToPurge() {
@@ -51,11 +56,13 @@ class DocumentLifecycleServiceTest {
         verify(documentRepository).delete(document);
         verify(objectStorage).delete(document.getStoragePath());
 
-        ArgumentCaptor<DocumentDeletedEvent> published = ArgumentCaptor.forClass(DocumentDeletedEvent.class);
+        ArgumentCaptor<DocumentDeletedEvent> published =
+                ArgumentCaptor.forClass(DocumentDeletedEvent.class);
         verify(eventPublisher).publishDeleted(published.capture());
         assertThat(published.getValue().documentId()).isEqualTo(document.getId());
         assertThat(published.getValue().workspaceId()).isEqualTo(WORKSPACE_ID);
-        assertThat(published.getValue().embeddingIds()).containsExactlyInAnyOrder("embedding-1", "embedding-2");
+        assertThat(published.getValue().embeddingIds())
+                .containsExactlyInAnyOrder("embedding-1", "embedding-2");
     }
 
     @Test
@@ -67,7 +74,8 @@ class DocumentLifecycleServiceTest {
                 .when(objectStorage)
                 .delete(document.getStoragePath());
 
-        assertThatCode(() -> service.delete(document.getId(), WORKSPACE_ID)).doesNotThrowAnyException();
+        assertThatCode(() -> service.delete(document.getId(), WORKSPACE_ID))
+                .doesNotThrowAnyException();
 
         verify(documentRepository).delete(document);
         verify(eventPublisher).publishDeleted(any());
@@ -83,7 +91,8 @@ class DocumentLifecycleServiceTest {
         assertThat(result.getStatus()).isEqualTo(DocumentStatus.PENDING);
         verify(documentRepository).save(document);
 
-        ArgumentCaptor<DocumentUploadedEvent> published = ArgumentCaptor.forClass(DocumentUploadedEvent.class);
+        ArgumentCaptor<DocumentUploadedEvent> published =
+                ArgumentCaptor.forClass(DocumentUploadedEvent.class);
         verify(eventPublisher).publishUploaded(published.capture());
         assertThat(published.getValue().documentId()).isEqualTo(document.getId());
         assertThat(published.getValue().storagePath()).isEqualTo(document.getStoragePath());
@@ -116,6 +125,13 @@ class DocumentLifecycleServiceTest {
 
     private DocumentChunkEntity chunk(String embeddingId) {
         return new DocumentChunkEntity(
-                UUID.randomUUID(), UUID.randomUUID(), WORKSPACE_ID, "text", 0, 1, embeddingId, Instant.now());
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                WORKSPACE_ID,
+                "text",
+                0,
+                1,
+                embeddingId,
+                Instant.now());
     }
 }

@@ -26,8 +26,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegistrationRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(request));
+    public ResponseEntity<AuthenticationResponse> register(
+            @Valid @RequestBody RegistrationRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(authenticationService.register(request));
     }
 
     @PostMapping("/login")
@@ -53,25 +55,29 @@ public class AuthenticationController {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiErrorResponse> handleBadCredentials(BadCredentialsException exception) {
+    public ResponseEntity<ApiErrorResponse> handleBadCredentials(
+            BadCredentialsException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ApiErrorResponse.of("invalid_credentials", exception.getMessage()));
     }
 
     @ExceptionHandler(EmailAlreadyRegisteredException.class)
-    public ResponseEntity<ApiErrorResponse> handleDuplicateEmail(EmailAlreadyRegisteredException exception) {
+    public ResponseEntity<ApiErrorResponse> handleDuplicateEmail(
+            EmailAlreadyRegisteredException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ApiErrorResponse.of("email_already_registered", exception.getMessage()));
     }
 
     @ExceptionHandler(InvalidRefreshTokenException.class)
-    public ResponseEntity<ApiErrorResponse> handleInvalidRefreshToken(InvalidRefreshTokenException exception) {
+    public ResponseEntity<ApiErrorResponse> handleInvalidRefreshToken(
+            InvalidRefreshTokenException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ApiErrorResponse.of("invalid_refresh_token", exception.getMessage()));
     }
 
     @ExceptionHandler(RefreshTokenReuseException.class)
-    public ResponseEntity<ApiErrorResponse> handleRefreshTokenReuse(RefreshTokenReuseException exception) {
+    public ResponseEntity<ApiErrorResponse> handleRefreshTokenReuse(
+            RefreshTokenReuseException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ApiErrorResponse.of("refresh_token_reused", exception.getMessage()));
     }

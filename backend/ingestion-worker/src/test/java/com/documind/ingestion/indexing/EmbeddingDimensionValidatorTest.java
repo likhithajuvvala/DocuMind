@@ -65,7 +65,8 @@ class EmbeddingDimensionValidatorTest {
     @Test
     void startsWhenTheEmbeddingModelCannotBeReached() {
         storedDimension(768);
-        when(embeddingModel.dimensions()).thenThrow(new IllegalStateException("provider unavailable"));
+        when(embeddingModel.dimensions())
+                .thenThrow(new IllegalStateException("provider unavailable"));
 
         assertThatCode(() -> validator(768).validate()).doesNotThrowAnyException();
     }
@@ -73,7 +74,8 @@ class EmbeddingDimensionValidatorTest {
     @Test
     void reportsTheStoredDimensionEvenWhenTheModelIsUnreachable() {
         storedDimension(1536);
-        when(embeddingModel.dimensions()).thenThrow(new IllegalStateException("provider unavailable"));
+        when(embeddingModel.dimensions())
+                .thenThrow(new IllegalStateException("provider unavailable"));
 
         assertThatThrownBy(() -> validator(768).validate())
                 .isInstanceOf(EmbeddingDimensionMismatchException.class)
@@ -96,6 +98,7 @@ class EmbeddingDimensionValidatorTest {
     }
 
     private EmbeddingDimensionValidator validator(int configuredDimensions) {
-        return new EmbeddingDimensionValidator(jdbcTemplate, embeddingModel, TABLE, configuredDimensions);
+        return new EmbeddingDimensionValidator(
+                jdbcTemplate, embeddingModel, TABLE, configuredDimensions);
     }
 }

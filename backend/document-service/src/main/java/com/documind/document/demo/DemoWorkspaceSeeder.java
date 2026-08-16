@@ -25,7 +25,8 @@ public class DemoWorkspaceSeeder {
     private final UserRepository userRepository;
     private final DemoWorkspaceRegistrar registrar;
     private final DocumentUploadService uploadService;
-    private final ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+    private final ResourcePatternResolver resourceResolver =
+            new PathMatchingResourcePatternResolver();
 
     public DemoWorkspaceSeeder(
             DemoWorkspaceProperties properties,
@@ -50,8 +51,11 @@ public class DemoWorkspaceSeeder {
         }
 
         try {
-            UserEntity owner = registrar.createWorkspaceOwner(
-                    properties.getWorkspaceName(), properties.getEmail(), properties.getPassword());
+            UserEntity owner =
+                    registrar.createWorkspaceOwner(
+                            properties.getWorkspaceName(),
+                            properties.getEmail(),
+                            properties.getPassword());
             int seeded = uploadSampleDocuments(owner);
             LOGGER.info(
                     "Seeded demo workspace {} for {} with {} sample documents",
@@ -88,7 +92,10 @@ public class DemoWorkspaceSeeder {
         try {
             return resourceResolver.getResources(properties.getDocumentLocation());
         } catch (IOException exception) {
-            LOGGER.warn("No demo documents were found at {}", properties.getDocumentLocation(), exception);
+            LOGGER.warn(
+                    "No demo documents were found at {}",
+                    properties.getDocumentLocation(),
+                    exception);
             return new Resource[0];
         }
     }

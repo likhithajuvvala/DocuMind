@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DocumentChunkRepository extends JpaRepository<DocumentChunkEntity, UUID> {
 
-    List<DocumentChunkEntity> findByEmbeddingIdInAndWorkspaceId(List<String> embeddingIds, UUID workspaceId);
+    List<DocumentChunkEntity> findByEmbeddingIdInAndWorkspaceId(
+            List<String> embeddingIds, UUID workspaceId);
 
     List<DocumentChunkEntity> findByDocumentId(UUID documentId);
 

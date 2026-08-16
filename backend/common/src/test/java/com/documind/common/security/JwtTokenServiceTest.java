@@ -18,7 +18,8 @@ class JwtTokenServiceTest {
     @Test
     void issuesAccessTokenCarryingWorkspaceAndRole() {
         AuthenticatedUser user =
-                new AuthenticatedUser(UUID.randomUUID(), UUID.randomUUID(), "user@documind.test", UserRole.ADMIN);
+                new AuthenticatedUser(
+                        UUID.randomUUID(), UUID.randomUUID(), "user@documind.test", UserRole.ADMIN);
 
         String token = tokenService.issueAccessToken(user);
 
@@ -28,7 +29,11 @@ class JwtTokenServiceTest {
     @Test
     void rejectsAccessTokenWhenSignatureDoesNotMatch() {
         AuthenticatedUser user =
-                new AuthenticatedUser(UUID.randomUUID(), UUID.randomUUID(), "user@documind.test", UserRole.MEMBER);
+                new AuthenticatedUser(
+                        UUID.randomUUID(),
+                        UUID.randomUUID(),
+                        "user@documind.test",
+                        UserRole.MEMBER);
         String token = tokenService.issueAccessToken(user);
 
         JwtProperties otherProperties = properties();
@@ -43,12 +48,14 @@ class JwtTokenServiceTest {
         // A hand-crafted token with no token_type claim at all must not authenticate, since
         // resolveAccessToken only accepts tokens explicitly marked as the access type.
         JwtProperties properties = properties();
-        SecretKey signingKey = Keys.hmacShaKeyFor(properties.getSecret().getBytes(StandardCharsets.UTF_8));
-        String bareToken = Jwts.builder()
-                .issuer(properties.getIssuer())
-                .subject(UUID.randomUUID().toString())
-                .signWith(signingKey)
-                .compact();
+        SecretKey signingKey =
+                Keys.hmacShaKeyFor(properties.getSecret().getBytes(StandardCharsets.UTF_8));
+        String bareToken =
+                Jwts.builder()
+                        .issuer(properties.getIssuer())
+                        .subject(UUID.randomUUID().toString())
+                        .signWith(signingKey)
+                        .compact();
 
         assertThat(tokenService.resolveAccessToken(bareToken)).isEmpty();
     }

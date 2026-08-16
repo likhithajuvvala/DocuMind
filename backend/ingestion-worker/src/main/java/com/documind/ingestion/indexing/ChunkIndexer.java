@@ -40,16 +40,18 @@ public class ChunkIndexer {
 
         for (TextChunk chunk : chunks) {
             String embeddingId = UUID.randomUUID().toString();
-            embeddableDocuments.add(new Document(embeddingId, chunk.text(), buildMetadata(source, chunk)));
-            persistedChunks.add(new DocumentChunkEntity(
-                    UUID.randomUUID(),
-                    source.getId(),
-                    source.getWorkspaceId(),
-                    chunk.text(),
-                    chunk.index(),
-                    chunk.pageNumber(),
-                    embeddingId,
-                    now));
+            embeddableDocuments.add(
+                    new Document(embeddingId, chunk.text(), buildMetadata(source, chunk)));
+            persistedChunks.add(
+                    new DocumentChunkEntity(
+                            UUID.randomUUID(),
+                            source.getId(),
+                            source.getWorkspaceId(),
+                            chunk.text(),
+                            chunk.index(),
+                            chunk.pageNumber(),
+                            embeddingId,
+                            now));
         }
 
         vectorStore.add(embeddableDocuments);
@@ -58,18 +60,21 @@ public class ChunkIndexer {
     }
 
     private void discardPreviousIndex(DocumentEntity source) {
-        List<String> staleEmbeddingIds = chunkRepository.findByDocumentId(source.getId()).stream()
-                .map(DocumentChunkEntity::getEmbeddingId)
-                .toList();
+        List<String> staleEmbeddingIds =
+                chunkRepository.findByDocumentId(source.getId()).stream()
+                        .map(DocumentChunkEntity::getEmbeddingId)
+                        .toList();
 
         purgeEmbeddings(staleEmbeddingIds);
         chunkRepository.deleteByDocumentId(source.getId());
     }
 
-    /** Removes the given embeddings from the vector store. Used both when re-indexing a document
+    /**
+     * Removes the given embeddings from the vector store. Used both when re-indexing a document
      * (via {@link #discardPreviousIndex}) and when a document is deleted outright — the caller in
      * that second case already knows the embedding ids because document-service captured them
-     * before the owning Postgres chunk rows cascade-deleted along with the document row. */
+     * before the owning Postgres chunk rows cascade-deleted along with the document row.
+     */
     @Transactional
     public void purgeEmbeddings(List<String> embeddingIds) {
         if (embeddingIds.isEmpty()) {

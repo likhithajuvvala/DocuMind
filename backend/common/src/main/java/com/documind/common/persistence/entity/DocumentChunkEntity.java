@@ -13,8 +13,7 @@ import org.hibernate.annotations.Filter;
 @Filter(name = "workspaceFilter")
 public class DocumentChunkEntity {
 
-    @Id
-    private UUID id;
+    @Id private UUID id;
 
     @Column(name = "document_id", nullable = false)
     private UUID documentId;
@@ -37,8 +36,7 @@ public class DocumentChunkEntity {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    protected DocumentChunkEntity() {
-    }
+    protected DocumentChunkEntity() {}
 
     public DocumentChunkEntity(
             UUID id,

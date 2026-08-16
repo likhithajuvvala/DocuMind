@@ -16,9 +16,15 @@ public enum PiiCategory {
 
     NATIONAL_ID("NATIONAL_ID", Pattern.compile("\\b\\d{3}-\\d{2}-\\d{4}\\b"), value -> true),
 
-    PHONE("PHONE", Pattern.compile("(?<![\\w.])\\+\\d[\\d\\s().-]{7,17}\\d(?![\\w.])"), value -> true),
+    PHONE(
+            "PHONE",
+            Pattern.compile("(?<![\\w.])\\+\\d[\\d\\s().-]{7,17}\\d(?![\\w.])"),
+            value -> true),
 
-    IP_ADDRESS("IP", Pattern.compile("\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b"), PiiCategory::isPlausibleIpv4);
+    IP_ADDRESS(
+            "IP",
+            Pattern.compile("\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b"),
+            PiiCategory::isPlausibleIpv4);
 
     private final String label;
     private final Pattern pattern;

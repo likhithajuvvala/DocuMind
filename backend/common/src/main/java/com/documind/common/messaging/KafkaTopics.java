@@ -8,6 +8,5 @@ public final class KafkaTopics {
     public static final String DOCUMENT_DELETED = "documind.document.deleted";
     public static final String DOCUMENT_UPLOADED_DEAD_LETTER = "documind.document.uploaded.dlt";
 
-    private KafkaTopics() {
-    }
+    private KafkaTopics() {}
 }
