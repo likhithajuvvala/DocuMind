@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jdk-alpine AS build
+FROM eclipse-temurin:25-jdk-alpine AS build
 WORKDIR /workspace
 
 # Resolve dependencies in their own layer, from just the build files, before the full source is
@@ -18,7 +18,7 @@ RUN ./gradlew --no-daemon :query-service:dependencies
 COPY . .
 RUN ./gradlew --no-daemon :query-service:bootJar
 
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
 RUN apk upgrade --no-cache
 RUN addgroup -S documind && adduser -S documind -G documind
