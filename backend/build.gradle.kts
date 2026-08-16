@@ -60,13 +60,13 @@ subprojects {
             // 4.1.135.Final is affected by CVE-2026-59901 (infinite loop in the bzip2 codec) and
             // fails gateway-service's image vulnerability scan in CI; pin every Netty module
             // individually to force the patched version.
-            dependency("io.netty:netty-buffer:4.1.136.Final")
-            dependency("io.netty:netty-codec:4.1.136.Final")
-            dependency("io.netty:netty-common:4.1.136.Final")
-            dependency("io.netty:netty-handler:4.1.136.Final")
-            dependency("io.netty:netty-resolver:4.1.136.Final")
-            dependency("io.netty:netty-transport:4.1.136.Final")
-            dependency("io.netty:netty-transport-native-unix-common:4.1.136.Final")
+            dependency("io.netty:netty-buffer:4.2.17.Final")
+            dependency("io.netty:netty-codec:4.2.17.Final")
+            dependency("io.netty:netty-common:4.2.17.Final")
+            dependency("io.netty:netty-handler:4.2.17.Final")
+            dependency("io.netty:netty-resolver:4.2.17.Final")
+            dependency("io.netty:netty-transport:4.2.17.Final")
+            dependency("io.netty:netty-transport-native-unix-common:4.2.17.Final")
             // spring-ai-starter-vector-store-qdrant (ingestion-worker, query-service) pulls in the
             // Qdrant Java client, which depends on an old gRPC/protobuf pair affected by
             // CVE-2025-55163 (Netty MadeYouReset HTTP/2 DoS, inside grpc-netty-shaded's bundled
