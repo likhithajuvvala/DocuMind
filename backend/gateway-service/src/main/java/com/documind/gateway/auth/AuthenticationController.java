@@ -40,6 +40,18 @@ public class AuthenticationController {
         return authenticationService.refresh(request);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@Valid @RequestBody RefreshRequest request) {
+        authenticationService.logout(request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/logout-all")
+    public ResponseEntity<Void> logoutAllSessions(@Valid @RequestBody RefreshRequest request) {
+        authenticationService.logoutAllSessions(request);
+        return ResponseEntity.noContent().build();
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiErrorResponse> handleBadCredentials(BadCredentialsException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -50,5 +62,17 @@ public class AuthenticationController {
     public ResponseEntity<ApiErrorResponse> handleDuplicateEmail(EmailAlreadyRegisteredException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ApiErrorResponse.of("email_already_registered", exception.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidRefreshToken(InvalidRefreshTokenException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiErrorResponse.of("invalid_refresh_token", exception.getMessage()));
+    }
+
+    @ExceptionHandler(RefreshTokenReuseException.class)
+    public ResponseEntity<ApiErrorResponse> handleRefreshTokenReuse(RefreshTokenReuseException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiErrorResponse.of("refresh_token_reused", exception.getMessage()));
     }
 }

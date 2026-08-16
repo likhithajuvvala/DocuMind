@@ -74,6 +74,29 @@ export async function refreshSession(): Promise<boolean> {
   return true;
 }
 
+/**
+ * Revokes the current refresh token server-side so it cannot be used again, then clears local
+ * state. Best-effort: if the network call fails, the session is still cleared locally, because
+ * the user's intent to sign out of this browser must not depend on connectivity. The revocation
+ * itself is what makes sign-out mean something beyond this tab; without it the refresh token
+ * would remain valid until it naturally expired.
+ */
+export async function logout(): Promise<void> {
+  const refreshToken = readRefreshToken();
+  if (refreshToken) {
+    try {
+      await fetch(`${API_BASE_URL}/api/auth/logout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refreshToken })
+      });
+    } catch {
+      // Network failure signing out is not actionable by the user; local state still clears below.
+    }
+  }
+  clearSession();
+}
+
 async function readErrorMessage(response: Response): Promise<string> {
   try {
     const body = await response.json();
