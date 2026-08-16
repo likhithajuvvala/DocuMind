@@ -1,13 +1,27 @@
 server:
   port: 8082
+  shutdown: graceful
 
 spring:
   application:
     name: ingestion-worker
+  lifecycle:
+    # Longer than the other services: a Kafka listener container is a SmartLifecycle bean too, so
+    # this is also how long an in-flight chunk-and-embed job gets to finish before being cut off.
+    # Cutting it off isn't data-unsafe (the message just gets redelivered and retried), but letting
+    # it finish avoids throwing away work that was most of the way done.
+    timeout-per-shutdown-phase: 60s
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/documind}
     username: ${DATABASE_USER:documind}
     password: ${DATABASE_PASSWORD:documind}
+    hikari:
+      pool-name: ingestion-hikari
+      maximum-pool-size: 8
+      minimum-idle: 2
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1800000
   jpa:
     open-in-view: false
     hibernate:
