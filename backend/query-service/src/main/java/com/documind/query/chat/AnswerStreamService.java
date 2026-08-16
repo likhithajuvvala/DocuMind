@@ -11,10 +11,13 @@ import com.documind.query.rag.RetrievedChunk;
 import com.documind.query.usage.UsageRecorder;
 import io.micrometer.core.instrument.MeterRegistry;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.metadata.Usage;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -73,13 +76,27 @@ public class AnswerStreamService {
         }
 
         StringBuilder answer = new StringBuilder();
-        Flux<AnswerStreamEvent> tokens = chatClient.prompt().messages(prompt).stream().content().map(text -> {
-            answer.append(text);
-            return new AnswerStreamEvent.Token(text);
-        });
+        // Providers report real token usage on the response metadata rather than in the plain
+        // text stream, and streaming responses typically only carry it on the final chunk — so
+        // the latest non-empty Usage seen across the stream is kept, overwriting empty
+        // intermediate chunks, rather than assuming a fixed position.
+        AtomicReference<Usage> usage = new AtomicReference<>();
+        Flux<AnswerStreamEvent> tokens =
+                chatClient.prompt().messages(prompt).stream().chatResponse().map(response -> {
+                    String text = extractText(response);
+                    answer.append(text);
+                    Usage responseUsage = response.getMetadata() == null ? null : response.getMetadata().getUsage();
+                    if (responseUsage != null
+                            && responseUsage.getTotalTokens() != null
+                            && responseUsage.getTotalTokens() > 0) {
+                        usage.set(responseUsage);
+                    }
+                    return new AnswerStreamEvent.Token(text);
+                });
 
         return tokens.cast(AnswerStreamEvent.class)
-                .concatWith(Flux.defer(() -> persistAnswer(session, user, question, answer.toString(), citations)))
+                .concatWith(Flux.defer(() ->
+                        persistAnswer(session, user, question, answer.toString(), citations, usage.get())))
                 .onErrorResume(exception -> {
                     countAnswer("failed");
                     LOGGER.error("Streaming failed for session {}", session.getId(), exception);
@@ -87,14 +104,23 @@ public class AnswerStreamService {
                 });
     }
 
+    private String extractText(ChatResponse response) {
+        if (response.getResults().isEmpty() || response.getResult().getOutput() == null) {
+            return "";
+        }
+        String text = response.getResult().getOutput().getText();
+        return text == null ? "" : text;
+    }
+
     private Flux<AnswerStreamEvent> persistAnswer(
             ChatSessionEntity session,
             AuthenticatedUser user,
             String question,
             String answer,
-            List<Citation> citations) {
+            List<Citation> citations,
+            Usage usage) {
         ChatMessageEntity stored = sessionService.recordAssistantMessage(session.getId(), answer, citations);
-        int tokenCount = usageRecorder.record(user, question, answer);
+        int tokenCount = usageRecorder.record(user, question, answer, usage);
         countAnswer("grounded");
         return Flux.just(
                 new AnswerStreamEvent.Citations(citations),

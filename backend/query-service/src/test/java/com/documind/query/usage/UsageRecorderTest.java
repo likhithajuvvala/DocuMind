@@ -13,6 +13,9 @@ import io.micrometer.prometheusmetrics.PrometheusConfig;
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.chat.metadata.DefaultUsage;
+import org.springframework.ai.chat.metadata.EmptyUsage;
+import org.springframework.ai.chat.metadata.Usage;
 
 class UsageRecorderTest {
 
@@ -58,6 +61,34 @@ class UsageRecorderTest {
         org.mockito.ArgumentCaptor<UsageLogEntity> saved = org.mockito.ArgumentCaptor.forClass(UsageLogEntity.class);
         org.mockito.Mockito.verify(usageLogRepository).save(saved.capture());
         assertThat(saved.getValue().getWorkspaceId()).isEqualTo(WORKSPACE_ID);
+    }
+
+    @Test
+    void prefersTheProvidersReportedTokenCountsOverTheCharacterEstimate() {
+        when(usageLogRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        // "a question about the vendor agreement" is 38 characters, which the char/4 estimate
+        // would turn into 9 tokens; the provider's real count must win instead.
+        Usage reportedUsage = new DefaultUsage(41, 17);
+
+        recorder.record(
+                user(), "a question about the vendor agreement", "an answer grounded in the excerpts", reportedUsage);
+
+        org.mockito.ArgumentCaptor<UsageLogEntity> saved = org.mockito.ArgumentCaptor.forClass(UsageLogEntity.class);
+        org.mockito.Mockito.verify(usageLogRepository).save(saved.capture());
+        assertThat(saved.getValue().getPromptTokens()).isEqualTo(41);
+        assertThat(saved.getValue().getCompletionTokens()).isEqualTo(17);
+    }
+
+    @Test
+    void fallsBackToTheCharacterEstimateWhenTheProviderReportedNoUsage() {
+        when(usageLogRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+
+        recorder.record(user(), "question", "answer", new EmptyUsage());
+
+        org.mockito.ArgumentCaptor<UsageLogEntity> saved = org.mockito.ArgumentCaptor.forClass(UsageLogEntity.class);
+        org.mockito.Mockito.verify(usageLogRepository).save(saved.capture());
+        assertThat(saved.getValue().getPromptTokens()).isGreaterThan(0);
+        assertThat(saved.getValue().getCompletionTokens()).isGreaterThan(0);
     }
 
     private AuthenticatedUser user() {
