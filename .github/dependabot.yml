@@ -17,6 +17,15 @@ updates:
           - "org.mockito*"
           - "org.testcontainers*"
           - "org.assertj*"
+      # These are pinned as a matched set in build.gradle.kts (see the comments there) to avoid
+      # mixing incompatible Netty/gRPC versions on the same classpath — a real problem we hit
+      # once already. Grouping them here means any future bump arrives as one coordinated PR
+      # instead of N individually-broken ones.
+      netty-grpc:
+        patterns:
+          - "io.netty*"
+          - "io.grpc*"
+          - "com.google.protobuf*"
     labels:
       - dependencies
       - backend
