@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { CitationList } from "@/components/CitationList";
+import { Skeleton } from "@/components/Skeleton";
 import { chatHistory, createChatSession, listChatSessions, listDocuments } from "@/lib/apiClient";
 import { streamAnswer } from "@/lib/answerStream";
 import type { ChatMessage, ChatSession, Citation, DocumentSummary } from "@/lib/types";
@@ -17,6 +18,7 @@ export default function ChatPage() {
   const [streamingCitations, setStreamingCitations] = useState<Citation[]>([]);
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loadingWorkspace, setLoadingWorkspace] = useState(true);
 
   useEffect(() => {
     void (async () => {
@@ -29,6 +31,8 @@ export default function ChatPage() {
         }
       } catch (cause) {
         setError(cause instanceof Error ? cause.message : "Unable to load the chat workspace");
+      } finally {
+        setLoadingWorkspace(false);
       }
     })();
   }, []);
@@ -92,39 +96,49 @@ export default function ChatPage() {
     <>
       <section className="panel">
         <h2>Conversations</h2>
-        <div className="field">
-          <label htmlFor="session">Active session</label>
-          <select
-            id="session"
-            value={activeSessionId ?? ""}
-            onChange={(event) => setActiveSessionId(event.target.value || null)}
-          >
-            <option value="">Select a session</option>
-            {sessions.map((session) => (
-              <option key={session.id} value={session.id}>
-                {session.title}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="field">
-          <label htmlFor="scope">Scope to a document</label>
-          <select
-            id="scope"
-            value={scopedDocumentId}
-            onChange={(event) => setScopedDocumentId(event.target.value)}
-          >
-            <option value="">All workspace documents</option>
-            {documents.map((document) => (
-              <option key={document.id} value={document.id}>
-                {document.filename}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button type="button" onClick={handleNewSession}>
-          Start a new session
-        </button>
+        {loadingWorkspace ? (
+          <div className="field">
+            <Skeleton width="30%" height="0.85rem" />
+            <Skeleton width="100%" height="2.4rem" />
+            <Skeleton width="100%" height="2.4rem" />
+          </div>
+        ) : (
+          <>
+            <div className="field">
+              <label htmlFor="session">Active session</label>
+              <select
+                id="session"
+                value={activeSessionId ?? ""}
+                onChange={(event) => setActiveSessionId(event.target.value || null)}
+              >
+                <option value="">Select a session</option>
+                {sessions.map((session) => (
+                  <option key={session.id} value={session.id}>
+                    {session.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="field">
+              <label htmlFor="scope">Scope to a document</label>
+              <select
+                id="scope"
+                value={scopedDocumentId}
+                onChange={(event) => setScopedDocumentId(event.target.value)}
+              >
+                <option value="">All workspace documents</option>
+                {documents.map((document) => (
+                  <option key={document.id} value={document.id}>
+                    {document.filename}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button type="button" onClick={handleNewSession}>
+              Start a new session
+            </button>
+          </>
+        )}
       </section>
 
       <section className="panel">
