@@ -6,9 +6,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
+import org.hibernate.annotations.Filter;
 
 @Entity
 @Table(name = "chat_sessions")
+@Filter(name = "workspaceFilter")
 public class ChatSessionEntity {
 
     @Id
