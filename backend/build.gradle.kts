@@ -14,14 +14,34 @@ allprojects {
     }
 }
 
+// Instruction-coverage floors per module, each set a few points below what the module actually
+// measures today (see the measurements this was derived from — common and document-service are
+// genuinely under-tested relative to gateway-service/ingestion-worker, not a typo). A single
+// global threshold would either be meaninglessly low or break half the modules immediately; this
+// is a regression gate — it catches a PR that erodes an already-tested module, not a mandate to
+// hit one aspirational number everywhere at once. Ratchet a module's floor up as its real coverage
+// improves.
+val coverageMinimums = mapOf(
+    "common" to 0.20,
+    "gateway-service" to 0.85,
+    "document-service" to 0.15,
+    "ingestion-worker" to 0.90,
+    "query-service" to 0.50,
+)
+
 subprojects {
     apply(plugin = "java")
     apply(plugin = "io.spring.dependency-management")
+    apply(plugin = "jacoco")
 
     configure<JavaPluginExtension> {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(21))
         }
+    }
+
+    configure<JacocoPluginExtension> {
+        toolVersion = "0.8.12"
     }
 
     configure<DependencyManagementExtension> {
@@ -73,9 +93,46 @@ subprojects {
 
     tasks.withType<Test> {
         useJUnitPlatform()
+        finalizedBy(tasks.named("jacocoTestReport"))
     }
 
     tasks.withType<JavaCompile> {
         options.compilerArgs.add("-parameters")
+    }
+
+    // Application entry points and @Configuration classes are pure bean-wiring with no branches
+    // worth measuring; excluding them keeps the gate meaningful instead of being padded by classes
+    // no unit test could sensibly exercise.
+    val coverageExclusions = listOf("**/*Application.class", "**/config/**")
+
+    tasks.named<JacocoReport>("jacocoTestReport") {
+        dependsOn(tasks.named("test"))
+        reports {
+            xml.required.set(true)
+            html.required.set(true)
+        }
+        classDirectories.setFrom(
+            classDirectories.files.map { fileTree(it) { exclude(coverageExclusions) } }
+        )
+    }
+
+    tasks.named<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
+        dependsOn(tasks.named("jacocoTestReport"))
+        classDirectories.setFrom(
+            classDirectories.files.map { fileTree(it) { exclude(coverageExclusions) } }
+        )
+        violationRules {
+            rule {
+                limit {
+                    counter = "INSTRUCTION"
+                    value = "COVEREDRATIO"
+                    minimum = (coverageMinimums[project.name] ?: 0.10).toBigDecimal()
+                }
+            }
+        }
+    }
+
+    tasks.named("check") {
+        dependsOn(tasks.named("jacocoTestCoverageVerification"))
     }
 }
