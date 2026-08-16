@@ -69,7 +69,7 @@ subprojects {
         }
         dependencies {
             dependency("org.postgresql:postgresql:42.7.13")
-            dependency("org.bouncycastle:bcprov-jdk18on:1.85")
+            dependency("org.bouncycastle:bcprov-jdk18on:1.85.2")
             // spring-cloud-starter-gateway-server-webmvc pulls in Netty 4.1.135.Final transitively
             // (via reactor-netty, which declares its own Netty version rather than deferring to
             // the spring-boot-dependencies BOM, so importing a netty-bom here doesn't override it).
