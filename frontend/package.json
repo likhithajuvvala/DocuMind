@@ -25,6 +25,6 @@
     "eslint-config-next": "15.5.22",
     "openapi-typescript": "^7.4.3",
     "typescript": "5.7.3",
-    "vitest": "2.1.8"
+    "vitest": "4.1.10"
   }
 }
