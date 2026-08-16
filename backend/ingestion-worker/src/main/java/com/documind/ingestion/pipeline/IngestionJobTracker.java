@@ -61,4 +61,19 @@ public class IngestionJobTracker {
         document.changeStatus(DocumentStatus.FAILED);
         documentRepository.save(document);
     }
+
+    /** Used by {@code DeadLetterListener}, which only has the document (from the dead-lettered
+     * event), not a specific job — unlike {@link #fail}, this looks the latest job up itself.
+     * Doing that lookup here rather than in the caller keeps it inside this method's transaction,
+     * where the workspace filter (enabled per-transaction, see WorkspaceScopedTransactionManager)
+     * actually applies to it. */
+    @Transactional
+    public void failLatestJob(DocumentEntity document, String reason) {
+        document.changeStatus(DocumentStatus.FAILED);
+        documentRepository.save(document);
+        jobRepository.findFirstByDocumentIdOrderByStartedAtDesc(document.getId()).ifPresent(job -> {
+            job.fail(reason, Instant.now());
+            jobRepository.save(job);
+        });
+    }
 }

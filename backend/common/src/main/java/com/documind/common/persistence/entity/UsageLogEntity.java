@@ -7,9 +7,11 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
+import org.hibernate.annotations.Filter;
 
 @Entity
 @Table(name = "usage_logs")
+@Filter(name = "workspaceFilter")
 public class UsageLogEntity {
 
     @Id
