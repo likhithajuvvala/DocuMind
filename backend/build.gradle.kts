@@ -75,14 +75,14 @@ subprojects {
             // modules risks ABI mismatches.
             dependency("com.google.protobuf:protobuf-java:3.25.5")
             dependency("com.google.protobuf:protobuf-java-util:3.25.5")
-            dependency("io.grpc:grpc-api:1.75.0")
-            dependency("io.grpc:grpc-context:1.75.0")
-            dependency("io.grpc:grpc-core:1.75.0")
-            dependency("io.grpc:grpc-netty-shaded:1.75.0")
-            dependency("io.grpc:grpc-protobuf:1.75.0")
-            dependency("io.grpc:grpc-protobuf-lite:1.75.0")
-            dependency("io.grpc:grpc-stub:1.75.0")
-            dependency("io.grpc:grpc-util:1.75.0")
+            dependency("io.grpc:grpc-api:1.83.0")
+            dependency("io.grpc:grpc-context:1.83.0")
+            dependency("io.grpc:grpc-core:1.83.0")
+            dependency("io.grpc:grpc-netty-shaded:1.83.0")
+            dependency("io.grpc:grpc-protobuf:1.83.0")
+            dependency("io.grpc:grpc-protobuf-lite:1.83.0")
+            dependency("io.grpc:grpc-stub:1.83.0")
+            dependency("io.grpc:grpc-util:1.83.0")
         }
     }
 
