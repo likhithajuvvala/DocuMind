@@ -9,9 +9,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
+import org.hibernate.annotations.Filter;
 
 @Entity
 @Table(name = "ingestion_jobs")
+@Filter(name = "workspaceFilter")
 public class IngestionJobEntity {
 
     @Id

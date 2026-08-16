@@ -2,6 +2,7 @@ package com.documind.ingestion.pipeline;
 
 import com.documind.common.messaging.DocumentDeletedEvent;
 import com.documind.common.messaging.KafkaTopics;
+import com.documind.common.tenant.WorkspaceContext;
 import com.documind.ingestion.indexing.ChunkIndexer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ public class DocumentDeletedListener {
 
     @KafkaListener(topics = KafkaTopics.DOCUMENT_DELETED, groupId = "ingestion-worker")
     public void onDocumentDeleted(DocumentDeletedEvent event) {
+        WorkspaceContext.set(event.workspaceId());
         try {
             chunkIndexer.purgeEmbeddings(event.embeddingIds());
         } catch (RuntimeException exception) {
@@ -36,6 +38,8 @@ public class DocumentDeletedListener {
                     "Failed to remove vector store embeddings for deleted document {}; they will be orphaned",
                     event.documentId(),
                     exception);
+        } finally {
+            WorkspaceContext.clear();
         }
     }
 }
