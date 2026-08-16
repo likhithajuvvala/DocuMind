@@ -19,7 +19,6 @@ public class JwtTokenService {
     private static final String CLAIM_ROLE = "role";
     private static final String CLAIM_TOKEN_TYPE = "token_type";
     private static final String TYPE_ACCESS = "access";
-    private static final String TYPE_REFRESH = "refresh";
 
     private final JwtProperties properties;
     private final SecretKey signingKey;
@@ -44,18 +43,6 @@ public class JwtTokenService {
                 .compact();
     }
 
-    public String issueRefreshToken(AuthenticatedUser user) {
-        Instant now = Instant.now();
-        return Jwts.builder()
-                .issuer(properties.getIssuer())
-                .subject(user.userId().toString())
-                .claim(CLAIM_TOKEN_TYPE, TYPE_REFRESH)
-                .issuedAt(Date.from(now))
-                .expiration(Date.from(now.plus(properties.getRefreshTokenTtl())))
-                .signWith(signingKey)
-                .compact();
-    }
-
     public Optional<AuthenticatedUser> resolveAccessToken(String token) {
         return parse(token)
                 .filter(claims -> TYPE_ACCESS.equals(claims.get(CLAIM_TOKEN_TYPE, String.class)))
@@ -64,12 +51,6 @@ public class JwtTokenService {
                         UUID.fromString(claims.get(CLAIM_WORKSPACE, String.class)),
                         claims.get(CLAIM_EMAIL, String.class),
                         UserRole.valueOf(claims.get(CLAIM_ROLE, String.class))));
-    }
-
-    public Optional<UUID> resolveRefreshToken(String token) {
-        return parse(token)
-                .filter(claims -> TYPE_REFRESH.equals(claims.get(CLAIM_TOKEN_TYPE, String.class)))
-                .map(claims -> UUID.fromString(claims.getSubject()));
     }
 
     public long accessTokenTtlSeconds() {
