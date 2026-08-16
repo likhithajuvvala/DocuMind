@@ -3,19 +3,23 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { clearSession, readSession } from "@/lib/session";
+import { logout } from "@/lib/apiClient";
+import { readSession } from "@/lib/session";
 
 export function SessionNav() {
   const router = useRouter();
   const [email, setEmail] = useState<string | null>(null);
+  const [signingOut, setSigningOut] = useState(false);
 
   useEffect(() => {
     setEmail(readSession()?.email ?? null);
   }, []);
 
-  function handleSignOut() {
-    clearSession();
+  async function handleSignOut() {
+    setSigningOut(true);
+    await logout();
     setEmail(null);
+    setSigningOut(false);
     router.replace("/login");
   }
 
@@ -26,8 +30,8 @@ export function SessionNav() {
   return (
     <>
       <span className="session-email">{email}</span>
-      <button type="button" className="link-button" onClick={handleSignOut}>
-        Sign out
+      <button type="button" className="link-button" disabled={signingOut} onClick={handleSignOut}>
+        {signingOut ? "Signing out…" : "Sign out"}
       </button>
     </>
   );

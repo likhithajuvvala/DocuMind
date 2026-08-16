@@ -3,8 +3,12 @@ package com.documind.common.security;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.documind.common.domain.UserRole;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.UUID;
+import javax.crypto.SecretKey;
 import org.junit.jupiter.api.Test;
 
 class JwtTokenServiceTest {
@@ -35,14 +39,18 @@ class JwtTokenServiceTest {
     }
 
     @Test
-    void doesNotAcceptRefreshTokenAsAccessToken() {
-        AuthenticatedUser user =
-                new AuthenticatedUser(UUID.randomUUID(), UUID.randomUUID(), "user@documind.test", UserRole.MEMBER);
+    void rejectsATokenThatIsNotSignedByJwtTokenService() {
+        // A hand-crafted token with no token_type claim at all must not authenticate, since
+        // resolveAccessToken only accepts tokens explicitly marked as the access type.
+        JwtProperties properties = properties();
+        SecretKey signingKey = Keys.hmacShaKeyFor(properties.getSecret().getBytes(StandardCharsets.UTF_8));
+        String bareToken = Jwts.builder()
+                .issuer(properties.getIssuer())
+                .subject(UUID.randomUUID().toString())
+                .signWith(signingKey)
+                .compact();
 
-        String refreshToken = tokenService.issueRefreshToken(user);
-
-        assertThat(tokenService.resolveAccessToken(refreshToken)).isEmpty();
-        assertThat(tokenService.resolveRefreshToken(refreshToken)).contains(user.userId());
+        assertThat(tokenService.resolveAccessToken(bareToken)).isEmpty();
     }
 
     private JwtProperties properties() {

@@ -96,7 +96,7 @@ services:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-documind}
       JWT_SECRET: ${JWT_SECRET:-change-me-in-every-environment-with-a-long-random-value}
       LOG_FORMAT: ${LOG_FORMAT:-ecs}
-      JWT_EXPIRY_MINUTES: ${JWT_EXPIRY_MINUTES:-60}
+      JWT_EXPIRY_MINUTES: ${JWT_EXPIRY_MINUTES:-15}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000}
       DOCUMENT_SERVICE_URL: http://document-service:8081
       QUERY_SERVICE_URL: http://query-service:8083

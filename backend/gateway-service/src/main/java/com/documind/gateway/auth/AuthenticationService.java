@@ -27,16 +27,19 @@ public class AuthenticationService {
     private final WorkspaceRepository workspaceRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenService tokenService;
+    private final RefreshTokenService refreshTokenService;
 
     public AuthenticationService(
             UserRepository userRepository,
             WorkspaceRepository workspaceRepository,
             PasswordEncoder passwordEncoder,
-            JwtTokenService tokenService) {
+            JwtTokenService tokenService,
+            RefreshTokenService refreshTokenService) {
         this.userRepository = userRepository;
         this.workspaceRepository = workspaceRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenService = tokenService;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @Transactional
@@ -59,7 +62,7 @@ public class AuthenticationService {
         return issueTokens(user);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public AuthenticationResponse login(LoginRequest request) {
         UserEntity user = userRepository
                 .findByEmail(request.email())
@@ -72,16 +75,37 @@ public class AuthenticationService {
         return issueTokens(user);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public AuthenticationResponse refresh(RefreshRequest request) {
-        UUID userId = tokenService
-                .resolveRefreshToken(request.refreshToken())
-                .orElseThrow(() -> new BadCredentialsException("Invalid refresh token"));
+        RefreshTokenRotationResult rotation = refreshTokenService.rotate(request.refreshToken());
         UserEntity user = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User " + userId + " no longer exists"));
+                .findById(rotation.userId())
+                .orElseThrow(() -> new ResourceNotFoundException("User " + rotation.userId() + " no longer exists"));
 
-        return issueTokens(user);
+        AuthenticatedUser principal =
+                new AuthenticatedUser(user.getId(), user.getWorkspaceId(), user.getEmail(), user.getRole());
+        return new AuthenticationResponse(
+                tokenService.issueAccessToken(principal),
+                rotation.refreshToken(),
+                tokenService.accessTokenTtlSeconds(),
+                user.getId(),
+                user.getWorkspaceId(),
+                user.getEmail(),
+                user.getRole().name());
+    }
+
+    /** Ends the single session the caller presented a refresh token for. */
+    @Transactional
+    public void logout(RefreshRequest request) {
+        refreshTokenService.revoke(request.refreshToken());
+    }
+
+    /** Ends every session for the account that owns the presented refresh token, for example
+     * after a suspected compromise. Deliberately takes a refresh token rather than an arbitrary
+     * user id, so a caller can only mass-revoke sessions they can prove they hold one of. */
+    @Transactional
+    public void logoutAllSessions(RefreshRequest request) {
+        refreshTokenService.revokeAllSessions(request.refreshToken());
     }
 
     private AuthenticationResponse issueTokens(UserEntity user) {
@@ -89,7 +113,7 @@ public class AuthenticationService {
                 new AuthenticatedUser(user.getId(), user.getWorkspaceId(), user.getEmail(), user.getRole());
         return new AuthenticationResponse(
                 tokenService.issueAccessToken(principal),
-                tokenService.issueRefreshToken(principal),
+                refreshTokenService.issue(user.getId()),
                 tokenService.accessTokenTtlSeconds(),
                 user.getId(),
                 user.getWorkspaceId(),
