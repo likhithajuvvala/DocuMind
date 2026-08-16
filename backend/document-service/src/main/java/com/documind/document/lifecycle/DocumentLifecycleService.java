@@ -58,14 +58,16 @@ public class DocumentLifecycleService {
     @Transactional
     public void delete(UUID documentId, UUID workspaceId) {
         DocumentEntity document = uploadService.requireDocument(documentId, workspaceId);
-        List<String> embeddingIds = chunkRepository.findByDocumentId(documentId).stream()
-                .map(DocumentChunkEntity::getEmbeddingId)
-                .toList();
+        List<String> embeddingIds =
+                chunkRepository.findByDocumentId(documentId).stream()
+                        .map(DocumentChunkEntity::getEmbeddingId)
+                        .toList();
 
         documentRepository.delete(document);
 
         deleteStorageObjectBestEffort(document.getStoragePath());
-        eventPublisher.publishDeleted(new DocumentDeletedEvent(documentId, workspaceId, embeddingIds, Instant.now()));
+        eventPublisher.publishDeleted(
+                new DocumentDeletedEvent(documentId, workspaceId, embeddingIds, Instant.now()));
     }
 
     /**
@@ -78,20 +80,22 @@ public class DocumentLifecycleService {
     public DocumentEntity reindex(UUID documentId, UUID workspaceId) {
         DocumentEntity document = uploadService.requireDocument(documentId, workspaceId);
         if (document.getStatus() == DocumentStatus.PROCESSING) {
-            throw new DocumentIndexingInProgressException("Document " + documentId + " is already being indexed");
+            throw new DocumentIndexingInProgressException(
+                    "Document " + documentId + " is already being indexed");
         }
 
         document.changeStatus(DocumentStatus.PENDING);
         documentRepository.save(document);
 
-        eventPublisher.publishUploaded(new DocumentUploadedEvent(
-                document.getId(),
-                document.getWorkspaceId(),
-                document.getUploadedBy(),
-                document.getFilename(),
-                document.getContentType(),
-                document.getStoragePath(),
-                Instant.now()));
+        eventPublisher.publishUploaded(
+                new DocumentUploadedEvent(
+                        document.getId(),
+                        document.getWorkspaceId(),
+                        document.getUploadedBy(),
+                        document.getFilename(),
+                        document.getContentType(),
+                        document.getStoragePath(),
+                        Instant.now()));
 
         return document;
     }

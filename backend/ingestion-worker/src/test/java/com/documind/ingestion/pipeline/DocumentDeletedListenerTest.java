@@ -19,8 +19,12 @@ class DocumentDeletedListenerTest {
 
     @Test
     void purgesTheEmbeddingsCarriedByTheEvent() {
-        DocumentDeletedEvent event = new DocumentDeletedEvent(
-                UUID.randomUUID(), UUID.randomUUID(), List.of("embedding-1", "embedding-2"), Instant.now());
+        DocumentDeletedEvent event =
+                new DocumentDeletedEvent(
+                        UUID.randomUUID(),
+                        UUID.randomUUID(),
+                        List.of("embedding-1", "embedding-2"),
+                        Instant.now());
 
         listener.onDocumentDeleted(event);
 
@@ -30,7 +34,11 @@ class DocumentDeletedListenerTest {
     @Test
     void swallowsFailuresSoTheyNeverReachTheSharedDeadLetterTopic() {
         DocumentDeletedEvent event =
-                new DocumentDeletedEvent(UUID.randomUUID(), UUID.randomUUID(), List.of("embedding-1"), Instant.now());
+                new DocumentDeletedEvent(
+                        UUID.randomUUID(),
+                        UUID.randomUUID(),
+                        List.of("embedding-1"),
+                        Instant.now());
         doThrow(new RuntimeException("vector store unavailable"))
                 .when(chunkIndexer)
                 .purgeEmbeddings(List.of("embedding-1"));

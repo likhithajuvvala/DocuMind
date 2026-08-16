@@ -17,8 +17,7 @@ import java.util.UUID;
 @Table(name = "refresh_tokens")
 public class RefreshTokenEntity {
 
-    @Id
-    private UUID id;
+    @Id private UUID id;
 
     @Column(name = "user_id", nullable = false)
     private UUID userId;
@@ -41,11 +40,15 @@ public class RefreshTokenEntity {
     @Column(name = "replaced_by_id")
     private UUID replacedById;
 
-    protected RefreshTokenEntity() {
-    }
+    protected RefreshTokenEntity() {}
 
     public RefreshTokenEntity(
-            UUID id, UUID userId, String tokenHash, UUID familyId, Instant issuedAt, Instant expiresAt) {
+            UUID id,
+            UUID userId,
+            String tokenHash,
+            UUID familyId,
+            Instant issuedAt,
+            Instant expiresAt) {
         this.id = id;
         this.userId = userId;
         this.tokenHash = tokenHash;

@@ -25,7 +25,8 @@ import org.mockito.ArgumentCaptor;
 class RefreshTokenServiceTest {
 
     private final RefreshTokenRepository repository = mock(RefreshTokenRepository.class);
-    private final RefreshTokenService service = new RefreshTokenService(repository, jwtProperties());
+    private final RefreshTokenService service =
+            new RefreshTokenService(repository, jwtProperties());
 
     @Test
     void issueStoresOnlyTheHashOfTheTokenItReturns() throws Exception {
@@ -34,7 +35,8 @@ class RefreshTokenServiceTest {
 
         String rawToken = service.issue(userId);
 
-        ArgumentCaptor<RefreshTokenEntity> saved = ArgumentCaptor.forClass(RefreshTokenEntity.class);
+        ArgumentCaptor<RefreshTokenEntity> saved =
+                ArgumentCaptor.forClass(RefreshTokenEntity.class);
         verify(repository).save(saved.capture());
         assertThat(saved.getValue().getUserId()).isEqualTo(userId);
         assertThat(saved.getValue().getTokenHash())
@@ -54,10 +56,13 @@ class RefreshTokenServiceTest {
 
         assertThat(result.userId()).isEqualTo(current.getUserId());
         assertThat(result.refreshToken()).isNotBlank();
-        assertThat(current.isRevoked()).as("the rotated-away token must be revoked immediately").isTrue();
+        assertThat(current.isRevoked())
+                .as("the rotated-away token must be revoked immediately")
+                .isTrue();
         assertThat(current.getReplacedById()).isNotNull();
 
-        ArgumentCaptor<RefreshTokenEntity> saved = ArgumentCaptor.forClass(RefreshTokenEntity.class);
+        ArgumentCaptor<RefreshTokenEntity> saved =
+                ArgumentCaptor.forClass(RefreshTokenEntity.class);
         verify(repository, org.mockito.Mockito.atLeastOnce()).save(saved.capture());
         assertThat(saved.getAllValues())
                 .as("the replacement token must stay in the same rotation family")
@@ -68,21 +73,24 @@ class RefreshTokenServiceTest {
     void rotateRejectsATokenThatWasNeverIssued() {
         when(repository.findByTokenHash(any())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> service.rotate("unknown")).isInstanceOf(InvalidRefreshTokenException.class);
+        assertThatThrownBy(() -> service.rotate("unknown"))
+                .isInstanceOf(InvalidRefreshTokenException.class);
     }
 
     @Test
     void rotateRejectsAnExpiredTokenWithoutTouchingTheFamily() {
-        RefreshTokenEntity expired = new RefreshTokenEntity(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                "hash",
-                UUID.randomUUID(),
-                Instant.now().minus(Duration.ofDays(20)),
-                Instant.now().minus(Duration.ofDays(6)));
+        RefreshTokenEntity expired =
+                new RefreshTokenEntity(
+                        UUID.randomUUID(),
+                        UUID.randomUUID(),
+                        "hash",
+                        UUID.randomUUID(),
+                        Instant.now().minus(Duration.ofDays(20)),
+                        Instant.now().minus(Duration.ofDays(6)));
         when(repository.findByTokenHash(any())).thenReturn(Optional.of(expired));
 
-        assertThatThrownBy(() -> service.rotate("expired")).isInstanceOf(InvalidRefreshTokenException.class);
+        assertThatThrownBy(() -> service.rotate("expired"))
+                .isInstanceOf(InvalidRefreshTokenException.class);
 
         verify(repository, never()).save(any());
         verify(repository, never()).findByFamilyIdAndRevokedAtIsNull(any());
@@ -98,10 +106,12 @@ class RefreshTokenServiceTest {
         when(repository.findByTokenHash(any())).thenReturn(Optional.of(alreadyUsed));
         when(repository.findByFamilyIdAndRevokedAtIsNull(familyId)).thenReturn(List.of(sibling));
 
-        assertThatThrownBy(() -> service.rotate("stolen")).isInstanceOf(RefreshTokenReuseException.class);
+        assertThatThrownBy(() -> service.rotate("stolen"))
+                .isInstanceOf(RefreshTokenReuseException.class);
 
         assertThat(sibling.isRevoked())
-                .as("every live token descended from the same login must be killed, not just the reused one")
+                .as(
+                        "every live token descended from the same login must be killed, not just the reused one")
                 .isTrue();
         verify(repository).saveAll(List.of(sibling));
     }
@@ -143,7 +153,8 @@ class RefreshTokenServiceTest {
         RefreshTokenEntity sessionOne = activeTokenFor(userId);
         RefreshTokenEntity sessionTwo = activeTokenFor(userId);
         when(repository.findByTokenHash(any())).thenReturn(Optional.of(sessionOne));
-        when(repository.findByUserIdAndRevokedAtIsNull(userId)).thenReturn(List.of(sessionOne, sessionTwo));
+        when(repository.findByUserIdAndRevokedAtIsNull(userId))
+                .thenReturn(List.of(sessionOne, sessionTwo));
 
         Optional<UUID> result = service.revokeAllSessions("token");
 

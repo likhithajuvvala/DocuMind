@@ -14,8 +14,7 @@ import org.hibernate.annotations.Filter;
 @Filter(name = "workspaceFilter")
 public class UsageLogEntity {
 
-    @Id
-    private UUID id;
+    @Id private UUID id;
 
     @Column(name = "workspace_id", nullable = false)
     private UUID workspaceId;
@@ -38,8 +37,7 @@ public class UsageLogEntity {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    protected UsageLogEntity() {
-    }
+    protected UsageLogEntity() {}
 
     public UsageLogEntity(
             UUID id,

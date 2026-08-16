@@ -23,7 +23,8 @@ public class TextExtractor {
         try {
             new AutoDetectParser().parse(content, handler, new Metadata(), new ParseContext());
         } catch (TikaException | SAXException | IOException exception) {
-            throw new TextExtractionException("Unable to extract text from the document", exception);
+            throw new TextExtractionException(
+                    "Unable to extract text from the document", exception);
         }
 
         return toPages(handler.toString());

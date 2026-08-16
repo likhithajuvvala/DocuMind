@@ -17,21 +17,22 @@ class PiiRedactionPolicyTest {
     @Test
     void leavesLocallyHostedModelsAloneByDefault() {
         assertThat(policy(PiiRedactionProperties.Mode.THIRD_PARTY_ONLY, "ollama").shouldRedact())
-                .as("a local model never sends the text anywhere, so redacting only degrades the answer")
+                .as(
+                        "a local model never sends the text anywhere, so redacting only degrades the answer")
                 .isFalse();
     }
 
     @Test
     void alwaysAndNeverOverrideTheProvider() {
-        assertThat(policy(PiiRedactionProperties.Mode.ALWAYS, "ollama").shouldRedact())
-                .isTrue();
-        assertThat(policy(PiiRedactionProperties.Mode.NEVER, "openai").shouldRedact())
-                .isFalse();
+        assertThat(policy(PiiRedactionProperties.Mode.ALWAYS, "ollama").shouldRedact()).isTrue();
+        assertThat(policy(PiiRedactionProperties.Mode.NEVER, "openai").shouldRedact()).isFalse();
     }
 
     @Test
     void treatsAnUnknownProviderAsThirdParty() {
-        assertThat(policy(PiiRedactionProperties.Mode.THIRD_PARTY_ONLY, "some-new-vendor").shouldRedact())
+        assertThat(
+                        policy(PiiRedactionProperties.Mode.THIRD_PARTY_ONLY, "some-new-vendor")
+                                .shouldRedact())
                 .as("failing open would leak to a provider nobody classified yet")
                 .isTrue();
     }

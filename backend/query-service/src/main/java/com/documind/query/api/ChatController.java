@@ -33,13 +33,15 @@ public class ChatController {
     private final ChatSessionService sessionService;
     private final AnswerStreamService answerStreamService;
 
-    public ChatController(ChatSessionService sessionService, AnswerStreamService answerStreamService) {
+    public ChatController(
+            ChatSessionService sessionService, AnswerStreamService answerStreamService) {
         this.sessionService = sessionService;
         this.answerStreamService = answerStreamService;
     }
 
     @PostMapping("/sessions")
-    public ResponseEntity<ChatSessionResponse> createSession(@RequestBody CreateSessionRequest request) {
+    public ResponseEntity<ChatSessionResponse> createSession(
+            @RequestBody CreateSessionRequest request) {
         AuthenticatedUser user = CurrentUser.require();
         ChatSessionEntity session = sessionService.createSession(request, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(ChatSessionResponse.from(session));
@@ -62,16 +64,16 @@ public class ChatController {
                 .toList();
     }
 
-    @PostMapping(value = "/sessions/{sessionId}/messages", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @PostMapping(
+            value = "/sessions/{sessionId}/messages",
+            produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<AnswerStreamEvent>> sendMessage(
             @PathVariable UUID sessionId, @Valid @RequestBody ChatMessageRequest request) {
         AuthenticatedUser user = CurrentUser.require();
         ChatSessionEntity session = sessionService.requireSession(sessionId, user.workspaceId());
         return answerStreamService
                 .streamAnswer(session, request.content(), user)
-                .map(event -> ServerSentEvent.builder(event)
-                        .event(eventName(event))
-                        .build());
+                .map(event -> ServerSentEvent.builder(event).event(eventName(event)).build());
     }
 
     private String eventName(AnswerStreamEvent event) {

@@ -42,16 +42,21 @@ public class DocumentController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<DocumentSummaryResponse> upload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<DocumentSummaryResponse> upload(
+            @RequestParam("file") MultipartFile file) {
         AuthenticatedUser user = CurrentUser.require();
         DocumentEntity document = uploadService.upload(file, user);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(DocumentSummaryResponse.from(document));
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(DocumentSummaryResponse.from(document));
     }
 
     @GetMapping
-    public Page<DocumentSummaryResponse> listDocuments(@PageableDefault(size = 20) Pageable pageable) {
+    public Page<DocumentSummaryResponse> listDocuments(
+            @PageableDefault(size = 20) Pageable pageable) {
         AuthenticatedUser user = CurrentUser.require();
-        return uploadService.listDocuments(user.workspaceId(), pageable).map(DocumentSummaryResponse::from);
+        return uploadService
+                .listDocuments(user.workspaceId(), pageable)
+                .map(DocumentSummaryResponse::from);
     }
 
     @GetMapping("/{documentId}/status")
@@ -61,8 +66,16 @@ public class DocumentController {
         return ingestionJobRepository
                 .findFirstByDocumentIdOrderByStartedAtDesc(documentId)
                 .map(job -> toStatusResponse(document, job))
-                .orElseGet(() -> new DocumentStatusResponse(
-                        document.getId(), document.getStatus(), null, 0, null, null, null));
+                .orElseGet(
+                        () ->
+                                new DocumentStatusResponse(
+                                        document.getId(),
+                                        document.getStatus(),
+                                        null,
+                                        0,
+                                        null,
+                                        null,
+                                        null));
     }
 
     @DeleteMapping("/{documentId}")
@@ -76,10 +89,12 @@ public class DocumentController {
     public ResponseEntity<DocumentSummaryResponse> reindexDocument(@PathVariable UUID documentId) {
         AuthenticatedUser user = CurrentUser.require();
         DocumentEntity document = lifecycleService.reindex(documentId, user.workspaceId());
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(DocumentSummaryResponse.from(document));
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(DocumentSummaryResponse.from(document));
     }
 
-    private DocumentStatusResponse toStatusResponse(DocumentEntity document, IngestionJobEntity job) {
+    private DocumentStatusResponse toStatusResponse(
+            DocumentEntity document, IngestionJobEntity job) {
         return new DocumentStatusResponse(
                 document.getId(),
                 document.getStatus(),

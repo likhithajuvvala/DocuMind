@@ -41,19 +41,21 @@ public class ChunkRetriever {
         this.properties = properties;
         this.meterRegistry = meterRegistry;
         this.reranker = reranker;
-        this.bestScores = DistributionSummary.builder(SCORE_METRIC)
-                .description("Similarity of the closest chunk found for a question")
-                .publishPercentileHistogram()
-                .register(meterRegistry);
+        this.bestScores =
+                DistributionSummary.builder(SCORE_METRIC)
+                        .description("Similarity of the closest chunk found for a question")
+                        .publishPercentileHistogram()
+                        .register(meterRegistry);
     }
 
     public List<RetrievedChunk> retrieve(String question, UUID workspaceId, UUID documentId) {
-        SearchRequest request = SearchRequest.builder()
-                .query(question)
-                .topK(properties.getTopK())
-                .similarityThreshold(SearchRequest.SIMILARITY_THRESHOLD_ACCEPT_ALL)
-                .filterExpression(buildFilter(workspaceId, documentId))
-                .build();
+        SearchRequest request =
+                SearchRequest.builder()
+                        .query(question)
+                        .topK(properties.getTopK())
+                        .similarityThreshold(SearchRequest.SIMILARITY_THRESHOLD_ACCEPT_ALL)
+                        .filterExpression(buildFilter(workspaceId, documentId))
+                        .build();
 
         List<Document> matches = vectorStore.similaritySearch(request);
         if (matches == null || matches.isEmpty()) {
@@ -65,9 +67,10 @@ public class ChunkRetriever {
         double bestScore = matches.stream().mapToDouble(this::scoreOf).max().orElse(NO_SCORE);
         bestScores.record(bestScore);
 
-        List<Document> relevant = matches.stream()
-                .filter(match -> scoreOf(match) >= properties.getSimilarityThreshold())
-                .toList();
+        List<Document> relevant =
+                matches.stream()
+                        .filter(match -> scoreOf(match) >= properties.getSimilarityThreshold())
+                        .toList();
 
         if (relevant.isEmpty()) {
             countOutcome("below_threshold");
@@ -94,9 +97,8 @@ public class ChunkRetriever {
     private List<RetrievedChunk> reorder(String question, List<RetrievedChunk> chunks) {
         List<RetrievedChunk> reranked = reranker.rerank(question, chunks);
         boolean orderChanged = !reranked.equals(chunks);
-        boolean topChanged = !reranked.isEmpty()
-                && !chunks.isEmpty()
-                && !reranked.get(0).equals(chunks.get(0));
+        boolean topChanged =
+                !reranked.isEmpty() && !chunks.isEmpty() && !reranked.get(0).equals(chunks.get(0));
 
         meterRegistry
                 .counter(
@@ -122,13 +124,14 @@ public class ChunkRetriever {
         List<RetrievedChunk> numbered = new ArrayList<>(chunks.size());
         for (int index = 0; index < chunks.size(); index++) {
             RetrievedChunk chunk = chunks.get(index);
-            numbered.add(new RetrievedChunk(
-                    index + 1,
-                    chunk.documentId(),
-                    chunk.documentName(),
-                    chunk.pageNumber(),
-                    chunk.text(),
-                    chunk.relevance()));
+            numbered.add(
+                    new RetrievedChunk(
+                            index + 1,
+                            chunk.documentId(),
+                            chunk.documentName(),
+                            chunk.pageNumber(),
+                            chunk.text(),
+                            chunk.relevance()));
         }
         return List.copyOf(numbered);
     }
@@ -155,7 +158,9 @@ public class ChunkRetriever {
         if (documentId == null) {
             return workspaceFilter.build();
         }
-        return builder.and(workspaceFilter, builder.eq(ChunkMetadataKeys.DOCUMENT_ID, documentId.toString()))
+        return builder.and(
+                        workspaceFilter,
+                        builder.eq(ChunkMetadataKeys.DOCUMENT_ID, documentId.toString()))
                 .build();
     }
 

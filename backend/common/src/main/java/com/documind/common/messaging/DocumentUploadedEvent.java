@@ -10,5 +10,4 @@ public record DocumentUploadedEvent(
         String filename,
         String contentType,
         String storagePath,
-        Instant uploadedAt) {
-}
+        Instant uploadedAt) {}

@@ -26,31 +26,40 @@ public class AdminController {
     private final UsageLogRepository usageLogRepository;
     private final DocumentRepository documentRepository;
 
-    public AdminController(UsageLogRepository usageLogRepository, DocumentRepository documentRepository) {
+    public AdminController(
+            UsageLogRepository usageLogRepository, DocumentRepository documentRepository) {
         this.usageLogRepository = usageLogRepository;
         this.documentRepository = documentRepository;
     }
 
     @GetMapping("/usage")
-    public WorkspaceUsageResponse usage(@RequestParam(defaultValue = "" + DEFAULT_WINDOW_DAYS) int windowDays) {
+    public WorkspaceUsageResponse usage(
+            @RequestParam(defaultValue = "" + DEFAULT_WINDOW_DAYS) int windowDays) {
         AuthenticatedUser user = CurrentUser.require();
         Instant since = Instant.now().minus(Duration.ofDays(windowDays));
         List<UsageSummary> perUser = usageLogRepository.summarizeByUser(user.workspaceId(), since);
 
         long totalTokens = perUser.stream().mapToLong(UsageSummary::totalTokens).sum();
         BigDecimal totalCost =
-                perUser.stream().map(UsageSummary::totalCost).reduce(BigDecimal.ZERO, BigDecimal::add);
+                perUser.stream()
+                        .map(UsageSummary::totalCost)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return new WorkspaceUsageResponse(user.workspaceId(), since, totalTokens, totalCost, perUser);
+        return new WorkspaceUsageResponse(
+                user.workspaceId(), since, totalTokens, totalCost, perUser);
     }
 
     @GetMapping("/documents/status")
     public IngestionHealthResponse ingestionHealth() {
         AuthenticatedUser user = CurrentUser.require();
         return new IngestionHealthResponse(
-                documentRepository.countByWorkspaceIdAndStatus(user.workspaceId(), DocumentStatus.PENDING),
-                documentRepository.countByWorkspaceIdAndStatus(user.workspaceId(), DocumentStatus.PROCESSING),
-                documentRepository.countByWorkspaceIdAndStatus(user.workspaceId(), DocumentStatus.INDEXED),
-                documentRepository.countByWorkspaceIdAndStatus(user.workspaceId(), DocumentStatus.FAILED));
+                documentRepository.countByWorkspaceIdAndStatus(
+                        user.workspaceId(), DocumentStatus.PENDING),
+                documentRepository.countByWorkspaceIdAndStatus(
+                        user.workspaceId(), DocumentStatus.PROCESSING),
+                documentRepository.countByWorkspaceIdAndStatus(
+                        user.workspaceId(), DocumentStatus.INDEXED),
+                documentRepository.countByWorkspaceIdAndStatus(
+                        user.workspaceId(), DocumentStatus.FAILED));
     }
 }

@@ -24,26 +24,28 @@ public class MinioObjectStorage implements ObjectStorage {
     @PostConstruct
     public void ensureBucketExists() {
         try {
-            boolean exists = client.bucketExists(
-                    BucketExistsArgs.builder().bucket(properties.getBucket()).build());
+            boolean exists =
+                    client.bucketExists(
+                            BucketExistsArgs.builder().bucket(properties.getBucket()).build());
             if (!exists) {
-                client.makeBucket(
-                        MakeBucketArgs.builder().bucket(properties.getBucket()).build());
+                client.makeBucket(MakeBucketArgs.builder().bucket(properties.getBucket()).build());
             }
         } catch (Exception exception) {
-            throw new ObjectStorageException("Unable to prepare bucket " + properties.getBucket(), exception);
+            throw new ObjectStorageException(
+                    "Unable to prepare bucket " + properties.getBucket(), exception);
         }
     }
 
     @Override
     public String store(String objectPath, InputStream content, long size, String contentType) {
         try {
-            client.putObject(PutObjectArgs.builder()
-                    .bucket(properties.getBucket())
-                    .object(objectPath)
-                    .stream(content, size, UNKNOWN_PART_SIZE)
-                    .contentType(contentType)
-                    .build());
+            client.putObject(
+                    PutObjectArgs.builder()
+                            .bucket(properties.getBucket())
+                            .object(objectPath)
+                            .stream(content, size, UNKNOWN_PART_SIZE)
+                            .contentType(contentType)
+                            .build());
             return objectPath;
         } catch (Exception exception) {
             throw new ObjectStorageException("Unable to store object " + objectPath, exception);
@@ -53,10 +55,11 @@ public class MinioObjectStorage implements ObjectStorage {
     @Override
     public InputStream read(String objectPath) {
         try {
-            return client.getObject(GetObjectArgs.builder()
-                    .bucket(properties.getBucket())
-                    .object(objectPath)
-                    .build());
+            return client.getObject(
+                    GetObjectArgs.builder()
+                            .bucket(properties.getBucket())
+                            .object(objectPath)
+                            .build());
         } catch (Exception exception) {
             throw new ObjectStorageException("Unable to read object " + objectPath, exception);
         }
@@ -65,10 +68,11 @@ public class MinioObjectStorage implements ObjectStorage {
     @Override
     public void delete(String objectPath) {
         try {
-            client.removeObject(RemoveObjectArgs.builder()
-                    .bucket(properties.getBucket())
-                    .object(objectPath)
-                    .build());
+            client.removeObject(
+                    RemoveObjectArgs.builder()
+                            .bucket(properties.getBucket())
+                            .object(objectPath)
+                            .build());
         } catch (Exception exception) {
             throw new ObjectStorageException("Unable to delete object " + objectPath, exception);
         }

@@ -29,16 +29,15 @@ class ChunkIndexerTest {
     private static final UUID DOCUMENT_ID = UUID.randomUUID();
     private static final UUID WORKSPACE_ID = UUID.randomUUID();
 
-    @Mock
-    private VectorStore vectorStore;
+    @Mock private VectorStore vectorStore;
 
-    @Mock
-    private DocumentChunkRepository chunkRepository;
+    @Mock private DocumentChunkRepository chunkRepository;
 
     @Test
     void removesPreviousEmbeddingsBeforeIndexingAgain() {
         String staleEmbeddingId = UUID.randomUUID().toString();
-        when(chunkRepository.findByDocumentId(DOCUMENT_ID)).thenReturn(List.of(existingChunk(staleEmbeddingId)));
+        when(chunkRepository.findByDocumentId(DOCUMENT_ID))
+                .thenReturn(List.of(existingChunk(staleEmbeddingId)));
 
         ChunkIndexer indexer = new ChunkIndexer(vectorStore, chunkRepository);
         indexer.index(document(), List.of(new TextChunk(0, 1, "fresh content")));
@@ -67,7 +66,8 @@ class ChunkIndexerTest {
         ChunkIndexer indexer = new ChunkIndexer(vectorStore, chunkRepository);
         indexer.index(document(), List.of(new TextChunk(0, 3, "content")));
 
-        ArgumentCaptor<List<org.springframework.ai.document.Document>> embedded = ArgumentCaptor.forClass(List.class);
+        ArgumentCaptor<List<org.springframework.ai.document.Document>> embedded =
+                ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<List<DocumentChunkEntity>> persisted = ArgumentCaptor.forClass(List.class);
         verify(vectorStore).add(embedded.capture());
         verify(chunkRepository).saveAll(persisted.capture());
@@ -110,6 +110,13 @@ class ChunkIndexerTest {
 
     private DocumentChunkEntity existingChunk(String embeddingId) {
         return new DocumentChunkEntity(
-                UUID.randomUUID(), DOCUMENT_ID, WORKSPACE_ID, "old content", 0, 1, embeddingId, Instant.now());
+                UUID.randomUUID(),
+                DOCUMENT_ID,
+                WORKSPACE_ID,
+                "old content",
+                0,
+                1,
+                embeddingId,
+                Instant.now());
     }
 }

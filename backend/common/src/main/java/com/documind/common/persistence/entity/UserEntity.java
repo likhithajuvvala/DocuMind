@@ -14,8 +14,7 @@ import java.util.UUID;
 @Table(name = "users")
 public class UserEntity {
 
-    @Id
-    private UUID id;
+    @Id private UUID id;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -33,10 +32,15 @@ public class UserEntity {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    protected UserEntity() {
-    }
+    protected UserEntity() {}
 
-    public UserEntity(UUID id, String email, String passwordHash, UUID workspaceId, UserRole role, Instant createdAt) {
+    public UserEntity(
+            UUID id,
+            String email,
+            String passwordHash,
+            UUID workspaceId,
+            UserRole role,
+            Instant createdAt) {
         this.id = id;
         this.email = email;
         this.passwordHash = passwordHash;

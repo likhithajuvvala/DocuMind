@@ -17,7 +17,8 @@ public class IngestionJobTracker {
     private final DocumentRepository documentRepository;
     private final IngestionJobRepository jobRepository;
 
-    public IngestionJobTracker(DocumentRepository documentRepository, IngestionJobRepository jobRepository) {
+    public IngestionJobTracker(
+            DocumentRepository documentRepository, IngestionJobRepository jobRepository) {
         this.documentRepository = documentRepository;
         this.jobRepository = jobRepository;
     }
@@ -26,12 +27,13 @@ public class IngestionJobTracker {
     public IngestionJobEntity start(DocumentEntity document) {
         document.changeStatus(DocumentStatus.PROCESSING);
         documentRepository.save(document);
-        return jobRepository.save(new IngestionJobEntity(
-                UUID.randomUUID(),
-                document.getId(),
-                document.getWorkspaceId(),
-                IngestionStatus.QUEUED,
-                Instant.now()));
+        return jobRepository.save(
+                new IngestionJobEntity(
+                        UUID.randomUUID(),
+                        document.getId(),
+                        document.getWorkspaceId(),
+                        IngestionStatus.QUEUED,
+                        Instant.now()));
     }
 
     @Transactional
@@ -62,18 +64,23 @@ public class IngestionJobTracker {
         documentRepository.save(document);
     }
 
-    /** Used by {@code DeadLetterListener}, which only has the document (from the dead-lettered
-     * event), not a specific job — unlike {@link #fail}, this looks the latest job up itself.
-     * Doing that lookup here rather than in the caller keeps it inside this method's transaction,
-     * where the workspace filter (enabled per-transaction, see WorkspaceScopedTransactionManager)
-     * actually applies to it. */
+    /**
+     * Used by {@code DeadLetterListener}, which only has the document (from the dead-lettered
+     * event), not a specific job — unlike {@link #fail}, this looks the latest job up itself. Doing
+     * that lookup here rather than in the caller keeps it inside this method's transaction, where
+     * the workspace filter (enabled per-transaction, see WorkspaceScopedTransactionManager)
+     * actually applies to it.
+     */
     @Transactional
     public void failLatestJob(DocumentEntity document, String reason) {
         document.changeStatus(DocumentStatus.FAILED);
         documentRepository.save(document);
-        jobRepository.findFirstByDocumentIdOrderByStartedAtDesc(document.getId()).ifPresent(job -> {
-            job.fail(reason, Instant.now());
-            jobRepository.save(job);
-        });
+        jobRepository
+                .findFirstByDocumentIdOrderByStartedAtDesc(document.getId())
+                .ifPresent(
+                        job -> {
+                            job.fail(reason, Instant.now());
+                            jobRepository.save(job);
+                        });
     }
 }

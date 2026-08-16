@@ -11,7 +11,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface UsageLogRepository extends JpaRepository<UsageLogEntity, UUID> {
 
-    @Query("""
+    @Query(
+            """
             select new com.documind.common.persistence.projection.UsageSummary(
                 u.userId,
                 sum(u.promptTokens + u.completionTokens),
@@ -20,5 +21,6 @@ public interface UsageLogRepository extends JpaRepository<UsageLogEntity, UUID> 
             where u.workspaceId = :workspaceId and u.createdAt >= :since
             group by u.userId
             """)
-    List<UsageSummary> summarizeByUser(@Param("workspaceId") UUID workspaceId, @Param("since") Instant since);
+    List<UsageSummary> summarizeByUser(
+            @Param("workspaceId") UUID workspaceId, @Param("since") Instant since);
 }

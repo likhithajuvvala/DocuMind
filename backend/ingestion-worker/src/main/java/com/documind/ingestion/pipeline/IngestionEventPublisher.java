@@ -21,13 +21,15 @@ public class IngestionEventPublisher {
         kafkaTemplate.send(
                 KafkaTopics.DOCUMENT_INDEXED,
                 document.getId().toString(),
-                new DocumentIndexedEvent(document.getId(), document.getWorkspaceId(), chunkCount, Instant.now()));
+                new DocumentIndexedEvent(
+                        document.getId(), document.getWorkspaceId(), chunkCount, Instant.now()));
     }
 
     public void publishFailed(DocumentEntity document, String reason) {
         kafkaTemplate.send(
                 KafkaTopics.DOCUMENT_FAILED,
                 document.getId().toString(),
-                new DocumentFailedEvent(document.getId(), document.getWorkspaceId(), reason, Instant.now()));
+                new DocumentFailedEvent(
+                        document.getId(), document.getWorkspaceId(), reason, Instant.now()));
     }
 }
