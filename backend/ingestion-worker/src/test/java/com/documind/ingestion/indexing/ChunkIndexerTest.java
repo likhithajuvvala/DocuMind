@@ -77,6 +77,24 @@ class ChunkIndexerTest {
         assertThat(persisted.getValue().get(0).getPageNumber()).isEqualTo(3);
     }
 
+    @Test
+    void purgeEmbeddingsDeletesTheGivenIdsFromTheVectorStore() {
+        ChunkIndexer indexer = new ChunkIndexer(vectorStore, chunkRepository);
+
+        indexer.purgeEmbeddings(List.of("embedding-1", "embedding-2"));
+
+        verify(vectorStore).delete(List.of("embedding-1", "embedding-2"));
+    }
+
+    @Test
+    void purgeEmbeddingsIsANoOpForAnEmptyList() {
+        ChunkIndexer indexer = new ChunkIndexer(vectorStore, chunkRepository);
+
+        indexer.purgeEmbeddings(List.of());
+
+        verify(vectorStore, never()).delete(anyList());
+    }
+
     private DocumentEntity document() {
         return new DocumentEntity(
                 DOCUMENT_ID,
