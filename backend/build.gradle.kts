@@ -1,7 +1,7 @@
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 
 plugins {
-    id("org.springframework.boot") version "3.5.16" apply false
+    id("org.springframework.boot") version "4.1.0" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
     id("com.diffplug.spotless") version "7.0.2" apply false
 }
@@ -62,9 +62,9 @@ subprojects {
 
     configure<DependencyManagementExtension> {
         imports {
-            mavenBom("org.springframework.boot:spring-boot-dependencies:3.5.16")
-            mavenBom("org.springframework.ai:spring-ai-bom:1.0.9")
-            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.0.3")
+            mavenBom("org.springframework.boot:spring-boot-dependencies:4.1.0")
+            mavenBom("org.springframework.ai:spring-ai-bom:2.0.0")
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.1.2")
             mavenBom("org.testcontainers:testcontainers-bom:1.20.4")
         }
         dependencies {
