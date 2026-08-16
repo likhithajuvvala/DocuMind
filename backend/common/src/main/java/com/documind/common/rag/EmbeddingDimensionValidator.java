@@ -22,7 +22,10 @@ public class EmbeddingDimensionValidator {
     private final int configuredDimensions;
 
     public EmbeddingDimensionValidator(
-            JdbcTemplate jdbcTemplate, EmbeddingModel embeddingModel, String tableName, int configuredDimensions) {
+            JdbcTemplate jdbcTemplate,
+            EmbeddingModel embeddingModel,
+            String tableName,
+            int configuredDimensions) {
         this.jdbcTemplate = jdbcTemplate;
         this.embeddingModel = embeddingModel;
         this.tableName = tableName;
@@ -49,10 +52,11 @@ public class EmbeddingDimensionValidator {
 
     private Integer readStoredDimensions() {
         try {
-            Integer dimension = jdbcTemplate.query(
-                    STORED_DIMENSION_QUERY,
-                    resultSet -> resultSet.next() ? resultSet.getInt(1) : null,
-                    "public." + tableName);
+            Integer dimension =
+                    jdbcTemplate.query(
+                            STORED_DIMENSION_QUERY,
+                            resultSet -> resultSet.next() ? resultSet.getInt(1) : null,
+                            "public." + tableName);
             return dimension == null || dimension == UNSPECIFIED_DIMENSION ? null : dimension;
         } catch (RuntimeException exception) {
             LOGGER.warn("Could not read the dimension of the {} table", tableName, exception);

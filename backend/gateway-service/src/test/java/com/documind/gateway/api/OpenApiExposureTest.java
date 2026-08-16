@@ -29,10 +29,11 @@ class OpenApiExposureTest {
             DockerImageName.parse("pgvector/pgvector:pg16").asCompatibleSubstituteFor("postgres");
 
     @Container
-    static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>(POSTGRES_IMAGE)
-            .withDatabaseName("documind")
-            .withUsername("documind")
-            .withPassword("documind");
+    static final PostgreSQLContainer<?> POSTGRES =
+            new PostgreSQLContainer<>(POSTGRES_IMAGE)
+                    .withDatabaseName("documind")
+                    .withUsername("documind")
+                    .withPassword("documind");
 
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {
@@ -41,8 +42,7 @@ class OpenApiExposureTest {
         registry.add("spring.datasource.password", POSTGRES::getPassword);
     }
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+    @Autowired private TestRestTemplate restTemplate;
 
     @Test
     void apiDocsAreServedWithoutAuthentication() {

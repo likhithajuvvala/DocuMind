@@ -14,8 +14,7 @@ import java.util.UUID;
 @Table(name = "workspaces")
 public class WorkspaceEntity {
 
-    @Id
-    private UUID id;
+    @Id private UUID id;
 
     @Column(nullable = false)
     private String name;
@@ -27,8 +26,7 @@ public class WorkspaceEntity {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    protected WorkspaceEntity() {
-    }
+    protected WorkspaceEntity() {}
 
     public WorkspaceEntity(UUID id, String name, WorkspacePlan plan, Instant createdAt) {
         this.id = id;

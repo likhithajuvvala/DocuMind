@@ -11,12 +11,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class UploadValidator {
 
-    private static final Set<String> SUPPORTED_CONTENT_TYPES = Set.of(
-            "application/pdf",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "application/msword",
-            "text/plain",
-            "text/markdown");
+    private static final Set<String> SUPPORTED_CONTENT_TYPES =
+            Set.of(
+                    "application/pdf",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "application/msword",
+                    "text/plain",
+                    "text/markdown");
 
     private final Tika tika = new Tika();
 
@@ -42,7 +43,8 @@ public class UploadValidator {
         try (InputStream content = file.getInputStream()) {
             return tika.detect(content, file.getOriginalFilename());
         } catch (IOException exception) {
-            throw new UnsupportedDocumentTypeException("Unable to read the uploaded file to determine its type");
+            throw new UnsupportedDocumentTypeException(
+                    "Unable to read the uploaded file to determine its type");
         }
     }
 }

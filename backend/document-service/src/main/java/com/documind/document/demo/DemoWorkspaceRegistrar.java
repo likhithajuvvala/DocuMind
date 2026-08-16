@@ -20,7 +20,9 @@ public class DemoWorkspaceRegistrar {
     private final PasswordEncoder passwordEncoder;
 
     public DemoWorkspaceRegistrar(
-            WorkspaceRepository workspaceRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+            WorkspaceRepository workspaceRepository,
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
         this.workspaceRepository = workspaceRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -30,14 +32,17 @@ public class DemoWorkspaceRegistrar {
     public UserEntity createWorkspaceOwner(String workspaceName, String email, String password) {
         Instant now = Instant.now();
         WorkspaceEntity workspace =
-                workspaceRepository.save(new WorkspaceEntity(UUID.randomUUID(), workspaceName, WorkspacePlan.TEAM, now));
+                workspaceRepository.save(
+                        new WorkspaceEntity(
+                                UUID.randomUUID(), workspaceName, WorkspacePlan.TEAM, now));
 
-        return userRepository.save(new UserEntity(
-                UUID.randomUUID(),
-                email,
-                passwordEncoder.encode(password),
-                workspace.getId(),
-                UserRole.ADMIN,
-                now));
+        return userRepository.save(
+                new UserEntity(
+                        UUID.randomUUID(),
+                        email,
+                        passwordEncoder.encode(password),
+                        workspace.getId(),
+                        UserRole.ADMIN,
+                        now));
     }
 }

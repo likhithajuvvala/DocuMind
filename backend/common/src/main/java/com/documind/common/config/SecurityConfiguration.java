@@ -40,7 +40,8 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    private HttpSecurity applyCors(HttpSecurity http, CorsProperties properties, CorsConfigurationSource source)
+    private HttpSecurity applyCors(
+            HttpSecurity http, CorsProperties properties, CorsConfigurationSource source)
             throws Exception {
         if (!properties.isEnabled()) {
             return http.cors(cors -> cors.disable());
@@ -71,21 +72,31 @@ public class SecurityConfiguration {
             throws Exception {
         return applyCors(http, corsProperties, corsSource)
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/api/auth/**")
-                        .permitAll()
-                        .requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/prometheus")
-                        .permitAll()
-                        .requestMatchers("/v3/api-docs", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**")
-                        .permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**")
-                        .permitAll()
-                        .requestMatchers("/api/admin/**")
-                        .hasRole("ADMIN")
-                        .anyRequest()
-                        .authenticated())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(
+                        requests ->
+                                requests.requestMatchers("/api/auth/**")
+                                        .permitAll()
+                                        .requestMatchers(
+                                                "/actuator/health",
+                                                "/actuator/health/**",
+                                                "/actuator/prometheus")
+                                        .permitAll()
+                                        .requestMatchers(
+                                                "/v3/api-docs",
+                                                "/v3/api-docs/**",
+                                                "/swagger-ui.html",
+                                                "/swagger-ui/**")
+                                        .permitAll()
+                                        .requestMatchers(HttpMethod.OPTIONS, "/**")
+                                        .permitAll()
+                                        .requestMatchers("/api/admin/**")
+                                        .hasRole("ADMIN")
+                                        .anyRequest()
+                                        .authenticated())
+                .addFilterBefore(
+                        jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

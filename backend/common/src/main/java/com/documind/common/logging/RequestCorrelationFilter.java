@@ -33,7 +33,8 @@ public class RequestCorrelationFilter extends OncePerRequestFilter {
     private static final String DURATION_KEY = "duration_ms";
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    protected void doFilterInternal(
+            HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         String inboundRequestId = request.getHeader(REQUEST_ID_HEADER);
         boolean generated = inboundRequestId == null || inboundRequestId.isBlank();
@@ -46,14 +47,16 @@ public class RequestCorrelationFilter extends OncePerRequestFilter {
 
         long startedAt = System.nanoTime();
         try {
-            chain.doFilter(generated ? new CorrelatedRequest(request, requestId) : request, response);
+            chain.doFilter(
+                    generated ? new CorrelatedRequest(request, requestId) : request, response);
         } finally {
             logCompletion(request, response, startedAt);
             MDC.clear();
         }
     }
 
-    private void logCompletion(HttpServletRequest request, HttpServletResponse response, long startedAt) {
+    private void logCompletion(
+            HttpServletRequest request, HttpServletResponse response, long startedAt) {
         if (request.getRequestURI().startsWith(ACTUATOR_PREFIX)) {
             return;
         }
@@ -63,10 +66,15 @@ public class RequestCorrelationFilter extends OncePerRequestFilter {
         MDC.put(HTTP_METHOD_KEY, request.getMethod());
         MDC.put(HTTP_PATH_KEY, request.getRequestURI());
         MDC.put(HTTP_STATUS_KEY, String.valueOf(response.getStatus()));
-        MDC.put(DURATION_KEY, String.valueOf(Duration.ofNanos(System.nanoTime() - startedAt).toMillis()));
+        MDC.put(
+                DURATION_KEY,
+                String.valueOf(Duration.ofNanos(System.nanoTime() - startedAt).toMillis()));
         try {
             LOGGER.info(
-                    "{} {} responded {}", request.getMethod(), request.getRequestURI(), response.getStatus());
+                    "{} {} responded {}",
+                    request.getMethod(),
+                    request.getRequestURI(),
+                    response.getStatus());
         } finally {
             MDC.remove(HTTP_METHOD_KEY);
             MDC.remove(HTTP_PATH_KEY);

@@ -18,7 +18,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties({RetrievalProperties.class, ModelPricingProperties.class, PiiRedactionProperties.class})
+@EnableConfigurationProperties({
+    RetrievalProperties.class,
+    ModelPricingProperties.class,
+    PiiRedactionProperties.class
+})
 public class QueryConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QueryConfiguration.class);
@@ -44,7 +48,8 @@ public class QueryConfiguration {
 
     @Bean
     public PiiRedactionPolicy piiRedactionPolicy(
-            PiiRedactionProperties properties, @Value("${spring.ai.model.chat:openai}") String chatProvider) {
+            PiiRedactionProperties properties,
+            @Value("${spring.ai.model.chat:openai}") String chatProvider) {
         return new PiiRedactionPolicy(properties, chatProvider);
     }
 

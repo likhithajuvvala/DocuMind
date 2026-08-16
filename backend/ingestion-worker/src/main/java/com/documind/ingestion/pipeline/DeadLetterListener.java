@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * {@code WorkspaceContext} is set from the event's own workspaceId before touching the
- * repositories, and cleared afterward — Kafka listener threads have no ambient workspace
- * otherwise, which would leave the persistence-layer workspace filter disabled for these lookups.
+ * repositories, and cleared afterward — Kafka listener threads have no ambient workspace otherwise,
+ * which would leave the persistence-layer workspace filter disabled for these lookups.
  */
 @Component
 public class DeadLetterListener {
@@ -34,16 +34,23 @@ public class DeadLetterListener {
         this.eventPublisher = eventPublisher;
     }
 
-    @KafkaListener(topics = KafkaTopics.DOCUMENT_UPLOADED_DEAD_LETTER, groupId = "ingestion-worker-dlt")
+    @KafkaListener(
+            topics = KafkaTopics.DOCUMENT_UPLOADED_DEAD_LETTER,
+            groupId = "ingestion-worker-dlt")
     public void onExhaustedIngestion(DocumentUploadedEvent event) {
         UUID documentId = event.documentId();
         WorkspaceContext.set(event.workspaceId());
         try {
-            documentRepository.findById(documentId).ifPresent(document -> {
-                jobTracker.failLatestJob(document, EXHAUSTED_REASON);
-                eventPublisher.publishFailed(document, EXHAUSTED_REASON);
-                LOGGER.error("Document {} moved to the dead letter topic after repeated failures", documentId);
-            });
+            documentRepository
+                    .findById(documentId)
+                    .ifPresent(
+                            document -> {
+                                jobTracker.failLatestJob(document, EXHAUSTED_REASON);
+                                eventPublisher.publishFailed(document, EXHAUSTED_REASON);
+                                LOGGER.error(
+                                        "Document {} moved to the dead letter topic after repeated failures",
+                                        documentId);
+                            });
         } finally {
             WorkspaceContext.clear();
         }

@@ -20,7 +20,8 @@ public class PersistenceConfiguration {
     // configuration enforces workspace isolation at the persistence layer by construction, rather
     // than each service needing to remember to wire this up itself.
     @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+    public PlatformTransactionManager transactionManager(
+            EntityManagerFactory entityManagerFactory) {
         return new WorkspaceScopedTransactionManager(entityManagerFactory);
     }
 }

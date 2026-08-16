@@ -8,6 +8,5 @@ public final class ChunkMetadataKeys {
     public static final String PAGE_NUMBER = "page_number";
     public static final String CHUNK_INDEX = "chunk_index";
 
-    private ChunkMetadataKeys() {
-    }
+    private ChunkMetadataKeys() {}
 }

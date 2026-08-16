@@ -25,7 +25,8 @@ public class JwtTokenService {
 
     public JwtTokenService(JwtProperties properties) {
         this.properties = properties;
-        this.signingKey = Keys.hmacShaKeyFor(properties.getSecret().getBytes(StandardCharsets.UTF_8));
+        this.signingKey =
+                Keys.hmacShaKeyFor(properties.getSecret().getBytes(StandardCharsets.UTF_8));
     }
 
     public String issueAccessToken(AuthenticatedUser user) {
@@ -46,11 +47,13 @@ public class JwtTokenService {
     public Optional<AuthenticatedUser> resolveAccessToken(String token) {
         return parse(token)
                 .filter(claims -> TYPE_ACCESS.equals(claims.get(CLAIM_TOKEN_TYPE, String.class)))
-                .map(claims -> new AuthenticatedUser(
-                        UUID.fromString(claims.getSubject()),
-                        UUID.fromString(claims.get(CLAIM_WORKSPACE, String.class)),
-                        claims.get(CLAIM_EMAIL, String.class),
-                        UserRole.valueOf(claims.get(CLAIM_ROLE, String.class))));
+                .map(
+                        claims ->
+                                new AuthenticatedUser(
+                                        UUID.fromString(claims.getSubject()),
+                                        UUID.fromString(claims.get(CLAIM_WORKSPACE, String.class)),
+                                        claims.get(CLAIM_EMAIL, String.class),
+                                        UserRole.valueOf(claims.get(CLAIM_ROLE, String.class))));
     }
 
     public long accessTokenTtlSeconds() {
@@ -59,12 +62,13 @@ public class JwtTokenService {
 
     private Optional<Claims> parse(String token) {
         try {
-            return Optional.of(Jwts.parser()
-                    .verifyWith(signingKey)
-                    .requireIssuer(properties.getIssuer())
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload());
+            return Optional.of(
+                    Jwts.parser()
+                            .verifyWith(signingKey)
+                            .requireIssuer(properties.getIssuer())
+                            .build()
+                            .parseSignedClaims(token)
+                            .getPayload());
         } catch (JwtException | IllegalArgumentException exception) {
             return Optional.empty();
         }

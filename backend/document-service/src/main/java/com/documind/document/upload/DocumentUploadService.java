@@ -54,31 +54,39 @@ public class DocumentUploadService {
 
     @Transactional
     public DocumentEntity ingest(
-            InputStream content, long size, String filename, String contentType, UUID workspaceId, UUID uploadedBy) {
+            InputStream content,
+            long size,
+            String filename,
+            String contentType,
+            UUID workspaceId,
+            UUID uploadedBy) {
         UUID documentId = UUID.randomUUID();
         String storagePath = buildStoragePath(workspaceId, documentId, filename);
         objectStorage.store(storagePath, content, size, contentType);
 
         Instant now = Instant.now();
-        DocumentEntity document = documentRepository.save(new DocumentEntity(
-                documentId,
-                workspaceId,
-                filename,
-                contentType,
-                size,
-                storagePath,
-                DocumentStatus.PENDING,
-                uploadedBy,
-                now));
+        DocumentEntity document =
+                documentRepository.save(
+                        new DocumentEntity(
+                                documentId,
+                                workspaceId,
+                                filename,
+                                contentType,
+                                size,
+                                storagePath,
+                                DocumentStatus.PENDING,
+                                uploadedBy,
+                                now));
 
-        eventPublisher.publishUploaded(new DocumentUploadedEvent(
-                document.getId(),
-                document.getWorkspaceId(),
-                document.getUploadedBy(),
-                document.getFilename(),
-                document.getContentType(),
-                document.getStoragePath(),
-                now));
+        eventPublisher.publishUploaded(
+                new DocumentUploadedEvent(
+                        document.getId(),
+                        document.getWorkspaceId(),
+                        document.getUploadedBy(),
+                        document.getFilename(),
+                        document.getContentType(),
+                        document.getStoragePath(),
+                        now));
 
         return document;
     }
@@ -92,7 +100,10 @@ public class DocumentUploadService {
     public DocumentEntity requireDocument(UUID documentId, UUID workspaceId) {
         return documentRepository
                 .findByIdAndWorkspaceId(documentId, workspaceId)
-                .orElseThrow(() -> new ResourceNotFoundException("Document " + documentId + " was not found"));
+                .orElseThrow(
+                        () ->
+                                new ResourceNotFoundException(
+                                        "Document " + documentId + " was not found"));
     }
 
     private InputStream openStream(MultipartFile file) {

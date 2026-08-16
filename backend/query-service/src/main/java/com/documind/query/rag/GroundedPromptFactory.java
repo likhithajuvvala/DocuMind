@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,7 +28,8 @@ public class GroundedPromptFactory {
     private final PiiRedactionPolicy policy;
     private final MeterRegistry meterRegistry;
 
-    public GroundedPromptFactory(PiiRedactor redactor, PiiRedactionPolicy policy, MeterRegistry meterRegistry) {
+    public GroundedPromptFactory(
+            PiiRedactor redactor, PiiRedactionPolicy policy, MeterRegistry meterRegistry) {
         this.redactor = redactor;
         this.policy = policy;
         this.meterRegistry = meterRegistry;
@@ -53,7 +54,8 @@ public class GroundedPromptFactory {
             Question: %s
             """;
 
-    public List<Message> create(String question, List<RetrievedChunk> chunks, List<ChatMessageEntity> history) {
+    public List<Message> create(
+            String question, List<RetrievedChunk> chunks, List<ChatMessageEntity> history) {
         if (!policy.shouldRedact()) {
             return assemble(question, renderChunks(chunks), history, text -> text);
         }
@@ -72,8 +74,10 @@ public class GroundedPromptFactory {
         List<Message> messages = new ArrayList<>();
         messages.add(new SystemMessage(SYSTEM_INSTRUCTIONS));
         history.forEach(message -> messages.add(toChatMessage(message, sanitize)));
-        messages.add(new UserMessage(
-                CONTEXT_TEMPLATE.formatted(sanitize.apply(renderedChunks), sanitize.apply(question))));
+        messages.add(
+                new UserMessage(
+                        CONTEXT_TEMPLATE.formatted(
+                                sanitize.apply(renderedChunks), sanitize.apply(question))));
         return List.copyOf(messages);
     }
 
@@ -88,12 +92,17 @@ public class GroundedPromptFactory {
                     .increment(entry.getValue());
         }
         // Counts only. Logging the values would defeat the point of removing them.
-        LOGGER.info("Redacted {} values from the prompt before calling the model", session.totalRedactions());
+        LOGGER.info(
+                "Redacted {} values from the prompt before calling the model",
+                session.totalRedactions());
     }
 
-    private Message toChatMessage(ChatMessageEntity message, java.util.function.UnaryOperator<String> sanitize) {
+    private Message toChatMessage(
+            ChatMessageEntity message, java.util.function.UnaryOperator<String> sanitize) {
         String content = sanitize.apply(message.getContent());
-        return message.getRole() == MessageRole.ASSISTANT ? new AssistantMessage(content) : new UserMessage(content);
+        return message.getRole() == MessageRole.ASSISTANT
+                ? new AssistantMessage(content)
+                : new UserMessage(content);
     }
 
     private String renderChunks(List<RetrievedChunk> chunks) {
@@ -101,8 +110,10 @@ public class GroundedPromptFactory {
     }
 
     private String renderChunk(RetrievedChunk chunk) {
-        String location = chunk.pageNumber() == null ? chunk.documentName() : chunk.documentName() + ", page "
-                + chunk.pageNumber();
+        String location =
+                chunk.pageNumber() == null
+                        ? chunk.documentName()
+                        : chunk.documentName() + ", page " + chunk.pageNumber();
         return "[%d] (%s)%n%s".formatted(chunk.reference(), location, chunk.text());
     }
 }

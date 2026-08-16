@@ -30,7 +30,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    protected void doFilterInternal(
+            HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         try {
             extractBearerToken(request)
@@ -50,7 +51,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         WorkspaceContext.set(user.workspaceId());
         MDC.put(WORKSPACE_ID_KEY, user.workspaceId().toString());
         MDC.put(USER_ID_KEY, user.userId().toString());
-        request.setAttribute(RequestCorrelationFilter.WORKSPACE_ID_ATTRIBUTE, user.workspaceId().toString());
+        request.setAttribute(
+                RequestCorrelationFilter.WORKSPACE_ID_ATTRIBUTE, user.workspaceId().toString());
         request.setAttribute(RequestCorrelationFilter.USER_ID_ATTRIBUTE, user.userId().toString());
     }
 

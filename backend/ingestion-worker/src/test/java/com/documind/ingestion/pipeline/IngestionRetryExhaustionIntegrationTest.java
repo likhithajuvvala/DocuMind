@@ -47,10 +47,10 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 /**
- * Proves the redelivery and dead-letter wiring against a real broker: a message that keeps
- * failing is actually retried by Kafka, not just retried in the sense that our own code calls a
- * retry method, and it actually lands on the configured dead letter topic once the budget for
- * this test's backoff is exhausted.
+ * Proves the redelivery and dead-letter wiring against a real broker: a message that keeps failing
+ * is actually retried by Kafka, not just retried in the sense that our own code calls a retry
+ * method, and it actually lands on the configured dead letter topic once the budget for this test's
+ * backoff is exhausted.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Testcontainers
@@ -61,17 +61,19 @@ class IngestionRetryExhaustionIntegrationTest {
             DockerImageName.parse("pgvector/pgvector:pg16").asCompatibleSubstituteFor("postgres");
 
     @Container
-    static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>(POSTGRES_IMAGE)
-            .withDatabaseName("documind")
-            .withUsername("documind")
-            .withPassword("documind");
+    static final PostgreSQLContainer<?> POSTGRES =
+            new PostgreSQLContainer<>(POSTGRES_IMAGE)
+                    .withDatabaseName("documind")
+                    .withUsername("documind")
+                    .withPassword("documind");
 
     @Container
     static final KafkaContainer KAFKA =
             new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.0")).withKraft();
 
     @Container
-    static final MinIOContainer MINIO = new MinIOContainer("minio/minio:RELEASE.2024-11-07T00-52-20Z");
+    static final MinIOContainer MINIO =
+            new MinIOContainer("minio/minio:RELEASE.2024-11-07T00-52-20Z");
 
     private static final String BUCKET = "documind-test";
     private static final Duration AWAIT_TIMEOUT = Duration.ofSeconds(30);
@@ -89,23 +91,20 @@ class IngestionRetryExhaustionIntegrationTest {
         registry.add("documind.storage.secret-key", MINIO::getPassword);
         registry.add("documind.storage.bucket", () -> BUCKET);
         registry.add("spring.ai.model.embedding", () -> "none");
-        registry.add("spring.ai.vectorstore.pgvector.dimensions", () -> TestEmbeddingModelConfiguration.TEST_DIMENSIONS);
+        registry.add(
+                "spring.ai.vectorstore.pgvector.dimensions",
+                () -> TestEmbeddingModelConfiguration.TEST_DIMENSIONS);
     }
 
-    @Autowired
-    private WorkspaceRepository workspaceRepository;
+    @Autowired private WorkspaceRepository workspaceRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
-    @Autowired
-    private DocumentRepository documentRepository;
+    @Autowired private DocumentRepository documentRepository;
 
-    @Autowired
-    private IngestionJobRepository jobRepository;
+    @Autowired private IngestionJobRepository jobRepository;
 
-    @Autowired
-    private KafkaTemplate<String, Object> kafkaTemplate;
+    @Autowired private KafkaTemplate<String, Object> kafkaTemplate;
 
     private UUID workspaceId;
     private UUID userId;
@@ -116,9 +115,16 @@ class IngestionRetryExhaustionIntegrationTest {
         workspaceId = UUID.randomUUID();
         userId = UUID.randomUUID();
         Instant now = Instant.now();
-        workspaceRepository.save(new WorkspaceEntity(workspaceId, "Retry Test Workspace", WorkspacePlan.TEAM, now));
-        userRepository.save(new UserEntity(
-                userId, "retry-" + userId + "@documind.test", "hash", workspaceId, UserRole.ADMIN, now));
+        workspaceRepository.save(
+                new WorkspaceEntity(workspaceId, "Retry Test Workspace", WorkspacePlan.TEAM, now));
+        userRepository.save(
+                new UserEntity(
+                        userId,
+                        "retry-" + userId + "@documind.test",
+                        "hash",
+                        workspaceId,
+                        UserRole.ADMIN,
+                        now));
 
         Properties consumerProps = new Properties();
         consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KAFKA.getBootstrapServers());
@@ -127,7 +133,8 @@ class IngestionRetryExhaustionIntegrationTest {
         consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         dltConsumer = new KafkaConsumer<>(consumerProps);
-        dltConsumer.subscribe(List.of(KafkaTopics.DOCUMENT_UPLOADED_DEAD_LETTER, KafkaTopics.DOCUMENT_FAILED));
+        dltConsumer.subscribe(
+                List.of(KafkaTopics.DOCUMENT_UPLOADED_DEAD_LETTER, KafkaTopics.DOCUMENT_FAILED));
         dltConsumer.poll(Duration.ofMillis(500));
     }
 
@@ -144,16 +151,18 @@ class IngestionRetryExhaustionIntegrationTest {
         // throws a transient, retryable ObjectStorageException.
         UUID documentId = UUID.randomUUID();
         String storagePath = workspaceId + "/" + documentId + "/missing.txt";
-        DocumentEntity document = documentRepository.save(new DocumentEntity(
-                documentId,
-                workspaceId,
-                "missing.txt",
-                "text/plain",
-                0,
-                storagePath,
-                DocumentStatus.PENDING,
-                userId,
-                Instant.now()));
+        DocumentEntity document =
+                documentRepository.save(
+                        new DocumentEntity(
+                                documentId,
+                                workspaceId,
+                                "missing.txt",
+                                "text/plain",
+                                0,
+                                storagePath,
+                                DocumentStatus.PENDING,
+                                userId,
+                                Instant.now()));
 
         kafkaTemplate.send(
                 KafkaTopics.DOCUMENT_UPLOADED,
@@ -168,23 +177,33 @@ class IngestionRetryExhaustionIntegrationTest {
                         Instant.now()));
 
         ConsumerRecord<String, String> deadLettered =
-                KafkaTestUtils.getSingleRecord(dltConsumer, KafkaTopics.DOCUMENT_UPLOADED_DEAD_LETTER, AWAIT_TIMEOUT);
+                KafkaTestUtils.getSingleRecord(
+                        dltConsumer, KafkaTopics.DOCUMENT_UPLOADED_DEAD_LETTER, AWAIT_TIMEOUT);
         assertThat(deadLettered.value())
-                .as("the exact original event must reach the dead letter topic, not a summary of it")
+                .as(
+                        "the exact original event must reach the dead letter topic, not a summary of it")
                 .contains(document.getId().toString());
 
-        await().atMost(AWAIT_TIMEOUT).untilAsserted(() -> assertThat(
-                        documentRepository.findById(document.getId()).orElseThrow().getStatus())
-                .isEqualTo(DocumentStatus.FAILED));
+        await().atMost(AWAIT_TIMEOUT)
+                .untilAsserted(
+                        () ->
+                                assertThat(
+                                                documentRepository
+                                                        .findById(document.getId())
+                                                        .orElseThrow()
+                                                        .getStatus())
+                                        .isEqualTo(DocumentStatus.FAILED));
 
-        IngestionJobEntity latestJob = jobRepository
-                .findFirstByDocumentIdOrderByStartedAtDesc(document.getId())
-                .orElseThrow();
+        IngestionJobEntity latestJob =
+                jobRepository
+                        .findFirstByDocumentIdOrderByStartedAtDesc(document.getId())
+                        .orElseThrow();
         assertThat(latestJob.getStatus()).isEqualTo(IngestionStatus.FAILED);
         assertThat(latestJob.getErrorMessage()).isEqualTo("Ingestion retries were exhausted");
 
         ConsumerRecord<String, String> failedEvent =
-                KafkaTestUtils.getSingleRecord(dltConsumer, KafkaTopics.DOCUMENT_FAILED, AWAIT_TIMEOUT);
+                KafkaTestUtils.getSingleRecord(
+                        dltConsumer, KafkaTopics.DOCUMENT_FAILED, AWAIT_TIMEOUT);
         assertThat(failedEvent.value()).contains(document.getId().toString());
     }
 }
