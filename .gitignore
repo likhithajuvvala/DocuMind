@@ -12,6 +12,9 @@ frontend/.next/
 frontend/out/
 frontend/next-env.d.ts
 frontend/*.tsbuildinfo
+# Generated from each backend service's live /v3/api-docs by npm run generate:api-types —
+# regenerate rather than commit, since it goes stale the moment an endpoint's shape changes.
+frontend/src/lib/generated/
 
 .idea/
 .vscode/
