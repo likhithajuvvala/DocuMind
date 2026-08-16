@@ -6,5 +6,4 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties(ChunkingProperties.class)
-public class IngestionConfiguration {
-}
+public class IngestionConfiguration {}

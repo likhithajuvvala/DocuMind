@@ -16,8 +16,7 @@ import org.hibernate.annotations.Filter;
 @Filter(name = "workspaceFilter")
 public class DocumentEntity {
 
-    @Id
-    private UUID id;
+    @Id private UUID id;
 
     @Column(name = "workspace_id", nullable = false)
     private UUID workspaceId;
@@ -44,8 +43,7 @@ public class DocumentEntity {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    protected DocumentEntity() {
-    }
+    protected DocumentEntity() {}
 
     public DocumentEntity(
             UUID id,

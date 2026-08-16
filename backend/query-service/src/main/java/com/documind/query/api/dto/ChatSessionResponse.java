@@ -8,6 +8,9 @@ public record ChatSessionResponse(UUID id, UUID documentId, String title, Instan
 
     public static ChatSessionResponse from(ChatSessionEntity session) {
         return new ChatSessionResponse(
-                session.getId(), session.getDocumentId(), session.getTitle(), session.getCreatedAt());
+                session.getId(),
+                session.getDocumentId(),
+                session.getTitle(),
+                session.getCreatedAt());
     }
 }

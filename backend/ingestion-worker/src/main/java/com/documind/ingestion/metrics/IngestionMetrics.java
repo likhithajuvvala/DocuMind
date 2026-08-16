@@ -20,25 +20,30 @@ public class IngestionMetrics {
     private final Timer ingestionDuration;
 
     public IngestionMetrics(MeterRegistry registry) {
-        this.indexedDocuments = Counter.builder(DOCUMENTS_METRIC)
-                .description("Documents that completed the ingestion pipeline")
-                .tags("result", "indexed", "failure", "none")
-                .register(registry);
-        this.permanentFailures = Counter.builder(DOCUMENTS_METRIC)
-                .description("Documents that failed ingestion")
-                .tags("result", "failed", "failure", "permanent")
-                .register(registry);
-        this.transientFailures = Counter.builder(DOCUMENTS_METRIC)
-                .description("Documents that failed ingestion")
-                .tags("result", "failed", "failure", "transient")
-                .register(registry);
-        this.indexedChunks = Counter.builder(CHUNKS_METRIC)
-                .description("Chunks written to the vector store")
-                .register(registry);
-        this.ingestionDuration = Timer.builder(DURATION_METRIC)
-                .description("Time taken to extract, chunk, and embed a document")
-                .publishPercentileHistogram()
-                .register(registry);
+        this.indexedDocuments =
+                Counter.builder(DOCUMENTS_METRIC)
+                        .description("Documents that completed the ingestion pipeline")
+                        .tags("result", "indexed", "failure", "none")
+                        .register(registry);
+        this.permanentFailures =
+                Counter.builder(DOCUMENTS_METRIC)
+                        .description("Documents that failed ingestion")
+                        .tags("result", "failed", "failure", "permanent")
+                        .register(registry);
+        this.transientFailures =
+                Counter.builder(DOCUMENTS_METRIC)
+                        .description("Documents that failed ingestion")
+                        .tags("result", "failed", "failure", "transient")
+                        .register(registry);
+        this.indexedChunks =
+                Counter.builder(CHUNKS_METRIC)
+                        .description("Chunks written to the vector store")
+                        .register(registry);
+        this.ingestionDuration =
+                Timer.builder(DURATION_METRIC)
+                        .description("Time taken to extract, chunk, and embed a document")
+                        .publishPercentileHistogram()
+                        .register(registry);
     }
 
     public void recordIndexed(int chunkCount, Duration elapsed) {

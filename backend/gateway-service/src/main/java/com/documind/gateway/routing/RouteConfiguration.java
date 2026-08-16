@@ -17,7 +17,8 @@ import org.springframework.web.servlet.function.ServerResponse;
 public class RouteConfiguration {
 
     @Bean
-    public RouterFunction<ServerResponse> documentServiceRoutes(DownstreamServiceProperties properties) {
+    public RouterFunction<ServerResponse> documentServiceRoutes(
+            DownstreamServiceProperties properties) {
         return route("document-service")
                 .route(path("/api/documents/**"), http())
                 .before(uri(properties.getDocumentService()))
@@ -25,7 +26,8 @@ public class RouteConfiguration {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> queryServiceRoutes(DownstreamServiceProperties properties) {
+    public RouterFunction<ServerResponse> queryServiceRoutes(
+            DownstreamServiceProperties properties) {
         return route("query-service")
                 .route(path("/api/chat/**"), http())
                 .route(path("/api/admin/**"), http())

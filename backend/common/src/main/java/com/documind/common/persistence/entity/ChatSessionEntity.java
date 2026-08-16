@@ -13,8 +13,7 @@ import org.hibernate.annotations.Filter;
 @Filter(name = "workspaceFilter")
 public class ChatSessionEntity {
 
-    @Id
-    private UUID id;
+    @Id private UUID id;
 
     @Column(name = "workspace_id", nullable = false)
     private UUID workspaceId;
@@ -31,10 +30,15 @@ public class ChatSessionEntity {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    protected ChatSessionEntity() {
-    }
+    protected ChatSessionEntity() {}
 
-    public ChatSessionEntity(UUID id, UUID workspaceId, UUID userId, UUID documentId, String title, Instant createdAt) {
+    public ChatSessionEntity(
+            UUID id,
+            UUID workspaceId,
+            UUID userId,
+            UUID documentId,
+            String title,
+            Instant createdAt) {
         this.id = id;
         this.workspaceId = workspaceId;
         this.userId = userId;

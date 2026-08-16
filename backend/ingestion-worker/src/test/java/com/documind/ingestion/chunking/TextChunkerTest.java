@@ -22,7 +22,10 @@ class TextChunkerTest {
     @Test
     void keepsPageNumbersForEachChunk() {
         List<TextChunk> chunks =
-                chunker.chunk(List.of(new ExtractedPage(1, "b".repeat(120)), new ExtractedPage(2, "c".repeat(120))));
+                chunker.chunk(
+                        List.of(
+                                new ExtractedPage(1, "b".repeat(120)),
+                                new ExtractedPage(2, "c".repeat(120))));
 
         assertThat(chunks).extracting(TextChunk::pageNumber).contains(1, 2);
     }
@@ -34,7 +37,8 @@ class TextChunkerTest {
         assertThat(chunks).isEmpty();
     }
 
-    private ChunkingProperties chunkingProperties(int chunkSize, int overlap, int minimumChunkLength) {
+    private ChunkingProperties chunkingProperties(
+            int chunkSize, int overlap, int minimumChunkLength) {
         ChunkingProperties properties = new ChunkingProperties();
         properties.setChunkSize(chunkSize);
         properties.setOverlap(overlap);

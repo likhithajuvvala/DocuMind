@@ -13,8 +13,8 @@ import org.springframework.ai.embedding.EmbeddingResponse;
  * A deterministic stand-in for a real embedding provider: text is hashed into a fixed-size
  * bag-of-words vector, so texts sharing vocabulary end up with a higher cosine similarity. That is
  * enough to build a realistic "this chunk is the best content match" scenario without a trained
- * model, which is what the tenant isolation tests need in order to prove the workspace filter
- * still wins even when a competitor's chunk would otherwise be the top result.
+ * model, which is what the tenant isolation tests need in order to prove the workspace filter still
+ * wins even when a competitor's chunk would otherwise be the top result.
  */
 public class HashingEmbeddingModel implements EmbeddingModel {
 

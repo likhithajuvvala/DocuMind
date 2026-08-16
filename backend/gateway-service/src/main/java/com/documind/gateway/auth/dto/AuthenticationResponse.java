@@ -9,5 +9,4 @@ public record AuthenticationResponse(
         UUID userId,
         UUID workspaceId,
         String email,
-        String role) {
-}
+        String role) {}

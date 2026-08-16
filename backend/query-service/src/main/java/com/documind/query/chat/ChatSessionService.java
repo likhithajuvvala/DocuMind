@@ -39,9 +39,18 @@ public class ChatSessionService {
 
     @Transactional
     public ChatSessionEntity createSession(CreateSessionRequest request, AuthenticatedUser user) {
-        String title = request.title() == null || request.title().isBlank() ? DEFAULT_SESSION_TITLE : request.title();
-        return sessionRepository.save(new ChatSessionEntity(
-                UUID.randomUUID(), user.workspaceId(), user.userId(), request.documentId(), title, Instant.now()));
+        String title =
+                request.title() == null || request.title().isBlank()
+                        ? DEFAULT_SESSION_TITLE
+                        : request.title();
+        return sessionRepository.save(
+                new ChatSessionEntity(
+                        UUID.randomUUID(),
+                        user.workspaceId(),
+                        user.userId(),
+                        request.documentId(),
+                        title,
+                        Instant.now()));
     }
 
     @Transactional(readOnly = true)
@@ -53,7 +62,10 @@ public class ChatSessionService {
     public ChatSessionEntity requireSession(UUID sessionId, UUID workspaceId) {
         return sessionRepository
                 .findByIdAndWorkspaceId(sessionId, workspaceId)
-                .orElseThrow(() -> new ResourceNotFoundException("Chat session " + sessionId + " was not found"));
+                .orElseThrow(
+                        () ->
+                                new ResourceNotFoundException(
+                                        "Chat session " + sessionId + " was not found"));
     }
 
     @Transactional(readOnly = true)
@@ -64,7 +76,8 @@ public class ChatSessionService {
     @Transactional(readOnly = true)
     public List<ChatMessageEntity> loadRecentHistory(UUID sessionId, int limit) {
         List<ChatMessageEntity> recent =
-                messageRepository.findBySessionIdOrderByCreatedAtDesc(sessionId, PageRequest.of(0, limit));
+                messageRepository.findBySessionIdOrderByCreatedAtDesc(
+                        sessionId, PageRequest.of(0, limit));
         Collections.reverse(recent);
         return recent;
     }
@@ -72,18 +85,26 @@ public class ChatSessionService {
     @Transactional
     public ChatMessageEntity recordUserMessage(UUID sessionId, String content) {
         return messageRepository.save(
-                new ChatMessageEntity(UUID.randomUUID(), sessionId, MessageRole.USER, content, null, Instant.now()));
+                new ChatMessageEntity(
+                        UUID.randomUUID(),
+                        sessionId,
+                        MessageRole.USER,
+                        content,
+                        null,
+                        Instant.now()));
     }
 
     @Transactional
-    public ChatMessageEntity recordAssistantMessage(UUID sessionId, String content, List<Citation> citations) {
-        return messageRepository.save(new ChatMessageEntity(
-                UUID.randomUUID(),
-                sessionId,
-                MessageRole.ASSISTANT,
-                content,
-                serializeCitations(citations),
-                Instant.now()));
+    public ChatMessageEntity recordAssistantMessage(
+            UUID sessionId, String content, List<Citation> citations) {
+        return messageRepository.save(
+                new ChatMessageEntity(
+                        UUID.randomUUID(),
+                        sessionId,
+                        MessageRole.ASSISTANT,
+                        content,
+                        serializeCitations(citations),
+                        Instant.now()));
     }
 
     public List<Citation> deserializeCitations(String citations) {
@@ -92,7 +113,10 @@ public class ChatSessionService {
         }
         try {
             return objectMapper.readValue(
-                    citations, objectMapper.getTypeFactory().constructCollectionType(List.class, Citation.class));
+                    citations,
+                    objectMapper
+                            .getTypeFactory()
+                            .constructCollectionType(List.class, Citation.class));
         } catch (JsonProcessingException exception) {
             throw new CitationSerializationException("Unable to read stored citations", exception);
         }

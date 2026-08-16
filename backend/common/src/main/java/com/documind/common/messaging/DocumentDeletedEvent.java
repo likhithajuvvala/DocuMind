@@ -5,5 +5,4 @@ import java.util.List;
 import java.util.UUID;
 
 public record DocumentDeletedEvent(
-        UUID documentId, UUID workspaceId, List<String> embeddingIds, Instant deletedAt) {
-}
+        UUID documentId, UUID workspaceId, List<String> embeddingIds, Instant deletedAt) {}

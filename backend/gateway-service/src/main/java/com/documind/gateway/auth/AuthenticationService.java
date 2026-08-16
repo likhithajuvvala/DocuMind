@@ -45,28 +45,38 @@ public class AuthenticationService {
     @Transactional
     public AuthenticationResponse register(RegistrationRequest request) {
         if (userRepository.existsByEmail(request.email())) {
-            throw new EmailAlreadyRegisteredException("An account already exists for " + request.email());
+            throw new EmailAlreadyRegisteredException(
+                    "An account already exists for " + request.email());
         }
 
         Instant now = Instant.now();
-        WorkspaceEntity workspace = workspaceRepository.save(
-                new WorkspaceEntity(UUID.randomUUID(), request.workspaceName(), WorkspacePlan.FREE, now));
-        UserEntity user = userRepository.save(new UserEntity(
-                UUID.randomUUID(),
-                request.email(),
-                passwordEncoder.encode(request.password()),
-                workspace.getId(),
-                UserRole.ADMIN,
-                now));
+        WorkspaceEntity workspace =
+                workspaceRepository.save(
+                        new WorkspaceEntity(
+                                UUID.randomUUID(),
+                                request.workspaceName(),
+                                WorkspacePlan.FREE,
+                                now));
+        UserEntity user =
+                userRepository.save(
+                        new UserEntity(
+                                UUID.randomUUID(),
+                                request.email(),
+                                passwordEncoder.encode(request.password()),
+                                workspace.getId(),
+                                UserRole.ADMIN,
+                                now));
 
         return issueTokens(user);
     }
 
     @Transactional
     public AuthenticationResponse login(LoginRequest request) {
-        UserEntity user = userRepository
-                .findByEmail(request.email())
-                .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
+        UserEntity user =
+                userRepository
+                        .findByEmail(request.email())
+                        .orElseThrow(
+                                () -> new BadCredentialsException("Invalid email or password"));
 
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
             throw new BadCredentialsException("Invalid email or password");
@@ -78,12 +88,17 @@ public class AuthenticationService {
     @Transactional
     public AuthenticationResponse refresh(RefreshRequest request) {
         RefreshTokenRotationResult rotation = refreshTokenService.rotate(request.refreshToken());
-        UserEntity user = userRepository
-                .findById(rotation.userId())
-                .orElseThrow(() -> new ResourceNotFoundException("User " + rotation.userId() + " no longer exists"));
+        UserEntity user =
+                userRepository
+                        .findById(rotation.userId())
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "User " + rotation.userId() + " no longer exists"));
 
         AuthenticatedUser principal =
-                new AuthenticatedUser(user.getId(), user.getWorkspaceId(), user.getEmail(), user.getRole());
+                new AuthenticatedUser(
+                        user.getId(), user.getWorkspaceId(), user.getEmail(), user.getRole());
         return new AuthenticationResponse(
                 tokenService.issueAccessToken(principal),
                 rotation.refreshToken(),
@@ -100,9 +115,11 @@ public class AuthenticationService {
         refreshTokenService.revoke(request.refreshToken());
     }
 
-    /** Ends every session for the account that owns the presented refresh token, for example
-     * after a suspected compromise. Deliberately takes a refresh token rather than an arbitrary
-     * user id, so a caller can only mass-revoke sessions they can prove they hold one of. */
+    /**
+     * Ends every session for the account that owns the presented refresh token, for example after a
+     * suspected compromise. Deliberately takes a refresh token rather than an arbitrary user id, so
+     * a caller can only mass-revoke sessions they can prove they hold one of.
+     */
     @Transactional
     public void logoutAllSessions(RefreshRequest request) {
         refreshTokenService.revokeAllSessions(request.refreshToken());
@@ -110,7 +127,8 @@ public class AuthenticationService {
 
     private AuthenticationResponse issueTokens(UserEntity user) {
         AuthenticatedUser principal =
-                new AuthenticatedUser(user.getId(), user.getWorkspaceId(), user.getEmail(), user.getRole());
+                new AuthenticatedUser(
+                        user.getId(), user.getWorkspaceId(), user.getEmail(), user.getRole());
         return new AuthenticationResponse(
                 tokenService.issueAccessToken(principal),
                 refreshTokenService.issue(user.getId()),

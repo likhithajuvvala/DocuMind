@@ -74,9 +74,15 @@ public class IngestionPipeline {
     }
 
     private void processDocument(DocumentUploadedEvent event) {
-        DocumentEntity document = documentRepository
-                .findById(event.documentId())
-                .orElseThrow(() -> new ResourceNotFoundException("Document " + event.documentId() + " was not found"));
+        DocumentEntity document =
+                documentRepository
+                        .findById(event.documentId())
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "Document "
+                                                        + event.documentId()
+                                                        + " was not found"));
 
         if (alreadyIndexed(document)) {
             LOGGER.info("Skipping document {} because it is already indexed", document.getId());
@@ -107,12 +113,19 @@ public class IngestionPipeline {
             jobTracker.fail(document, job, exception.getMessage());
             eventPublisher.publishFailed(document, exception.getMessage());
             metrics.recordPermanentFailure(elapsedSince(startedAt));
-            LOGGER.error("Document {} cannot be parsed and will not be retried", document.getId(), exception);
+            LOGGER.error(
+                    "Document {} cannot be parsed and will not be retried",
+                    document.getId(),
+                    exception);
         } catch (Exception exception) {
             jobTracker.recordTransientFailure(job, exception.getMessage());
             metrics.recordTransientFailure(elapsedSince(startedAt));
-            LOGGER.warn("Ingestion of document {} failed and will be retried", document.getId(), exception);
-            throw new RetryableIngestionException("Ingestion failed for document " + document.getId(), exception);
+            LOGGER.warn(
+                    "Ingestion of document {} failed and will be retried",
+                    document.getId(),
+                    exception);
+            throw new RetryableIngestionException(
+                    "Ingestion failed for document " + document.getId(), exception);
         }
     }
 

@@ -24,13 +24,15 @@ class WorkspaceRateLimiterTest {
 
     @Container
     static final GenericContainer<?> REDIS =
-            new GenericContainer<>(DockerImageName.parse("redis:7.4-alpine")).withExposedPorts(6379);
+            new GenericContainer<>(DockerImageName.parse("redis:7.4-alpine"))
+                    .withExposedPorts(6379);
 
     private LettuceConnectionFactory connectionFactory;
 
     @BeforeEach
     void setUp() {
-        connectionFactory = new LettuceConnectionFactory(REDIS.getHost(), REDIS.getMappedPort(6379));
+        connectionFactory =
+                new LettuceConnectionFactory(REDIS.getHost(), REDIS.getMappedPort(6379));
         connectionFactory.afterPropertiesSet();
     }
 
@@ -59,7 +61,8 @@ class WorkspaceRateLimiterTest {
 
     @Test
     void distinctWorkspacesGetIndependentQuotas() {
-        WorkspaceRateLimiter limiter = new WorkspaceRateLimiter(redisTemplate(), properties(1, Duration.ofMinutes(1)));
+        WorkspaceRateLimiter limiter =
+                new WorkspaceRateLimiter(redisTemplate(), properties(1, Duration.ofMinutes(1)));
 
         assertThat(limiter.tryConsume(UUID.randomUUID())).isTrue();
         assertThat(limiter.tryConsume(UUID.randomUUID()))

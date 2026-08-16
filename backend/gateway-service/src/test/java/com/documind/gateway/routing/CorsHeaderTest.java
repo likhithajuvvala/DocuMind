@@ -17,8 +17,9 @@ class CorsHeaderTest {
         CorsProperties downstream = new CorsProperties();
 
         assertThat(downstream.isEnabled())
-                .as("only the gateway may answer CORS, otherwise a proxied response carries the header twice "
-                        + "and the browser rejects it")
+                .as(
+                        "only the gateway may answer CORS, otherwise a proxied response carries the header twice "
+                                + "and the browser rejects it")
                 .isFalse();
     }
 

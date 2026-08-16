@@ -16,8 +16,7 @@ import org.hibernate.type.SqlTypes;
 @Table(name = "chat_messages")
 public class ChatMessageEntity {
 
-    @Id
-    private UUID id;
+    @Id private UUID id;
 
     @Column(name = "session_id", nullable = false)
     private UUID sessionId;
@@ -36,11 +35,15 @@ public class ChatMessageEntity {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    protected ChatMessageEntity() {
-    }
+    protected ChatMessageEntity() {}
 
     public ChatMessageEntity(
-            UUID id, UUID sessionId, MessageRole role, String content, String citations, Instant createdAt) {
+            UUID id,
+            UUID sessionId,
+            MessageRole role,
+            String content,
+            String citations,
+            Instant createdAt) {
         this.id = id;
         this.sessionId = sessionId;
         this.role = role;

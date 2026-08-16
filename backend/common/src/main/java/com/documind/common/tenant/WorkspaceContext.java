@@ -7,8 +7,7 @@ public final class WorkspaceContext {
 
     private static final ThreadLocal<UUID> CURRENT_WORKSPACE = new ThreadLocal<>();
 
-    private WorkspaceContext() {
-    }
+    private WorkspaceContext() {}
 
     public static void set(UUID workspaceId) {
         CURRENT_WORKSPACE.set(workspaceId);
@@ -19,7 +18,10 @@ public final class WorkspaceContext {
     }
 
     public static UUID require() {
-        return find().orElseThrow(() -> new IllegalStateException("No workspace bound to the current request"));
+        return find().orElseThrow(
+                        () ->
+                                new IllegalStateException(
+                                        "No workspace bound to the current request"));
     }
 
     public static void clear() {
