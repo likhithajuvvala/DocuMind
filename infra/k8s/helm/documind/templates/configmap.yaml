@@ -14,6 +14,8 @@ data:
   QDRANT_HOST: {{ .Values.config.qdrant.host | quote }}
   QDRANT_PORT: {{ .Values.config.qdrant.port | quote }}
   QDRANT_COLLECTION: {{ .Values.config.qdrant.collection | quote }}
+  REDIS_HOST: {{ .Values.config.redis.host | quote }}
+  REDIS_PORT: {{ .Values.config.redis.port | quote }}
   LLM_PROVIDER: {{ .Values.config.llm.provider | quote }}
   EMBEDDING_PROVIDER: {{ .Values.config.llm.embeddingProvider | quote }}
   EMBEDDING_MODEL: {{ .Values.config.llm.embeddingModel | quote }}
