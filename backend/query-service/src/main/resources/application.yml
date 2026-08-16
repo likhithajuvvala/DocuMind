@@ -1,13 +1,26 @@
 server:
   port: 8083
+  shutdown: graceful
 
 spring:
   application:
     name: query-service
+  lifecycle:
+    # Longer than gateway/document-service: this is the streaming-answer path, and an in-flight
+    # SSE response mid-LLM-call is exactly the kind of "active request" graceful shutdown exists to
+    # protect — cutting it off means the user's answer just vanishes mid-stream.
+    timeout-per-shutdown-phase: 45s
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/documind}
     username: ${DATABASE_USER:documind}
     password: ${DATABASE_PASSWORD:documind}
+    hikari:
+      pool-name: query-hikari
+      maximum-pool-size: 12
+      minimum-idle: 5
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1800000
   jpa:
     open-in-view: false
     hibernate:

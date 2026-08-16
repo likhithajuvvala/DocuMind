@@ -1,13 +1,23 @@
 server:
   port: 8081
+  shutdown: graceful
 
 spring:
   application:
     name: document-service
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/documind}
     username: ${DATABASE_USER:documind}
     password: ${DATABASE_PASSWORD:documind}
+    hikari:
+      pool-name: document-hikari
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1800000
   jpa:
     open-in-view: false
     hibernate:

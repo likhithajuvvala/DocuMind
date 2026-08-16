@@ -55,6 +55,12 @@ services:
       - "9092:9092"
     volumes:
       - kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
 
   qdrant:
     image: qdrant/qdrant:v1.12.4
@@ -63,6 +69,14 @@ services:
       - "6334:6334"
     volumes:
       - qdrant-data:/qdrant/storage
+    healthcheck:
+      # No curl/wget in this image, so fall back to a bare TCP probe via bash's /dev/tcp — good
+      # enough to know the REST listener is up and accepting connections.
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/6333'"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
 
   redis:
     image: redis:7.4-alpine
@@ -116,6 +130,17 @@ services:
       REDIS_PORT: ${REDIS_PORT:-6379}
     ports:
       - "8080:8080"
+    # Docker's default stop_grace_period (10s) is shorter than this service's
+    # spring.lifecycle.timeout-per-shutdown-phase (30s) — without raising it, `docker compose
+    # stop`/`down` would SIGKILL the JVM mid-graceful-shutdown under any real in-flight-request
+    # load, defeating the point of configuring graceful shutdown at all.
+    stop_grace_period: 35s
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8080/actuator/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 30s
     depends_on:
       postgres:
         condition: service_healthy
@@ -141,15 +166,22 @@ services:
       DEMO_USER_PASSWORD: ${DEMO_USER_PASSWORD:-demo-password-2026}
     ports:
       - "8081:8081"
+    stop_grace_period: 35s
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8081/actuator/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 30s
     depends_on:
       postgres:
         condition: service_healthy
       minio:
-        condition: service_started
+        condition: service_healthy
       kafka:
-        condition: service_started
+        condition: service_healthy
       gateway-service:
-        condition: service_started
+        condition: service_healthy
 
   ingestion-worker:
     build:
@@ -179,15 +211,26 @@ services:
       - "8082:8082"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    # Matches spring.lifecycle.timeout-per-shutdown-phase: 60s for this service — longer than the
+    # others since it's the one that lets an in-flight chunk-and-embed job finish.
+    stop_grace_period: 65s
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8082/actuator/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 30s
     depends_on:
       postgres:
         condition: service_healthy
       minio:
-        condition: service_started
+        condition: service_healthy
       kafka:
-        condition: service_started
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
       gateway-service:
-        condition: service_started
+        condition: service_healthy
 
   query-service:
     build:
@@ -223,11 +266,22 @@ services:
       - "8083:8083"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    # Matches spring.lifecycle.timeout-per-shutdown-phase: 45s for this service — longer than
+    # gateway/document-service since an in-flight streamed answer needs time to finish.
+    stop_grace_period: 50s
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8083/actuator/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 30s
     depends_on:
       postgres:
         condition: service_healthy
+      qdrant:
+        condition: service_healthy
       gateway-service:
-        condition: service_started
+        condition: service_healthy
 
   frontend:
     build:
@@ -236,8 +290,15 @@ services:
       NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8080}
     ports:
       - "3000:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3000/login || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 15s
     depends_on:
-      - gateway-service
+      gateway-service:
+        condition: service_healthy
 
 volumes:
   postgres-data:

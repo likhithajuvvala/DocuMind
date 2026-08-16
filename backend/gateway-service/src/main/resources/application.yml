@@ -1,13 +1,27 @@
 server:
   port: 8080
+  shutdown: graceful
 
 spring:
   application:
     name: gateway-service
+  lifecycle:
+    # Gives in-flight requests (and, on this service specifically, any refresh-token rotation
+    # mid-transaction) time to finish before the JVM stops accepting SIGTERM as final — matched to
+    # server.shutdown: graceful, which stops taking new requests immediately but lets active ones
+    # drain within this window.
+    timeout-per-shutdown-phase: 30s
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/documind}
     username: ${DATABASE_USER:documind}
     password: ${DATABASE_PASSWORD:documind}
+    hikari:
+      pool-name: gateway-hikari
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1800000
   jpa:
     open-in-view: false
     hibernate:
