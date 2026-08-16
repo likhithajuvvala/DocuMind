@@ -49,7 +49,7 @@ subprojects {
             mavenBom("org.springframework.boot:spring-boot-dependencies:3.5.16")
             mavenBom("org.springframework.ai:spring-ai-bom:1.0.9")
             mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.0.3")
-            mavenBom("org.testcontainers:testcontainers-bom:1.20.4")
+            mavenBom("org.testcontainers:testcontainers-bom:2.0.5")
         }
         dependencies {
             dependency("org.postgresql:postgresql:42.7.13")
