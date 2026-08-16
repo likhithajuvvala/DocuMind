@@ -27,7 +27,7 @@ documind:
   jwt:
     secret: ${JWT_SECRET:change-me-in-every-environment-with-a-long-random-value}
     issuer: documind
-    access-token-ttl: ${JWT_EXPIRY_MINUTES:60}m
+    access-token-ttl: ${JWT_EXPIRY_MINUTES:15}m
     refresh-token-ttl: 14d
   gateway:
     downstream:
