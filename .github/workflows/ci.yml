@@ -58,23 +58,58 @@ jobs:
       - uses: azure/setup-helm@v5
       - name: Lint chart
         run: helm lint infra/k8s/helm/documind --set secrets.jwtSecret=ci --set secrets.databasePassword=ci
-      - name: Render and validate against Kubernetes schemas
+      - name: Render manifests
         run: |
-          curl -sL https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz \
-            | tar -xz -C /usr/local/bin kubeconform
+          mkdir -p rendered
           helm template documind infra/k8s/helm/documind \
             --set secrets.jwtSecret=ci --set secrets.databasePassword=ci \
-            | kubeconform -strict -summary -kubernetes-version 1.31.0
+            > rendered/default.yaml
           helm template documind infra/k8s/helm/documind \
             -f infra/k8s/helm/documind/values-ollama.yaml \
             --set secrets.jwtSecret=ci --set secrets.databasePassword=ci \
-            | kubeconform -strict -summary -kubernetes-version 1.31.0
+            > rendered/ollama.yaml
+      - name: Validate against Kubernetes schemas
+        run: |
+          curl -sL https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz \
+            | tar -xz -C /usr/local/bin kubeconform
+          kubeconform -strict -summary -kubernetes-version 1.31.0 rendered/default.yaml
+          kubeconform -strict -summary -kubernetes-version 1.31.0 rendered/ollama.yaml
+      - name: Scan rendered manifests for misconfigurations
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: rendered
+          severity: HIGH,CRITICAL
+          exit-code: "1"
       - name: Refuse to render without a signing key
         run: |
           if helm template documind infra/k8s/helm/documind --set secrets.databasePassword=ci >/dev/null 2>&1; then
             echo "chart rendered without a JWT secret, the credential guard is broken"
             exit 1
           fi
+
+  iac-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # Scoped to backend/ and frontend/ rather than the repo root: scanning the root would also
+      # make Trivy try to auto-detect and render infra/k8s/helm/documind, which fails without the
+      # chart's required secrets values (those are supplied properly in the helm job instead,
+      # which scans the already-rendered manifests).
+      - name: Scan backend Dockerfiles for misconfigurations
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: backend
+          severity: HIGH,CRITICAL
+          exit-code: "1"
+      - name: Scan frontend Dockerfile for misconfigurations
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: frontend
+          severity: HIGH,CRITICAL
+          exit-code: "1"
 
   images:
     runs-on: ubuntu-latest
