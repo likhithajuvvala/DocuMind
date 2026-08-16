@@ -1,0 +1,78 @@
+version: 2
+
+updates:
+  # Root Gradle build — covers common, gateway-service, document-service, ingestion-worker,
+  # query-service, since Dependabot resolves the whole multi-module graph from here.
+  - package-ecosystem: gradle
+    directory: /backend
+    schedule:
+      interval: weekly
+    groups:
+      spring:
+        patterns:
+          - "org.springframework*"
+      testing:
+        patterns:
+          - "org.junit*"
+          - "org.mockito*"
+          - "org.testcontainers*"
+          - "org.assertj*"
+    labels:
+      - dependencies
+      - backend
+
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+    groups:
+      next:
+        patterns:
+          - "next"
+          - "eslint-config-next"
+      dev-tooling:
+        dependency-type: development
+    labels:
+      - dependencies
+      - frontend
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - ci
+
+  # Each service has its own Dockerfile with its own base-image pin, so each needs its own entry.
+  - package-ecosystem: docker
+    directory: /backend/gateway-service
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - docker
+
+  - package-ecosystem: docker
+    directory: /backend/document-service
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - docker
+
+  - package-ecosystem: docker
+    directory: /backend/ingestion-worker
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - docker
+
+  - package-ecosystem: docker
+    directory: /backend/query-service
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+      - docker
