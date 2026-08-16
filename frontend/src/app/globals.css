@@ -1,11 +1,30 @@
 :root {
+  --bg: #f5f6fa;
   --surface: #ffffff;
-  --surface-muted: #f4f5f7;
-  --border: #d9dce1;
-  --text: #16191d;
-  --text-muted: #5c636e;
-  --accent: #2f5bea;
-  --danger: #c0392b;
+  --surface-muted: #f1f3f8;
+  --surface-hover: #eceffa;
+  --border: #e3e6ee;
+  --border-strong: #c9cedb;
+  --text: #14161f;
+  --text-muted: #656b7a;
+  --text-faint: #9aa0af;
+
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-soft: #eef0fe;
+
+  --danger: #dc2626;
+  --danger-soft: #fdeced;
+  --success: #15803d;
+  --success-soft: #e4f6ea;
+  --warning: #b45309;
+  --warning-soft: #fdf1de;
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 2px rgba(20, 22, 31, 0.05);
+  --shadow-md: 0 8px 24px rgba(20, 22, 31, 0.08), 0 1px 2px rgba(20, 22, 31, 0.04);
 }
 
 * {
@@ -14,44 +33,99 @@
 
 body {
   margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color: var(--text);
-  background: var(--surface-muted);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
 }
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.01em;
+}
+
+/* ---------- header / nav ---------- */
 
 .app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem;
+  gap: 1.5rem;
+  padding: 0.85rem 2rem;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .app-brand {
-  font-weight: 600;
-  font-size: 1.15rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-weight: 700;
+  font-size: 1.05rem;
   text-decoration: none;
   color: var(--text);
 }
 
+.app-brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 7px;
+  background: linear-gradient(135deg, var(--accent), #7c73f0);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
 .app-nav {
   display: flex;
-  gap: 1.25rem;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.app-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .app-nav a {
   color: var(--text-muted);
   text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  transition: background-color 0.12s ease, color 0.12s ease;
 }
 
 .app-nav a:hover {
+  color: var(--text);
+  background: var(--surface-muted);
+}
+
+.app-nav a.active {
   color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.app-nav-session {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
 }
 
 .session-email {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .link-button {
@@ -61,11 +135,21 @@ body {
   color: var(--text-muted);
   cursor: pointer;
   font: inherit;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .link-button:hover {
   color: var(--accent);
 }
+
+.app-nav-session > a {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ---------- layout ---------- */
 
 .app-main {
   max-width: 68rem;
@@ -76,40 +160,156 @@ body {
 .panel {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem 1.75rem;
   margin-bottom: 1.5rem;
 }
 
 .panel h2 {
   margin-top: 0;
+  margin-bottom: 0.35rem;
   font-size: 1.05rem;
 }
+
+.panel > p:first-of-type {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 0;
+}
+
+/* ---------- hero (home page) ---------- */
+
+.hero {
+  padding: 3rem 2.25rem;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero p {
+  color: var(--text-muted);
+  max-width: 38rem;
+  margin: 0 auto 1.75rem;
+  line-height: 1.55;
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.3rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 0.12s ease, border-color 0.12s ease, transform 0.05s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.btn-secondary:hover {
+  background: var(--surface-muted);
+}
+
+/* ---------- forms ---------- */
 
 .field {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
+}
+
+.field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
 }
 
 .field input,
 .field textarea,
 .field select {
-  padding: 0.55rem 0.7rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
   font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.field input[type="file"] {
+  padding: 0.4rem;
+  border-style: dashed;
+}
+
+.field input[type="file"]::file-selector-button {
+  padding: 0.45rem 0.9rem;
+  margin-right: 0.75rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.field input[type="file"]::file-selector-button:hover {
+  background: var(--accent-hover);
 }
 
 button {
-  padding: 0.55rem 1rem;
+  padding: 0.6rem 1.15rem;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   background: var(--accent);
   color: #ffffff;
   font: inherit;
+  font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+button:hover:not(:disabled) {
+  background: var(--accent-hover);
 }
 
 button:disabled {
@@ -117,26 +317,88 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* ---------- tables ---------- */
+
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
-th,
+th {
+  text-align: left;
+  padding: 0.55rem 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-faint);
+  border-bottom: 1px solid var(--border);
+}
+
 td {
   text-align: left;
-  padding: 0.6rem 0.5rem;
+  padding: 0.7rem 0.6rem;
   border-bottom: 1px solid var(--border);
   font-size: 0.92rem;
 }
 
+tbody tr:hover td {
+  background: var(--surface-muted);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
 .status-pill {
   display: inline-block;
-  padding: 0.15rem 0.55rem;
+  padding: 0.2rem 0.65rem;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: capitalize;
   background: var(--surface-muted);
   border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.status-pill[data-status="INDEXED"],
+.status-pill[data-status="COMPLETED"] {
+  background: var(--success-soft);
+  border-color: transparent;
+  color: var(--success);
+}
+
+.status-pill[data-status="PENDING"],
+.status-pill[data-status="PROCESSING"],
+.status-pill[data-status="QUEUED"],
+.status-pill[data-status="EXTRACTING"],
+.status-pill[data-status="CHUNKING"],
+.status-pill[data-status="EMBEDDING"] {
+  background: var(--warning-soft);
+  border-color: transparent;
+  color: var(--warning);
+}
+
+.status-pill[data-status="FAILED"] {
+  background: var(--danger-soft);
+  border-color: transparent;
+  color: var(--danger);
+}
+
+/* ---------- chat ---------- */
+
+.chat-layout {
+  display: grid;
+  grid-template-columns: 16.5rem 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 56rem) {
+  .chat-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 .chat-transcript {
@@ -144,33 +406,43 @@ td {
   flex-direction: column;
   gap: 1rem;
   min-height: 18rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  padding-right: 0.25rem;
+  overflow-y: auto;
 }
 
 .chat-bubble {
-  padding: 0.85rem 1rem;
-  border-radius: 8px;
+  padding: 0.85rem 1.05rem;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
   white-space: pre-wrap;
+  line-height: 1.5;
+  max-width: 85%;
 }
 
 .chat-bubble.user {
-  background: var(--surface-muted);
+  background: var(--accent-soft);
+  border-color: transparent;
+  align-self: flex-end;
 }
 
 .chat-bubble.assistant {
-  background: var(--surface);
+  background: var(--surface-muted);
+  align-self: flex-start;
 }
 
 .citation-list {
   margin-top: 0.75rem;
-  padding-left: 1rem;
+  padding-left: 1.1rem;
   color: var(--text-muted);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
 }
+
+/* ---------- misc ---------- */
 
 .error-text {
   color: var(--danger);
+  font-size: 0.88rem;
 }
 
 .metric-grid {
@@ -181,18 +453,25 @@ td {
 
 .metric-card {
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  background: var(--surface-muted);
 }
 
 .metric-card span {
   display: block;
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .metric-card strong {
-  font-size: 1.5rem;
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 1.6rem;
+  color: var(--text);
 }
 
 .skeleton {
@@ -220,4 +499,44 @@ td {
 .metric-skeleton-value {
   display: block;
   margin-top: 0.4rem;
+}
+
+/* ---------- auth ---------- */
+
+.auth-shell {
+  min-height: calc(100vh - 4.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 24rem;
+}
+
+.auth-card-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.auth-card-header .app-brand-mark {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.1rem;
+  margin: 0 auto 0.85rem;
+}
+
+.auth-card-header p {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin: 0.35rem 0 0;
+}
+
+.auth-switch {
+  text-align: center;
+  margin: 0.25rem 0 0;
+  font-size: 0.88rem;
+  color: var(--text-muted);
 }

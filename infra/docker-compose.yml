@@ -40,9 +40,13 @@ services:
       KAFKA_NODE_ID: "1"
       KAFKA_PROCESS_ROLES: broker,controller
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
-      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      # PLAINTEXT is for other containers (advertises the "kafka" hostname, only resolvable on the
+      # compose network); PLAINTEXT_HOST is for the host machine — e.g. scripts/dev.sh running app
+      # services natively — since a client that bootstraps via localhost still gets redirected to
+      # whatever hostname the matching listener advertises for actual produce/consume traffic.
+      KAFKA_LISTENERS: PLAINTEXT://:9092,PLAINTEXT_HOST://:29092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
@@ -53,6 +57,7 @@ services:
       KAFKA_LOG_DIRS: /var/lib/kafka/data
     ports:
       - "9092:9092"
+      - "29092:29092"
     volumes:
       - kafka-data:/var/lib/kafka/data
     healthcheck:

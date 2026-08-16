@@ -1,19 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { logout } from "@/lib/apiClient";
 import { readSession } from "@/lib/session";
 
 export function SessionNav() {
   const router = useRouter();
+  const pathname = usePathname();
   const [email, setEmail] = useState<string | null>(null);
   const [signingOut, setSigningOut] = useState(false);
 
   useEffect(() => {
     setEmail(readSession()?.email ?? null);
-  }, []);
+  }, [pathname]);
 
   async function handleSignOut() {
     setSigningOut(true);

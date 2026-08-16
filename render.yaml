@@ -1,0 +1,135 @@
+# Render Blueprint for the free-tier cloud deployment.
+#
+# This deliberately does not change how any service is built or run — same Dockerfiles, same
+# ports, same code as main. It only points the existing config at managed free-tier substitutes
+# for the infra that infra/docker-compose.yml normally runs locally:
+#   - Postgres + pgvector -> Neon
+#   - Kafka                -> Upstash Kafka (SASL_SSL, via spring.kafka.properties.* — a standard
+#                              Spring Boot relaxed-binding map, no code change needed)
+#   - Redis                -> Upstash Redis (TLS + password, standard Spring Data Redis properties)
+#   - S3 (MinIO)            -> Cloudflare R2 (S3-compatible API)
+#
+# Every value below marked `sync: false` is filled in through the Render dashboard after the
+# blueprint is applied — this file never holds real secrets. `fromGroup` pulls shared values (the
+# JWT signing secret above all — it must be byte-for-byte identical across all four services,
+# which is why it lives in one group with generateValue instead of being generated per-service.
+
+envVarGroups:
+  - name: documind-shared
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRY_MINUTES
+        value: "15"
+      - key: LOG_FORMAT
+        value: ecs
+      - key: DATABASE_URL
+        sync: false # jdbc:postgresql://<neon-host>/<db>?sslmode=require
+      - key: DATABASE_USER
+        sync: false # Neon role name
+      - key: DATABASE_PASSWORD
+        sync: false # Neon role password
+      - key: VECTOR_STORE
+        value: pgvector
+      - key: KAFKA_BOOTSTRAP_SERVERS
+        sync: false # <cluster>.upstash.io:9092, from Upstash Kafka "Details" tab
+      - key: SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL
+        value: SASL_SSL
+      - key: SPRING_KAFKA_PROPERTIES_SASL_MECHANISM
+        value: SCRAM-SHA-256
+      - key: SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG
+        sync: false # org.apache.kafka.common.security.scram.ScramLoginModule required username="..." password="...";  (Upstash gives you this exact string)
+      - key: SPRING_DATA_REDIS_HOST
+        sync: false # <db>.upstash.io, from Upstash Redis "Details" tab
+      - key: SPRING_DATA_REDIS_PORT
+        value: "6379"
+      - key: SPRING_DATA_REDIS_PASSWORD
+        sync: false # Upstash Redis password
+      - key: SPRING_DATA_REDIS_SSL_ENABLED
+        value: "true"
+      - key: S3_ENDPOINT
+        sync: false # https://<account-id>.r2.cloudflarestorage.com
+      - key: S3_ACCESS_KEY
+        sync: false # R2 API token access key id
+      - key: S3_SECRET_KEY
+        sync: false # R2 API token secret access key
+      - key: S3_BUCKET
+        value: documind-documents
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false # the Vercel frontend URL, e.g. https://documind.vercel.app
+      - key: DEMO_SEED_ENABLED
+        value: "true"
+      - key: DEMO_USER_EMAIL
+        value: demo@documind.test
+      - key: DEMO_USER_PASSWORD
+        sync: false
+      - key: EMBEDDING_PROVIDER
+        value: openai
+      - key: EMBEDDING_MODEL
+        value: text-embedding-3-small
+      - key: EMBEDDING_DIMENSIONS
+        value: "1536"
+      - key: LLM_PROVIDER
+        value: openai
+      - key: OPENAI_CHAT_MODEL
+        value: gpt-4o-mini
+      - key: OPENAI_API_KEY
+        sync: false # optional — leave blank to keep the same graceful "not found in your documents" fallback as local dev
+      - key: ANTHROPIC_API_KEY
+        sync: false # optional
+      - key: RETRIEVAL_TOP_K
+        value: "6"
+      - key: RETRIEVAL_SIMILARITY_THRESHOLD
+        value: "0.7"
+      - key: PII_REDACTION_MODE
+        value: THIRD_PARTY_ONLY
+      - key: RETRIEVAL_RERANKER
+        value: lexical
+      - key: RETRIEVAL_RERANK_WEIGHT
+        value: "0.6"
+
+services:
+  - type: web
+    name: documind-gateway
+    runtime: docker
+    dockerfilePath: ./backend/gateway-service/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - fromGroup: documind-shared
+      - key: DOCUMENT_SERVICE_URL
+        value: https://documind-document.onrender.com
+      - key: QUERY_SERVICE_URL
+        value: https://documind-query.onrender.com
+
+  - type: web
+    name: documind-document
+    runtime: docker
+    dockerfilePath: ./backend/document-service/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - fromGroup: documind-shared
+
+  - type: worker
+    name: documind-ingestion
+    runtime: docker
+    dockerfilePath: ./backend/ingestion-worker/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - fromGroup: documind-shared
+      - key: QDRANT_HOST
+        value: "" # unused in pgvector mode, left blank
+
+  - type: web
+    name: documind-query
+    runtime: docker
+    dockerfilePath: ./backend/query-service/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - fromGroup: documind-shared

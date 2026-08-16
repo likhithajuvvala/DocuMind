@@ -36,50 +36,60 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="panel">
-      <h2>{mode === "login" ? "Sign in" : "Create a workspace"}</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="field">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
+    <div className="auth-shell">
+      <section className="panel auth-card">
+        <div className="auth-card-header">
+          <span className="app-brand-mark">D</span>
+          <h2>{mode === "login" ? "Sign in" : "Create a workspace"}</h2>
+          <p>
+            {mode === "login"
+              ? "Ask grounded, cited questions about your documents."
+              : "Set up a new workspace to start uploading documents."}
+          </p>
         </div>
-        <div className="field">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
-        </div>
-        {mode === "register" && (
+        <form onSubmit={handleSubmit}>
           <div className="field">
-            <label htmlFor="workspace">Workspace name</label>
+            <label htmlFor="email">Email</label>
             <input
-              id="workspace"
-              value={workspaceName}
-              onChange={(event) => setWorkspaceName(event.target.value)}
+              id="email"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
               required
             />
           </div>
-        )}
-        {error && <p className="error-text">{error}</p>}
-        <button type="submit" disabled={submitting}>
-          {submitting ? "Working…" : mode === "login" ? "Sign in" : "Create workspace"}
-        </button>
-      </form>
-      <p>
-        <button type="button" onClick={() => setMode(mode === "login" ? "register" : "login")}>
-          {mode === "login" ? "Need a workspace?" : "Already registered?"}
-        </button>
-      </p>
-    </section>
+          <div className="field">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+            />
+          </div>
+          {mode === "register" && (
+            <div className="field">
+              <label htmlFor="workspace">Workspace name</label>
+              <input
+                id="workspace"
+                value={workspaceName}
+                onChange={(event) => setWorkspaceName(event.target.value)}
+                required
+              />
+            </div>
+          )}
+          {error && <p className="error-text">{error}</p>}
+          <button type="submit" disabled={submitting} style={{ width: "100%" }}>
+            {submitting ? "Working…" : mode === "login" ? "Sign in" : "Create workspace"}
+          </button>
+        </form>
+        <p className="auth-switch">
+          <button type="button" className="link-button" onClick={() => setMode(mode === "login" ? "register" : "login")}>
+            {mode === "login" ? "Need a workspace?" : "Already registered?"}
+          </button>
+        </p>
+      </section>
+    </div>
   );
 }

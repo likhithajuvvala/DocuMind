@@ -24,3 +24,6 @@ frontend/src/lib/generated/
 .vscode/
 *.iml
 .DS_Store
+
+# scripts/dev.sh runtime state (pid files, service logs)
+.dev/

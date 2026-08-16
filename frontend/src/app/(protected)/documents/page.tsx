@@ -79,7 +79,9 @@ export default function DocumentsPage() {
                   <tr key={document.id}>
                     <td>{document.filename}</td>
                     <td>
-                      <span className="status-pill">{document.status}</span>
+                      <span className="status-pill" data-status={document.status}>
+                        {document.status}
+                      </span>
                     </td>
                     <td>{formatSize(document.sizeBytes)}</td>
                     <td>{new Date(document.createdAt).toLocaleString()}</td>
