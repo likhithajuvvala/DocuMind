@@ -194,3 +194,30 @@ td {
 .metric-card strong {
   font-size: 1.5rem;
 }
+
+.skeleton {
+  display: inline-block;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--surface-muted) 25%, var(--border) 37%, var(--surface-muted) 63%);
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+.error-panel .error-digest {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.metric-skeleton-value {
+  display: block;
+  margin-top: 0.4rem;
+}
