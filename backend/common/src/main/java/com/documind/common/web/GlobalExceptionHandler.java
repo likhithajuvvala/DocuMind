@@ -1,5 +1,6 @@
 package com.documind.common.web;
 
+import com.documind.common.error.DocumentIndexingInProgressException;
 import com.documind.common.error.RateLimitExceededException;
 import com.documind.common.error.ResourceNotFoundException;
 import com.documind.common.error.UnsupportedDocumentTypeException;
@@ -31,6 +32,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleUploadTooLarge(MaxUploadSizeExceededException exception) {
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
                 .body(ApiErrorResponse.of("upload_too_large", "The uploaded file exceeds the configured size limit"));
+    }
+
+    @ExceptionHandler(DocumentIndexingInProgressException.class)
+    public ResponseEntity<ApiErrorResponse> handleIndexingInProgress(DocumentIndexingInProgressException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ApiErrorResponse.of("document_indexing_in_progress", exception.getMessage()));
     }
 
     @ExceptionHandler(RateLimitExceededException.class)
