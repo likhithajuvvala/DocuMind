@@ -47,6 +47,22 @@ subprojects {
             dependency("io.netty:netty-resolver:4.1.136.Final")
             dependency("io.netty:netty-transport:4.1.136.Final")
             dependency("io.netty:netty-transport-native-unix-common:4.1.136.Final")
+            // spring-ai-starter-vector-store-qdrant (ingestion-worker, query-service) pulls in the
+            // Qdrant Java client, which depends on an old gRPC/protobuf pair affected by
+            // CVE-2025-55163 (Netty MadeYouReset HTTP/2 DoS, inside grpc-netty-shaded's bundled
+            // Netty) and CVE-2024-7254 (protobuf-java stack overflow on deeply nested messages).
+            // Every io.grpc module is pinned together since mixing grpc-java versions across
+            // modules risks ABI mismatches.
+            dependency("com.google.protobuf:protobuf-java:3.25.5")
+            dependency("com.google.protobuf:protobuf-java-util:3.25.5")
+            dependency("io.grpc:grpc-api:1.75.0")
+            dependency("io.grpc:grpc-context:1.75.0")
+            dependency("io.grpc:grpc-core:1.75.0")
+            dependency("io.grpc:grpc-netty-shaded:1.75.0")
+            dependency("io.grpc:grpc-protobuf:1.75.0")
+            dependency("io.grpc:grpc-protobuf-lite:1.75.0")
+            dependency("io.grpc:grpc-stub:1.75.0")
+            dependency("io.grpc:grpc-util:1.75.0")
         }
     }
 
