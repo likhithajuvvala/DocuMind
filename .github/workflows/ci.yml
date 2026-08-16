@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: azure/setup-helm@v4
+      - uses: azure/setup-helm@v5
       - name: Lint chart
         run: helm lint infra/k8s/helm/documind --set secrets.jwtSecret=ci --set secrets.databasePassword=ci
       - name: Render and validate against Kubernetes schemas
