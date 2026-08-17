@@ -328,6 +328,9 @@ Completed:
 - Authentication and workspace-based multi-tenancy
 - Document upload and asynchronous ingestion pipeline
 - Retrieval-augmented query flow with streaming responses and citations
+- Frontend error boundaries, skeleton loading states, and expanded streaming test coverage
+- Visual design system refresh across the web UI
+- Free-tier cloud deployment path (Vercel frontend, Render backend services, managed Postgres/Kafka/Redis/object storage)
 
 Planned:
 - Cross-document comparison queries (for example, comparing a clause across multiple contracts)
@@ -335,6 +338,10 @@ Planned:
 - Optical character recognition support for scanned PDF documents
 - Chat-platform integration (Slack, Microsoft Teams) for querying documents outside the web interface
 - Document-level, rather than only workspace-level, access permissions
+- Single sign-on (SAML / OAuth2) for enterprise workspace onboarding
+- Usage-based billing tied to the existing per-workspace plan and usage-tracking tables
+- Exporting chat transcripts and cited answers to PDF or Markdown
+- Per-workspace retrieval tuning (top-k, similarity threshold, reranker weight) surfaced in the admin UI instead of only via environment variables
 
 ---
 
