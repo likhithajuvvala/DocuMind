@@ -93,7 +93,7 @@ export default function ChatPage() {
   }
 
   return (
-    <>
+    <div className="chat-layout">
       <section className="panel">
         <h2>Conversations</h2>
         {loadingWorkspace ? (
@@ -175,6 +175,6 @@ export default function ChatPage() {
           </button>
         </form>
       </section>
-    </>
+    </div>
   );
 }

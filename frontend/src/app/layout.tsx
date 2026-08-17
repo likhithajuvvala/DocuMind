@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { NavLinks } from "@/components/NavLinks";
 import { SessionNav } from "@/components/SessionNav";
 import "./globals.css";
 
@@ -15,13 +16,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <header className="app-header">
           <Link href="/" className="app-brand">
+            <span className="app-brand-mark">D</span>
             DocuMind
           </Link>
           <nav className="app-nav">
-            <Link href="/documents">Documents</Link>
-            <Link href="/chat">Chat</Link>
-            <Link href="/admin">Admin</Link>
-            <SessionNav />
+            <NavLinks />
+            <div className="app-nav-session">
+              <SessionNav />
+            </div>
           </nav>
         </header>
         <main className="app-main">{children}</main>
