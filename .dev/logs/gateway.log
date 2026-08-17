@@ -1,0 +1,138 @@
+> Task :common:compileJava UP-TO-DATE
+> Task :common:processResources UP-TO-DATE
+> Task :common:classes UP-TO-DATE
+> Task :common:jar UP-TO-DATE
+> Task :gateway-service:compileJava UP-TO-DATE
+> Task :gateway-service:processResources UP-TO-DATE
+> Task :gateway-service:classes UP-TO-DATE
+> Task :gateway-service:resolveMainClassName UP-TO-DATE
+
+> Task :gateway-service:bootRun
+2026-08-17T01:37:29.905+05:30  INFO 969040 --- [gateway-service] [           main] c.documind.gateway.GatewayApplication    : Starting GatewayApplication using Java 21.0.12 with PID 969040 (/home/premjampuram/Projects/DocuMind/backend/gateway-service/build/classes/java/main started by premjampuram in /home/premjampuram/Projects/DocuMind/backend/gateway-service)
+2026-08-17T01:37:29.906+05:30 DEBUG 969040 --- [gateway-service] [           main] c.documind.gateway.GatewayApplication    : Running with Spring Boot v3.5.16, Spring v6.2.19
+2026-08-17T01:37:29.907+05:30  INFO 969040 --- [gateway-service] [           main] c.documind.gateway.GatewayApplication    : No active profile set, falling back to 1 default profile: "default"
+2026-08-17T01:37:30.558+05:30  INFO 969040 --- [gateway-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-08-17T01:37:30.558+05:30  INFO 969040 --- [gateway-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-17T01:37:30.651+05:30  INFO 969040 --- [gateway-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 86 ms. Found 9 JPA repository interfaces.
+2026-08-17T01:37:31.002+05:30  INFO 969040 --- [gateway-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-08-17T01:37:31.003+05:30  INFO 969040 --- [gateway-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-08-17T01:37:31.020+05:30  INFO 969040 --- [gateway-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 10 ms. Found 0 Redis repository interfaces.
+2026-08-17T01:37:31.219+05:30  INFO 969040 --- [gateway-service] [           main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=8f27f26f-dbc1-3669-9640-92eef72ba687
+2026-08-17T01:37:31.562+05:30  INFO 969040 --- [gateway-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-08-17T01:37:31.575+05:30  INFO 969040 --- [gateway-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-08-17T01:37:31.576+05:30  INFO 969040 --- [gateway-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.55]
+2026-08-17T01:37:31.620+05:30  INFO 969040 --- [gateway-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-08-17T01:37:31.620+05:30  INFO 969040 --- [gateway-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1567 ms
+2026-08-17T01:37:32.048+05:30 DEBUG 969040 --- [gateway-service] [           main] c.d.c.security.JwtAuthenticationFilter   : Filter 'jwtAuthenticationFilter' configured for use
+2026-08-17T01:37:32.049+05:30 DEBUG 969040 --- [gateway-service] [           main] c.d.c.logging.RequestCorrelationFilter   : Filter 'requestCorrelationFilter' configured for use
+2026-08-17T01:37:32.049+05:30 DEBUG 969040 --- [gateway-service] [           main] c.d.gateway.ratelimit.RateLimitFilter    : Filter 'rateLimitFilter' configured for use
+2026-08-17T01:37:32.251+05:30  INFO 969040 --- [gateway-service] [           main] com.zaxxer.hikari.HikariDataSource       : gateway-hikari - Starting...
+2026-08-17T01:37:32.372+05:30  INFO 969040 --- [gateway-service] [           main] com.zaxxer.hikari.pool.HikariPool        : gateway-hikari - Added connection org.postgresql.jdbc.PgConnection@5da2966
+2026-08-17T01:37:32.374+05:30  INFO 969040 --- [gateway-service] [           main] com.zaxxer.hikari.HikariDataSource       : gateway-hikari - Start completed.
+2026-08-17T01:37:32.402+05:30  INFO 969040 --- [gateway-service] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:5432/documind (PostgreSQL 16.14)
+2026-08-17T01:37:32.438+05:30  INFO 969040 --- [gateway-service] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 2 migrations (execution time 00:00.019s)
+2026-08-17T01:37:32.472+05:30  INFO 969040 --- [gateway-service] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 2
+2026-08-17T01:37:32.475+05:30  INFO 969040 --- [gateway-service] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-08-17T01:37:32.563+05:30  INFO 969040 --- [gateway-service] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-17T01:37:32.602+05:30  INFO 969040 --- [gateway-service] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.53.Final
+2026-08-17T01:37:32.630+05:30  INFO 969040 --- [gateway-service] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-08-17T01:37:32.860+05:30  INFO 969040 --- [gateway-service] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-17T01:37:32.927+05:30  INFO 969040 --- [gateway-service] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (gateway-hikari)']
+	Database driver: undefined/unknown
+	Database version: 16.14
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-17T01:37:33.561+05:30  INFO 969040 --- [gateway-service] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-17T01:37:33.590+05:30  INFO 969040 --- [gateway-service] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-17T01:37:33.876+05:30  INFO 969040 --- [gateway-service] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-17T01:37:34.621+05:30  INFO 969040 --- [gateway-service] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2026-08-17T01:37:34.645+05:30  WARN 969040 --- [gateway-service] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 71c2d350-dc32-470a-a674-1271ce669a7a
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-08-17T01:37:34.651+05:30  INFO 969040 --- [gateway-service] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-08-17T01:37:35.159+05:30  INFO 969040 --- [gateway-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-08-17T01:37:35.177+05:30  INFO 969040 --- [gateway-service] [           main] c.documind.gateway.GatewayApplication    : Started GatewayApplication in 5.612 seconds (process running for 5.921)
+2026-08-17T01:37:36.857+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-17T01:37:36.857+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-08-17T01:37:36.859+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-08-17T01:37:37.267+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-1] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 500
+2026-08-17T01:37:37.267+05:30 ERROR 969040 --- [gateway-service] [nio-8080-exec-1] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8081/api/documents": null] with root cause
+
+java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874) ~[na:na]
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210) ~[java.net.http:na]
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571) ~[na:na]
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212) ~[java.net.http:na]
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280) ~[java.net.http:na]
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238) ~[java.net.http:na]
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934) ~[na:na]
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911) ~[na:na]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[na:na]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2026-08-17T01:37:37.287+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-3] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 500
+2026-08-17T01:37:37.288+05:30 ERROR 969040 --- [gateway-service] [nio-8080-exec-3] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8081/api/documents": null] with root cause
+
+java.nio.channels.ClosedChannelException
+	at java.base/sun.nio.ch.SocketChannelImpl.ensureOpen(SocketChannelImpl.java:202) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.beginConnect(SocketChannelImpl.java:786) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:874) ~[na:na]
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210) ~[java.net.http:na]
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:571) ~[na:na]
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212) ~[java.net.http:na]
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.checkRetryConnect(PlainHttpConnection.java:280) ~[java.net.http:na]
+	at java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$2(PlainHttpConnection.java:238) ~[java.net.http:na]
+	at java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934) ~[na:na]
+	at java.base/java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:911) ~[na:na]
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[na:na]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2026-08-17T01:37:40.919+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-6] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:37:44.827+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-7] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:37:48.677+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-8] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:37:48.690+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-9] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:37:53.435+05:30  INFO 969040 --- [gateway-service] [io-8080-exec-10] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:37:55.562+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-2] c.d.c.logging.RequestCorrelationFilter   : POST /api/documents/upload responded 202
+2026-08-17T01:37:55.578+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-1] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:37:57.433+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-3] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:38:01.301+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-4] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:38:05.433+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-5] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:38:09.021+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-7] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:38:09.034+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-7] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:38:09.138+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-6] c.d.c.logging.RequestCorrelationFilter   : GET /api/chat/sessions responded 200
+2026-08-17T01:38:09.149+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-9] c.d.c.logging.RequestCorrelationFilter   : GET /api/chat/sessions responded 200
+2026-08-17T01:38:22.622+05:30  INFO 969040 --- [gateway-service] [io-8080-exec-10] c.d.c.logging.RequestCorrelationFilter   : OPTIONS /api/chat/sessions responded 200
+2026-08-17T01:38:22.667+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-2] c.d.c.logging.RequestCorrelationFilter   : POST /api/chat/sessions responded 201
+2026-08-17T01:38:22.674+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-1] c.d.c.logging.RequestCorrelationFilter   : OPTIONS /api/chat/sessions/b790cf38-b300-4b2f-875e-b28b9cf985fd responded 200
+2026-08-17T01:38:22.697+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-3] c.d.c.logging.RequestCorrelationFilter   : GET /api/chat/sessions/b790cf38-b300-4b2f-875e-b28b9cf985fd responded 200
+2026-08-17T01:38:30.645+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-4] c.d.c.logging.RequestCorrelationFilter   : OPTIONS /api/chat/sessions/b790cf38-b300-4b2f-875e-b28b9cf985fd/messages responded 200
+2026-08-17T01:38:31.255+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-5] c.d.c.logging.RequestCorrelationFilter   : POST /api/chat/sessions/b790cf38-b300-4b2f-875e-b28b9cf985fd/messages responded 200
+2026-08-17T01:38:31.257+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-8] c.d.c.logging.RequestCorrelationFilter   : GET /api/chat/sessions/b790cf38-b300-4b2f-875e-b28b9cf985fd responded 200
+2026-08-17T01:40:00.956+05:30  INFO 969040 --- [gateway-service] [io-8080-exec-10] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:40:00.970+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-2] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:40:04.934+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-1] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:40:05.335+05:30 DEBUG 969040 --- [gateway-service] [nio-8080-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.gateway.auth.AuthenticationService.logout]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2026-08-17T01:40:05.335+05:30 DEBUG 969040 --- [gateway-service] [nio-8080-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(612059460<open>)] for JPA transaction
+2026-08-17T01:40:05.338+05:30 DEBUG 969040 --- [gateway-service] [nio-8080-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@40f84b19]
+2026-08-17T01:40:05.338+05:30 DEBUG 969040 --- [gateway-service] [nio-8080-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Found thread-bound EntityManager [SessionImpl(612059460<open>)] for JPA transaction
+2026-08-17T01:40:05.338+05:30 DEBUG 969040 --- [gateway-service] [nio-8080-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Participating in existing transaction
+2026-08-17T01:40:05.394+05:30 DEBUG 969040 --- [gateway-service] [nio-8080-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Found thread-bound EntityManager [SessionImpl(612059460<open>)] for JPA transaction
+2026-08-17T01:40:05.394+05:30 DEBUG 969040 --- [gateway-service] [nio-8080-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Participating in existing transaction
+2026-08-17T01:40:05.398+05:30 DEBUG 969040 --- [gateway-service] [nio-8080-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:40:05.398+05:30 DEBUG 969040 --- [gateway-service] [nio-8080-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(612059460<open>)]
+2026-08-17T01:40:05.412+05:30 DEBUG 969040 --- [gateway-service] [nio-8080-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(612059460<open>)] after transaction
+2026-08-17T01:40:05.414+05:30  INFO 969040 --- [gateway-service] [nio-8080-exec-3] c.d.c.logging.RequestCorrelationFilter   : POST /api/auth/logout responded 204

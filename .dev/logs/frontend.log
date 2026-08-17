@@ -1,0 +1,82 @@
+
+> documind-frontend@0.1.0 dev
+> next dev
+
+▲ Next.js 16.3.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.116:3000
+✓ Ready in 351ms
+✓ Running next.config.mjs took 16ms
+
+✓ Generated AGENTS.md and CLAUDE.md for AI agents. Set `agentRules: false` in next.config to disable.
+ GET /login 200 in 976ms (next.js: 802ms, application-code: 174ms)
+ GET /login 200 in 36ms (next.js: 5ms, application-code: 31ms)
+ GET /login 200 in 28ms (next.js: 2ms, application-code: 25ms)
+ GET /login 200 in 25ms (next.js: 1.9ms, application-code: 23ms)
+ GET /login 200 in 38ms (next.js: 7ms, application-code: 31ms)
+ GET /login 200 in 34ms (next.js: 3ms, application-code: 31ms)
+ GET /documents 200 in 165ms (next.js: 144ms, application-code: 21ms)
+ GET /documents 200 in 33ms (next.js: 1.8ms, application-code: 31ms)
+ GET /documents 200 in 31ms (next.js: 6ms, application-code: 25ms)
+✓ Compiled in 11ms
+ GET /login 200 in 17ms (next.js: 4ms, application-code: 13ms)
+ GET /documents 200 in 20ms (next.js: 3ms, application-code: 17ms)
+ GET /chat 200 in 131ms (next.js: 118ms, application-code: 13ms)
+ GET /admin 200 in 212ms (next.js: 197ms, application-code: 16ms)
+ GET /documents 200 in 32ms (next.js: 2ms, application-code: 30ms)
+ GET /documents 200 in 30ms (next.js: 1.5ms, application-code: 29ms)
+ GET /documents 200 in 37ms (next.js: 1.8ms, application-code: 35ms)
+ GET /documents 200 in 28ms (next.js: 1.6ms, application-code: 26ms)
+ GET /chat 200 in 30ms (next.js: 2ms, application-code: 28ms)
+ GET /documents 200 in 13ms (next.js: 1.9ms, application-code: 11ms)
+ GET /login 200 in 14ms (next.js: 2ms, application-code: 11ms)
+ GET /login 200 in 11ms (next.js: 3ms, application-code: 9ms)
+⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
+▲ Next.js 16.3.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.116:3000
+✓ Ready in 295ms
+✓ Running next.config.mjs took 16ms
+
+⨯ The directory at "/home/premjampuram/Projects/DocuMind/frontend/.next/dev" was deleted.
+
+Deleting this directory while Next.js is running can lead to undefined behavior. Restarting the server to recover...
+▲ Next.js 16.3.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.116:3000
+✓ Ready in 287ms
+✓ Running next.config.mjs took 15ms
+
+⨯ The directory at "/home/premjampuram/Projects/DocuMind/frontend/.next/dev" was deleted.
+
+Deleting this directory while Next.js is running can lead to undefined behavior. Restarting the server to recover...
+▲ Next.js 16.3.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.116:3000
+✓ Ready in 293ms
+✓ Running next.config.mjs took 14ms
+
+⨯ The directory at "/home/premjampuram/Projects/DocuMind/frontend/.next/dev" was deleted.
+
+Deleting this directory while Next.js is running can lead to undefined behavior. Restarting the server to recover...
+▲ Next.js 16.3.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.116:3000
+✓ Ready in 287ms
+✓ Running next.config.mjs took 17ms
+
+⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
+▲ Next.js 16.3.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.116:3000
+✓ Ready in 302ms
+✓ Running next.config.mjs took 18ms
+
+✓ Generated AGENTS.md and CLAUDE.md for AI agents. Set `agentRules: false` in next.config to disable.
+⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
+▲ Next.js 16.3.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.116:3000
+✓ Ready in 293ms
+✓ Running next.config.mjs took 15ms
+

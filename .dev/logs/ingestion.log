@@ -1,0 +1,573 @@
+> Task :common:compileJava UP-TO-DATE
+> Task :common:processResources UP-TO-DATE
+> Task :common:classes UP-TO-DATE
+> Task :common:jar UP-TO-DATE
+> Task :ingestion-worker:compileJava UP-TO-DATE
+> Task :ingestion-worker:processResources UP-TO-DATE
+> Task :ingestion-worker:classes UP-TO-DATE
+> Task :ingestion-worker:resolveMainClassName UP-TO-DATE
+
+> Task :ingestion-worker:bootRun
+2026-08-17T01:37:32.221+05:30  INFO 969603 --- [ingestion-worker] [           main] c.d.i.IngestionWorkerApplication         : Starting IngestionWorkerApplication using Java 21.0.12 with PID 969603 (/home/premjampuram/Projects/DocuMind/backend/ingestion-worker/build/classes/java/main started by premjampuram in /home/premjampuram/Projects/DocuMind/backend/ingestion-worker)
+2026-08-17T01:37:32.223+05:30 DEBUG 969603 --- [ingestion-worker] [           main] c.d.i.IngestionWorkerApplication         : Running with Spring Boot v3.5.16, Spring v6.2.19
+2026-08-17T01:37:32.224+05:30  INFO 969603 --- [ingestion-worker] [           main] c.d.i.IngestionWorkerApplication         : No active profile set, falling back to 1 default profile: "default"
+2026-08-17T01:37:32.874+05:30  INFO 969603 --- [ingestion-worker] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-17T01:37:33.011+05:30  INFO 969603 --- [ingestion-worker] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 130 ms. Found 9 JPA repository interfaces.
+2026-08-17T01:37:33.669+05:30  INFO 969603 --- [ingestion-worker] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2026-08-17T01:37:33.682+05:30  INFO 969603 --- [ingestion-worker] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-08-17T01:37:33.682+05:30  INFO 969603 --- [ingestion-worker] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.55]
+2026-08-17T01:37:33.728+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-08-17T01:37:33.729+05:30  INFO 969603 --- [ingestion-worker] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1462 ms
+2026-08-17T01:37:33.854+05:30 DEBUG 969603 --- [ingestion-worker] [           main] c.d.c.security.JwtAuthenticationFilter   : Filter 'jwtAuthenticationFilter' configured for use
+2026-08-17T01:37:33.854+05:30 DEBUG 969603 --- [ingestion-worker] [           main] c.d.c.logging.RequestCorrelationFilter   : Filter 'requestCorrelationFilter' configured for use
+2026-08-17T01:37:33.948+05:30  INFO 969603 --- [ingestion-worker] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-17T01:37:33.986+05:30  INFO 969603 --- [ingestion-worker] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.53.Final
+2026-08-17T01:37:34.008+05:30  INFO 969603 --- [ingestion-worker] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-08-17T01:37:34.221+05:30  INFO 969603 --- [ingestion-worker] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-17T01:37:34.241+05:30  INFO 969603 --- [ingestion-worker] [           main] com.zaxxer.hikari.HikariDataSource       : ingestion-hikari - Starting...
+2026-08-17T01:37:34.332+05:30  INFO 969603 --- [ingestion-worker] [           main] com.zaxxer.hikari.pool.HikariPool        : ingestion-hikari - Added connection org.postgresql.jdbc.PgConnection@2ae4c424
+2026-08-17T01:37:34.334+05:30  INFO 969603 --- [ingestion-worker] [           main] com.zaxxer.hikari.HikariDataSource       : ingestion-hikari - Start completed.
+2026-08-17T01:37:34.379+05:30  INFO 969603 --- [ingestion-worker] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (ingestion-hikari)']
+	Database driver: undefined/unknown
+	Database version: 16.14
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-17T01:37:35.058+05:30  INFO 969603 --- [ingestion-worker] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-17T01:37:35.099+05:30  INFO 969603 --- [ingestion-worker] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-17T01:37:35.655+05:30  INFO 969603 --- [ingestion-worker] [           main] o.s.a.v.pgvector.PgVectorStore           : Using the vector table name: vector_store. Is empty: false
+2026-08-17T01:37:35.657+05:30  INFO 969603 --- [ingestion-worker] [           main] o.s.a.v.pgvector.PgVectorStore           : Initializing PGVectorStore schema for table: vector_store in schema: public
+2026-08-17T01:37:35.657+05:30  INFO 969603 --- [ingestion-worker] [           main] o.s.a.v.pgvector.PgVectorStore           : vectorTableValidationsEnabled false
+2026-08-17T01:37:36.120+05:30  INFO 969603 --- [ingestion-worker] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-17T01:37:36.789+05:30  INFO 969603 --- [ingestion-worker] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2026-08-17T01:37:36.820+05:30  WARN 969603 --- [ingestion-worker] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 58614c54-c060-4716-9059-2070bf2b3612
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-08-17T01:37:36.827+05:30  INFO 969603 --- [ingestion-worker] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-08-17T01:37:37.176+05:30  INFO 969603 --- [ingestion-worker] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2026-08-17T01:37:37.202+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.k.clients.consumer.ConsumerConfig    : ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.include.jmx.reporter = true
+	auto.offset.reset = earliest
+	bootstrap.servers = [localhost:29092]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-ingestion-worker-1
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = ingestion-worker
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metadata.recovery.strategy = none
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.springframework.kafka.support.serializer.JsonDeserializer
+
+2026-08-17T01:37:37.232+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2026-08-17T01:37:37.331+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.9.2
+2026-08-17T01:37:37.331+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: 5e9866f43ab8e7e4
+2026-08-17T01:37:37.331+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1786910857330
+2026-08-17T01:37:37.340+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.k.c.c.i.ClassicKafkaConsumer         : [Consumer clientId=consumer-ingestion-worker-1, groupId=ingestion-worker] Subscribed to topic(s): documind.document.uploaded
+2026-08-17T01:37:37.345+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.k.clients.consumer.ConsumerConfig    : ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.include.jmx.reporter = true
+	auto.offset.reset = earliest
+	bootstrap.servers = [localhost:29092]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-ingestion-worker-dlt-2
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = ingestion-worker-dlt
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metadata.recovery.strategy = none
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.springframework.kafka.support.serializer.JsonDeserializer
+
+2026-08-17T01:37:37.345+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2026-08-17T01:37:37.349+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.9.2
+2026-08-17T01:37:37.349+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: 5e9866f43ab8e7e4
+2026-08-17T01:37:37.349+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1786910857349
+2026-08-17T01:37:37.354+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.k.c.c.i.ClassicKafkaConsumer         : [Consumer clientId=consumer-ingestion-worker-dlt-2, groupId=ingestion-worker-dlt] Subscribed to topic(s): documind.document.uploaded.dlt
+2026-08-17T01:37:37.356+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.k.clients.consumer.ConsumerConfig    : ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.include.jmx.reporter = true
+	auto.offset.reset = earliest
+	bootstrap.servers = [localhost:29092]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-ingestion-worker-3
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = ingestion-worker
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metadata.recovery.strategy = none
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.springframework.kafka.support.serializer.JsonDeserializer
+
+2026-08-17T01:37:37.356+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2026-08-17T01:37:37.361+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.9.2
+2026-08-17T01:37:37.361+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: 5e9866f43ab8e7e4
+2026-08-17T01:37:37.361+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1786910857361
+2026-08-17T01:37:37.363+05:30  INFO 969603 --- [ingestion-worker] [           main] o.a.k.c.c.i.ClassicKafkaConsumer         : [Consumer clientId=consumer-ingestion-worker-3, groupId=ingestion-worker] Subscribed to topic(s): documind.document.deleted
+2026-08-17T01:37:37.373+05:30  INFO 969603 --- [ingestion-worker] [           main] c.d.i.IngestionWorkerApplication         : Started IngestionWorkerApplication in 5.58 seconds (process running for 5.829)
+2026-08-17T01:37:37.562+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] org.apache.kafka.clients.Metadata        : [Consumer clientId=consumer-ingestion-worker-1, groupId=ingestion-worker] Cluster ID: 5L6g3nShT-eMCtK--X86sw
+2026-08-17T01:37:37.562+05:30  INFO 969603 --- [ingestion-worker] [ntainer#1-0-C-1] org.apache.kafka.clients.Metadata        : [Consumer clientId=consumer-ingestion-worker-3, groupId=ingestion-worker] Cluster ID: 5L6g3nShT-eMCtK--X86sw
+2026-08-17T01:37:37.562+05:30  INFO 969603 --- [ingestion-worker] [ntainer#0-0-C-1] org.apache.kafka.clients.Metadata        : [Consumer clientId=consumer-ingestion-worker-dlt-2, groupId=ingestion-worker-dlt] Cluster ID: 5L6g3nShT-eMCtK--X86sw
+2026-08-17T01:37:37.562+05:30  INFO 969603 --- [ingestion-worker] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-3, groupId=ingestion-worker] Discovered group coordinator localhost:29092 (id: 2147483646 rack: null)
+2026-08-17T01:37:37.563+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-1, groupId=ingestion-worker] Discovered group coordinator localhost:29092 (id: 2147483646 rack: null)
+2026-08-17T01:37:37.563+05:30  INFO 969603 --- [ingestion-worker] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-dlt-2, groupId=ingestion-worker-dlt] Discovered group coordinator localhost:29092 (id: 2147483646 rack: null)
+2026-08-17T01:37:37.564+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-1, groupId=ingestion-worker] (Re-)joining group
+2026-08-17T01:37:37.564+05:30  INFO 969603 --- [ingestion-worker] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-dlt-2, groupId=ingestion-worker-dlt] (Re-)joining group
+2026-08-17T01:37:37.564+05:30  INFO 969603 --- [ingestion-worker] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-3, groupId=ingestion-worker] (Re-)joining group
+2026-08-17T01:37:37.578+05:30  INFO 969603 --- [ingestion-worker] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-3, groupId=ingestion-worker] Request joining group due to: need to re-join with the given member-id: consumer-ingestion-worker-3-baa5704f-4335-4af6-b129-b9d4d3281c97
+2026-08-17T01:37:37.578+05:30  INFO 969603 --- [ingestion-worker] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-dlt-2, groupId=ingestion-worker-dlt] Request joining group due to: need to re-join with the given member-id: consumer-ingestion-worker-dlt-2-224902a0-b11c-4cb6-ac0c-2a3efc88e3bd
+2026-08-17T01:37:37.578+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-1, groupId=ingestion-worker] Request joining group due to: need to re-join with the given member-id: consumer-ingestion-worker-1-d10211a8-5fc3-44a0-9660-373f034ef43a
+2026-08-17T01:37:37.578+05:30  INFO 969603 --- [ingestion-worker] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-3, groupId=ingestion-worker] (Re-)joining group
+2026-08-17T01:37:37.578+05:30  INFO 969603 --- [ingestion-worker] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-dlt-2, groupId=ingestion-worker-dlt] (Re-)joining group
+2026-08-17T01:37:37.578+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-1, groupId=ingestion-worker] (Re-)joining group
+2026-08-17T01:37:37.586+05:30  INFO 969603 --- [ingestion-worker] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-dlt-2, groupId=ingestion-worker-dlt] Successfully joined group with generation Generation{generationId=1, memberId='consumer-ingestion-worker-dlt-2-224902a0-b11c-4cb6-ac0c-2a3efc88e3bd', protocol='range'}
+2026-08-17T01:37:37.587+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-1, groupId=ingestion-worker] Successfully joined group with generation Generation{generationId=1, memberId='consumer-ingestion-worker-1-d10211a8-5fc3-44a0-9660-373f034ef43a', protocol='range'}
+2026-08-17T01:37:37.587+05:30  INFO 969603 --- [ingestion-worker] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-3, groupId=ingestion-worker] Successfully joined group with generation Generation{generationId=1, memberId='consumer-ingestion-worker-3-baa5704f-4335-4af6-b129-b9d4d3281c97', protocol='range'}
+2026-08-17T01:37:37.590+05:30  INFO 969603 --- [ingestion-worker] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-dlt-2, groupId=ingestion-worker-dlt] Finished assignment for group at generation 1: {consumer-ingestion-worker-dlt-2-224902a0-b11c-4cb6-ac0c-2a3efc88e3bd=Assignment(partitions=[documind.document.uploaded.dlt-0])}
+2026-08-17T01:37:37.591+05:30  INFO 969603 --- [ingestion-worker] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-3, groupId=ingestion-worker] Finished assignment for group at generation 1: {consumer-ingestion-worker-1-d10211a8-5fc3-44a0-9660-373f034ef43a=Assignment(partitions=[documind.document.uploaded-0]), consumer-ingestion-worker-3-baa5704f-4335-4af6-b129-b9d4d3281c97=Assignment(partitions=[documind.document.deleted-0])}
+2026-08-17T01:37:37.602+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-1, groupId=ingestion-worker] Successfully synced group in generation Generation{generationId=1, memberId='consumer-ingestion-worker-1-d10211a8-5fc3-44a0-9660-373f034ef43a', protocol='range'}
+2026-08-17T01:37:37.602+05:30  INFO 969603 --- [ingestion-worker] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-dlt-2, groupId=ingestion-worker-dlt] Successfully synced group in generation Generation{generationId=1, memberId='consumer-ingestion-worker-dlt-2-224902a0-b11c-4cb6-ac0c-2a3efc88e3bd', protocol='range'}
+2026-08-17T01:37:37.602+05:30  INFO 969603 --- [ingestion-worker] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-3, groupId=ingestion-worker] Successfully synced group in generation Generation{generationId=1, memberId='consumer-ingestion-worker-3-baa5704f-4335-4af6-b129-b9d4d3281c97', protocol='range'}
+2026-08-17T01:37:37.602+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-1, groupId=ingestion-worker] Notifying assignor about the new Assignment(partitions=[documind.document.uploaded-0])
+2026-08-17T01:37:37.602+05:30  INFO 969603 --- [ingestion-worker] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-dlt-2, groupId=ingestion-worker-dlt] Notifying assignor about the new Assignment(partitions=[documind.document.uploaded.dlt-0])
+2026-08-17T01:37:37.602+05:30  INFO 969603 --- [ingestion-worker] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-3, groupId=ingestion-worker] Notifying assignor about the new Assignment(partitions=[documind.document.deleted-0])
+2026-08-17T01:37:37.604+05:30  INFO 969603 --- [ingestion-worker] [ntainer#1-0-C-1] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-ingestion-worker-3, groupId=ingestion-worker] Adding newly assigned partitions: documind.document.deleted-0
+2026-08-17T01:37:37.604+05:30  INFO 969603 --- [ingestion-worker] [ntainer#0-0-C-1] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-ingestion-worker-dlt-2, groupId=ingestion-worker-dlt] Adding newly assigned partitions: documind.document.uploaded.dlt-0
+2026-08-17T01:37:37.604+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-ingestion-worker-1, groupId=ingestion-worker] Adding newly assigned partitions: documind.document.uploaded-0
+2026-08-17T01:37:37.612+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-1, groupId=ingestion-worker] Found no committed offset for partition documind.document.uploaded-0
+2026-08-17T01:37:37.612+05:30  INFO 969603 --- [ingestion-worker] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-3, groupId=ingestion-worker] Found no committed offset for partition documind.document.deleted-0
+2026-08-17T01:37:37.612+05:30  INFO 969603 --- [ingestion-worker] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-ingestion-worker-dlt-2, groupId=ingestion-worker-dlt] Found no committed offset for partition documind.document.uploaded.dlt-0
+2026-08-17T01:37:37.619+05:30  INFO 969603 --- [ingestion-worker] [ntainer#1-0-C-1] o.a.k.c.c.internals.SubscriptionState    : [Consumer clientId=consumer-ingestion-worker-3, groupId=ingestion-worker] Resetting offset for partition documind.document.deleted-0 to position FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:29092 (id: 1 rack: null)], epoch=2}}.
+2026-08-17T01:37:37.619+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.k.c.c.internals.SubscriptionState    : [Consumer clientId=consumer-ingestion-worker-1, groupId=ingestion-worker] Resetting offset for partition documind.document.uploaded-0 to position FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:29092 (id: 1 rack: null)], epoch=2}}.
+2026-08-17T01:37:37.619+05:30  INFO 969603 --- [ingestion-worker] [ntainer#0-0-C-1] o.a.k.c.c.internals.SubscriptionState    : [Consumer clientId=consumer-ingestion-worker-dlt-2, groupId=ingestion-worker-dlt] Resetting offset for partition documind.document.uploaded.dlt-0 to position FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:29092 (id: 1 rack: null)], epoch=2}}.
+2026-08-17T01:37:37.619+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : ingestion-worker: partitions assigned: [documind.document.uploaded-0]
+2026-08-17T01:37:37.619+05:30  INFO 969603 --- [ingestion-worker] [ntainer#0-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : ingestion-worker-dlt: partitions assigned: [documind.document.uploaded.dlt-0]
+2026-08-17T01:37:37.619+05:30  INFO 969603 --- [ingestion-worker] [ntainer#1-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : ingestion-worker: partitions assigned: [documind.document.deleted-0]
+2026-08-17T01:37:38.128+05:30  INFO 969603 --- [ingestion-worker] [           main] c.d.c.rag.EmbeddingDimensionValidator    : Embedding dimensions agree: configured=1536, model=1536, table=1536
+2026-08-17T01:37:39.387+05:30  INFO 969603 --- [ingestion-worker] [nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-17T01:37:39.387+05:30  INFO 969603 --- [ingestion-worker] [nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-08-17T01:37:39.388+05:30  INFO 969603 --- [ingestion-worker] [nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-08-17T01:37:55.571+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:37:55.572+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(1875605696<open>)] for JPA transaction
+2026-08-17T01:37:55.574+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@1daeede3]
+2026-08-17T01:37:55.613+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:55.613+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(1875605696<open>)]
+2026-08-17T01:37:55.614+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(1875605696<open>)] after transaction
+2026-08-17T01:37:55.615+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.ingestion.pipeline.IngestionJobTracker.start]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2026-08-17T01:37:55.615+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(1262926496<open>)] for JPA transaction
+2026-08-17T01:37:55.615+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@3fcdb918]
+2026-08-17T01:37:55.615+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Found thread-bound EntityManager [SessionImpl(1262926496<open>)] for JPA transaction
+2026-08-17T01:37:55.615+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Participating in existing transaction
+2026-08-17T01:37:55.621+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Found thread-bound EntityManager [SessionImpl(1262926496<open>)] for JPA transaction
+2026-08-17T01:37:55.621+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Participating in existing transaction
+2026-08-17T01:37:55.628+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:55.628+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(1262926496<open>)]
+2026-08-17T01:37:55.644+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(1262926496<open>)] after transaction
+2026-08-17T01:37:55.645+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.ingestion.pipeline.IngestionJobTracker.advance]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2026-08-17T01:37:55.645+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(1793392934<open>)] for JPA transaction
+2026-08-17T01:37:55.645+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@5d0cf8e4]
+2026-08-17T01:37:55.645+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Found thread-bound EntityManager [SessionImpl(1793392934<open>)] for JPA transaction
+2026-08-17T01:37:55.645+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Participating in existing transaction
+2026-08-17T01:37:55.647+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:55.647+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(1793392934<open>)]
+2026-08-17T01:37:55.648+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(1793392934<open>)] after transaction
+2026-08-17T01:37:56.037+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.ingestion.pipeline.IngestionJobTracker.advance]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2026-08-17T01:37:56.037+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(1871335231<open>)] for JPA transaction
+2026-08-17T01:37:56.038+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@4851526e]
+2026-08-17T01:37:56.038+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Found thread-bound EntityManager [SessionImpl(1871335231<open>)] for JPA transaction
+2026-08-17T01:37:56.038+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Participating in existing transaction
+2026-08-17T01:37:56.039+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:56.040+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(1871335231<open>)]
+2026-08-17T01:37:56.042+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(1871335231<open>)] after transaction
+2026-08-17T01:37:56.042+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.ingestion.pipeline.IngestionJobTracker.advance]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2026-08-17T01:37:56.043+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(2088235387<open>)] for JPA transaction
+2026-08-17T01:37:56.043+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@6e4c9c68]
+2026-08-17T01:37:56.043+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Found thread-bound EntityManager [SessionImpl(2088235387<open>)] for JPA transaction
+2026-08-17T01:37:56.043+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Participating in existing transaction
+2026-08-17T01:37:56.044+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:56.044+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(2088235387<open>)]
+2026-08-17T01:37:56.046+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(2088235387<open>)] after transaction
+2026-08-17T01:37:56.046+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.ingestion.indexing.ChunkIndexer.index]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2026-08-17T01:37:56.046+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(212955275<open>)] for JPA transaction
+2026-08-17T01:37:56.047+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@613b6bf0]
+2026-08-17T01:37:57.195+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Found thread-bound EntityManager [SessionImpl(212955275<open>)] for JPA transaction
+2026-08-17T01:37:57.195+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Participating in existing transaction
+2026-08-17T01:37:57.198+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:57.198+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(212955275<open>)]
+2026-08-17T01:37:57.201+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(212955275<open>)] after transaction
+2026-08-17T01:37:57.201+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.ingestion.pipeline.IngestionJobTracker.complete]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2026-08-17T01:37:57.201+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(335939214<open>)] for JPA transaction
+2026-08-17T01:37:57.201+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@1e373335]
+2026-08-17T01:37:57.202+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Found thread-bound EntityManager [SessionImpl(335939214<open>)] for JPA transaction
+2026-08-17T01:37:57.202+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Participating in existing transaction
+2026-08-17T01:37:57.204+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Found thread-bound EntityManager [SessionImpl(335939214<open>)] for JPA transaction
+2026-08-17T01:37:57.204+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Participating in existing transaction
+2026-08-17T01:37:57.206+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:57.206+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(335939214<open>)]
+2026-08-17T01:37:57.208+05:30 DEBUG 969603 --- [ingestion-worker] [ntainer#2-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(335939214<open>)] after transaction
+2026-08-17T01:37:57.214+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.k.clients.producer.ProducerConfig    : ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [localhost:29092]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = ingestion-worker-producer-1
+	compression.gzip.level = -1
+	compression.lz4.level = 9
+	compression.type = none
+	compression.zstd.level = 3
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	enable.metrics.push = true
+	interceptor.classes = []
+	key.serializer = class org.apache.kafka.common.serialization.StringSerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metadata.recovery.strategy = none
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 60000
+	transactional.id = null
+	value.serializer = class org.springframework.kafka.support.serializer.JsonSerializer
+
+2026-08-17T01:37:57.214+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2026-08-17T01:37:57.220+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=ingestion-worker-producer-1] Instantiated an idempotent producer.
+2026-08-17T01:37:57.227+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.9.2
+2026-08-17T01:37:57.227+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: 5e9866f43ab8e7e4
+2026-08-17T01:37:57.227+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1786910877227
+2026-08-17T01:37:57.230+05:30  INFO 969603 --- [ingestion-worker] [rker-producer-1] org.apache.kafka.clients.Metadata        : [Producer clientId=ingestion-worker-producer-1] Cluster ID: 5L6g3nShT-eMCtK--X86sw
+2026-08-17T01:37:57.231+05:30  INFO 969603 --- [ingestion-worker] [rker-producer-1] o.a.k.c.p.internals.TransactionManager   : [Producer clientId=ingestion-worker-producer-1] ProducerId set to 1001 with epoch 0
+2026-08-17T01:37:57.239+05:30  INFO 969603 --- [ingestion-worker] [ntainer#2-0-C-1] c.d.i.pipeline.IngestionPipeline         : Indexed document 2d164b0b-994f-4f1c-b9bf-7079b0dfb5e9 into 1 chunks

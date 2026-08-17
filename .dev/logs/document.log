@@ -1,0 +1,517 @@
+> Task :common:compileJava UP-TO-DATE
+> Task :common:processResources UP-TO-DATE
+> Task :common:classes UP-TO-DATE
+> Task :common:jar UP-TO-DATE
+> Task :document-service:compileJava UP-TO-DATE
+> Task :document-service:processResources UP-TO-DATE
+> Task :document-service:classes UP-TO-DATE
+> Task :document-service:resolveMainClassName UP-TO-DATE
+
+> Task :document-service:bootRun
+2026-08-17T01:37:33.512+05:30  INFO 969884 --- [document-service] [           main] c.d.document.DocumentServiceApplication  : Starting DocumentServiceApplication using Java 21.0.12 with PID 969884 (/home/premjampuram/Projects/DocuMind/backend/document-service/build/classes/java/main started by premjampuram in /home/premjampuram/Projects/DocuMind/backend/document-service)
+2026-08-17T01:37:33.513+05:30 DEBUG 969884 --- [document-service] [           main] c.d.document.DocumentServiceApplication  : Running with Spring Boot v3.5.16, Spring v6.2.19
+2026-08-17T01:37:33.514+05:30  INFO 969884 --- [document-service] [           main] c.d.document.DocumentServiceApplication  : No active profile set, falling back to 1 default profile: "default"
+2026-08-17T01:37:34.002+05:30  INFO 969884 --- [document-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-17T01:37:34.035+05:30  INFO 969884 --- [document-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 27 ms. Found 9 JPA repository interfaces.
+2026-08-17T01:37:34.655+05:30  INFO 969884 --- [document-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2026-08-17T01:37:34.666+05:30  INFO 969884 --- [document-service] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-08-17T01:37:34.666+05:30  INFO 969884 --- [document-service] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.55]
+2026-08-17T01:37:34.707+05:30  INFO 969884 --- [document-service] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-08-17T01:37:34.707+05:30  INFO 969884 --- [document-service] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1155 ms
+2026-08-17T01:37:34.827+05:30 DEBUG 969884 --- [document-service] [           main] c.d.c.security.JwtAuthenticationFilter   : Filter 'jwtAuthenticationFilter' configured for use
+2026-08-17T01:37:34.827+05:30 DEBUG 969884 --- [document-service] [           main] c.d.c.logging.RequestCorrelationFilter   : Filter 'requestCorrelationFilter' configured for use
+2026-08-17T01:37:34.908+05:30  INFO 969884 --- [document-service] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-17T01:37:34.939+05:30  INFO 969884 --- [document-service] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.53.Final
+2026-08-17T01:37:34.960+05:30  INFO 969884 --- [document-service] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-08-17T01:37:35.151+05:30  INFO 969884 --- [document-service] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-17T01:37:35.173+05:30  INFO 969884 --- [document-service] [           main] com.zaxxer.hikari.HikariDataSource       : document-hikari - Starting...
+2026-08-17T01:37:35.310+05:30  INFO 969884 --- [document-service] [           main] com.zaxxer.hikari.pool.HikariPool        : document-hikari - Added connection org.postgresql.jdbc.PgConnection@2aaa89c2
+2026-08-17T01:37:35.311+05:30  INFO 969884 --- [document-service] [           main] com.zaxxer.hikari.HikariDataSource       : document-hikari - Start completed.
+2026-08-17T01:37:35.361+05:30  INFO 969884 --- [document-service] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (document-hikari)']
+	Database driver: undefined/unknown
+	Database version: 16.14
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-17T01:37:35.987+05:30  INFO 969884 --- [document-service] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-17T01:37:36.019+05:30  INFO 969884 --- [document-service] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-17T01:37:36.577+05:30  INFO 969884 --- [document-service] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-17T01:37:37.301+05:30  INFO 969884 --- [document-service] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2026-08-17T01:37:37.326+05:30  WARN 969884 --- [document-service] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d7d2ac71-6b2e-464e-ab43-a5c29e744b91
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-08-17T01:37:37.330+05:30  INFO 969884 --- [document-service] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-08-17T01:37:37.692+05:30  INFO 969884 --- [document-service] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2026-08-17T01:37:37.714+05:30  INFO 969884 --- [document-service] [           main] o.a.k.clients.consumer.ConsumerConfig    : ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.include.jmx.reporter = true
+	auto.offset.reset = earliest
+	bootstrap.servers = [localhost:29092]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-document-service-1
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = document-service
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metadata.recovery.strategy = none
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.springframework.kafka.support.serializer.JsonDeserializer
+
+2026-08-17T01:37:37.741+05:30  INFO 969884 --- [document-service] [           main] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2026-08-17T01:37:37.820+05:30  INFO 969884 --- [document-service] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.9.2
+2026-08-17T01:37:37.820+05:30  INFO 969884 --- [document-service] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: 5e9866f43ab8e7e4
+2026-08-17T01:37:37.820+05:30  INFO 969884 --- [document-service] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1786910857819
+2026-08-17T01:37:37.828+05:30  INFO 969884 --- [document-service] [           main] o.a.k.c.c.i.ClassicKafkaConsumer         : [Consumer clientId=consumer-document-service-1, groupId=document-service] Subscribed to topic(s): documind.document.indexed
+2026-08-17T01:37:37.833+05:30  INFO 969884 --- [document-service] [           main] o.a.k.clients.consumer.ConsumerConfig    : ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.include.jmx.reporter = true
+	auto.offset.reset = earliest
+	bootstrap.servers = [localhost:29092]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-document-service-2
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = document-service
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metadata.recovery.strategy = none
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.springframework.kafka.support.serializer.JsonDeserializer
+
+2026-08-17T01:37:37.833+05:30  INFO 969884 --- [document-service] [           main] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2026-08-17T01:37:37.837+05:30  INFO 969884 --- [document-service] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.9.2
+2026-08-17T01:37:37.837+05:30  INFO 969884 --- [document-service] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: 5e9866f43ab8e7e4
+2026-08-17T01:37:37.837+05:30  INFO 969884 --- [document-service] [           main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1786910857837
+2026-08-17T01:37:37.841+05:30  INFO 969884 --- [document-service] [           main] o.a.k.c.c.i.ClassicKafkaConsumer         : [Consumer clientId=consumer-document-service-2, groupId=document-service] Subscribed to topic(s): documind.document.failed
+2026-08-17T01:37:37.850+05:30  INFO 969884 --- [document-service] [           main] c.d.document.DocumentServiceApplication  : Started DocumentServiceApplication in 4.651 seconds (process running for 4.858)
+2026-08-17T01:37:37.921+05:30  INFO 969884 --- [document-service] [           main] c.d.document.demo.DemoWorkspaceSeeder    : Demo workspace already exists, skipping seeding
+2026-08-17T01:37:38.017+05:30  INFO 969884 --- [document-service] [ntainer#1-0-C-1] org.apache.kafka.clients.Metadata        : [Consumer clientId=consumer-document-service-2, groupId=document-service] Cluster ID: 5L6g3nShT-eMCtK--X86sw
+2026-08-17T01:37:38.018+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] org.apache.kafka.clients.Metadata        : [Consumer clientId=consumer-document-service-1, groupId=document-service] Cluster ID: 5L6g3nShT-eMCtK--X86sw
+2026-08-17T01:37:38.018+05:30  INFO 969884 --- [document-service] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-2, groupId=document-service] Discovered group coordinator localhost:29092 (id: 2147483646 rack: null)
+2026-08-17T01:37:38.018+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-1, groupId=document-service] Discovered group coordinator localhost:29092 (id: 2147483646 rack: null)
+2026-08-17T01:37:38.019+05:30  INFO 969884 --- [document-service] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-2, groupId=document-service] (Re-)joining group
+2026-08-17T01:37:38.019+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-1, groupId=document-service] (Re-)joining group
+2026-08-17T01:37:38.028+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-1, groupId=document-service] Request joining group due to: need to re-join with the given member-id: consumer-document-service-1-c57c2acf-346c-464d-a765-936f2a40cbc6
+2026-08-17T01:37:38.028+05:30  INFO 969884 --- [document-service] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-2, groupId=document-service] Request joining group due to: need to re-join with the given member-id: consumer-document-service-2-93b5813e-c55a-4c22-9402-7a69b2b5211e
+2026-08-17T01:37:38.028+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-1, groupId=document-service] (Re-)joining group
+2026-08-17T01:37:38.028+05:30  INFO 969884 --- [document-service] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-2, groupId=document-service] (Re-)joining group
+2026-08-17T01:37:38.029+05:30  INFO 969884 --- [document-service] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-2, groupId=document-service] Successfully joined group with generation Generation{generationId=1, memberId='consumer-document-service-2-93b5813e-c55a-4c22-9402-7a69b2b5211e', protocol='range'}
+2026-08-17T01:37:38.029+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-1, groupId=document-service] Successfully joined group with generation Generation{generationId=1, memberId='consumer-document-service-1-c57c2acf-346c-464d-a765-936f2a40cbc6', protocol='range'}
+2026-08-17T01:37:38.035+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-1, groupId=document-service] Finished assignment for group at generation 1: {consumer-document-service-1-c57c2acf-346c-464d-a765-936f2a40cbc6=Assignment(partitions=[documind.document.indexed-0]), consumer-document-service-2-93b5813e-c55a-4c22-9402-7a69b2b5211e=Assignment(partitions=[documind.document.failed-0])}
+2026-08-17T01:37:38.038+05:30  INFO 969884 --- [document-service] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-2, groupId=document-service] Successfully synced group in generation Generation{generationId=1, memberId='consumer-document-service-2-93b5813e-c55a-4c22-9402-7a69b2b5211e', protocol='range'}
+2026-08-17T01:37:38.038+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-1, groupId=document-service] Successfully synced group in generation Generation{generationId=1, memberId='consumer-document-service-1-c57c2acf-346c-464d-a765-936f2a40cbc6', protocol='range'}
+2026-08-17T01:37:38.038+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-1, groupId=document-service] Notifying assignor about the new Assignment(partitions=[documind.document.indexed-0])
+2026-08-17T01:37:38.038+05:30  INFO 969884 --- [document-service] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-2, groupId=document-service] Notifying assignor about the new Assignment(partitions=[documind.document.failed-0])
+2026-08-17T01:37:38.039+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-document-service-1, groupId=document-service] Adding newly assigned partitions: documind.document.indexed-0
+2026-08-17T01:37:38.039+05:30  INFO 969884 --- [document-service] [ntainer#1-0-C-1] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-document-service-2, groupId=document-service] Adding newly assigned partitions: documind.document.failed-0
+2026-08-17T01:37:38.043+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-1, groupId=document-service] Found no committed offset for partition documind.document.indexed-0
+2026-08-17T01:37:38.043+05:30  INFO 969884 --- [document-service] [ntainer#1-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-document-service-2, groupId=document-service] Found no committed offset for partition documind.document.failed-0
+2026-08-17T01:37:38.046+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] o.a.k.c.c.internals.SubscriptionState    : [Consumer clientId=consumer-document-service-1, groupId=document-service] Resetting offset for partition documind.document.indexed-0 to position FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:29092 (id: 1 rack: null)], epoch=2}}.
+2026-08-17T01:37:38.046+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : document-service: partitions assigned: [documind.document.indexed-0]
+2026-08-17T01:37:38.047+05:30  INFO 969884 --- [document-service] [ntainer#1-0-C-1] o.a.k.c.c.internals.SubscriptionState    : [Consumer clientId=consumer-document-service-2, groupId=document-service] Resetting offset for partition documind.document.failed-0 to position FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:29092 (id: 1 rack: null)], epoch=2}}.
+2026-08-17T01:37:38.047+05:30  INFO 969884 --- [document-service] [ntainer#1-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : document-service: partitions assigned: [documind.document.failed-0]
+2026-08-17T01:37:39.273+05:30  INFO 969884 --- [document-service] [nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-17T01:37:39.273+05:30  INFO 969884 --- [document-service] [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-08-17T01:37:39.274+05:30  INFO 969884 --- [document-service] [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-08-17T01:37:40.873+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-2] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:37:40.874+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-2] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(329331060<open>)] for JPA transaction
+2026-08-17T01:37:40.876+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-2] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@5a2b317a]
+2026-08-17T01:37:40.892+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-2] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:40.893+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-2] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(329331060<open>)]
+2026-08-17T01:37:40.894+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-2] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(329331060<open>)] after transaction
+2026-08-17T01:37:40.897+05:30  WARN 969884 --- [document-service] [nio-8081-exec-2] ration$PageModule$WarningLoggingModifier : Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-08-17T01:37:40.908+05:30  INFO 969884 --- [document-service] [nio-8081-exec-2] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:37:44.821+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:37:44.821+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(1480378795<open>)] for JPA transaction
+2026-08-17T01:37:44.822+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@5c034674]
+2026-08-17T01:37:44.824+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:44.824+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(1480378795<open>)]
+2026-08-17T01:37:44.824+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(1480378795<open>)] after transaction
+2026-08-17T01:37:44.826+05:30  INFO 969884 --- [document-service] [nio-8081-exec-3] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:37:48.672+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-4] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:37:48.672+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-4] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(514484983<open>)] for JPA transaction
+2026-08-17T01:37:48.672+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-4] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@1a95edfa]
+2026-08-17T01:37:48.674+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-4] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:48.674+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-4] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(514484983<open>)]
+2026-08-17T01:37:48.675+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-4] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(514484983<open>)] after transaction
+2026-08-17T01:37:48.676+05:30  INFO 969884 --- [document-service] [nio-8081-exec-4] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:37:48.685+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-5] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:37:48.685+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-5] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(60657514<open>)] for JPA transaction
+2026-08-17T01:37:48.686+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-5] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@7a20bc1]
+2026-08-17T01:37:48.688+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-5] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:48.688+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-5] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(60657514<open>)]
+2026-08-17T01:37:48.688+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-5] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(60657514<open>)] after transaction
+2026-08-17T01:37:48.689+05:30  INFO 969884 --- [document-service] [nio-8081-exec-5] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:37:53.429+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-6] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:37:53.429+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-6] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(1214414508<open>)] for JPA transaction
+2026-08-17T01:37:53.429+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-6] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@4c5de378]
+2026-08-17T01:37:53.431+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-6] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:53.432+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-6] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(1214414508<open>)]
+2026-08-17T01:37:53.432+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-6] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(1214414508<open>)] after transaction
+2026-08-17T01:37:53.433+05:30  INFO 969884 --- [document-service] [nio-8081-exec-6] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:37:55.352+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.upload]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2026-08-17T01:37:55.352+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(1358672871<open>)] for JPA transaction
+2026-08-17T01:37:55.352+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@36cf7822]
+2026-08-17T01:37:55.384+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Found thread-bound EntityManager [SessionImpl(1358672871<open>)] for JPA transaction
+2026-08-17T01:37:55.384+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Participating in existing transaction
+2026-08-17T01:37:55.406+05:30  INFO 969884 --- [document-service] [nio-8081-exec-7] o.a.k.clients.producer.ProducerConfig    : ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [localhost:29092]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = document-service-producer-1
+	compression.gzip.level = -1
+	compression.lz4.level = 9
+	compression.type = none
+	compression.zstd.level = 3
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	enable.metrics.push = true
+	interceptor.classes = []
+	key.serializer = class org.apache.kafka.common.serialization.StringSerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metadata.recovery.strategy = none
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 60000
+	transactional.id = null
+	value.serializer = class org.springframework.kafka.support.serializer.JsonSerializer
+
+2026-08-17T01:37:55.406+05:30  INFO 969884 --- [document-service] [nio-8081-exec-7] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2026-08-17T01:37:55.413+05:30  INFO 969884 --- [document-service] [nio-8081-exec-7] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=document-service-producer-1] Instantiated an idempotent producer.
+2026-08-17T01:37:55.421+05:30  INFO 969884 --- [document-service] [nio-8081-exec-7] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.9.2
+2026-08-17T01:37:55.421+05:30  INFO 969884 --- [document-service] [nio-8081-exec-7] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: 5e9866f43ab8e7e4
+2026-08-17T01:37:55.421+05:30  INFO 969884 --- [document-service] [nio-8081-exec-7] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1786910875421
+2026-08-17T01:37:55.424+05:30  INFO 969884 --- [document-service] [vice-producer-1] org.apache.kafka.clients.Metadata        : [Producer clientId=document-service-producer-1] Cluster ID: 5L6g3nShT-eMCtK--X86sw
+2026-08-17T01:37:55.532+05:30  INFO 969884 --- [document-service] [vice-producer-1] o.a.k.c.p.internals.TransactionManager   : [Producer clientId=document-service-producer-1] ProducerId set to 1000 with epoch 0
+2026-08-17T01:37:55.541+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:55.541+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(1358672871<open>)]
+2026-08-17T01:37:55.554+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(1358672871<open>)] after transaction
+2026-08-17T01:37:55.561+05:30  INFO 969884 --- [document-service] [nio-8081-exec-7] c.d.c.logging.RequestCorrelationFilter   : POST /api/documents/upload responded 202
+2026-08-17T01:37:55.571+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-8] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:37:55.572+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-8] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(214782842<open>)] for JPA transaction
+2026-08-17T01:37:55.572+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-8] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@8f2d63b]
+2026-08-17T01:37:55.575+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-8] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:55.575+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-8] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(214782842<open>)]
+2026-08-17T01:37:55.575+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-8] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(214782842<open>)] after transaction
+2026-08-17T01:37:55.577+05:30  INFO 969884 --- [document-service] [nio-8081-exec-8] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:37:57.266+05:30 DEBUG 969884 --- [document-service] [ntainer#0-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:37:57.266+05:30 DEBUG 969884 --- [document-service] [ntainer#0-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(2122280915<open>)] for JPA transaction
+2026-08-17T01:37:57.267+05:30 DEBUG 969884 --- [document-service] [ntainer#0-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@1f4cbc8]
+2026-08-17T01:37:57.271+05:30 DEBUG 969884 --- [document-service] [ntainer#0-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:57.271+05:30 DEBUG 969884 --- [document-service] [ntainer#0-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(2122280915<open>)]
+2026-08-17T01:37:57.271+05:30 DEBUG 969884 --- [document-service] [ntainer#0-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(2122280915<open>)] after transaction
+2026-08-17T01:37:57.271+05:30 DEBUG 969884 --- [document-service] [ntainer#0-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2026-08-17T01:37:57.271+05:30 DEBUG 969884 --- [document-service] [ntainer#0-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(1013094950<open>)] for JPA transaction
+2026-08-17T01:37:57.271+05:30 DEBUG 969884 --- [document-service] [ntainer#0-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@27526ce9]
+2026-08-17T01:37:57.273+05:30 DEBUG 969884 --- [document-service] [ntainer#0-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:57.273+05:30 DEBUG 969884 --- [document-service] [ntainer#0-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(1013094950<open>)]
+2026-08-17T01:37:57.273+05:30 DEBUG 969884 --- [document-service] [ntainer#0-0-C-1] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(1013094950<open>)] after transaction
+2026-08-17T01:37:57.273+05:30  INFO 969884 --- [document-service] [ntainer#0-0-C-1] c.d.d.ingestion.IngestionResultListener  : Document 2d164b0b-994f-4f1c-b9bf-7079b0dfb5e9 indexed with 1 chunks
+2026-08-17T01:37:57.428+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-9] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:37:57.429+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-9] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(1961546533<open>)] for JPA transaction
+2026-08-17T01:37:57.429+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-9] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@70d54960]
+2026-08-17T01:37:57.431+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-9] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:37:57.431+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-9] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(1961546533<open>)]
+2026-08-17T01:37:57.431+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-9] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(1961546533<open>)] after transaction
+2026-08-17T01:37:57.432+05:30  INFO 969884 --- [document-service] [nio-8081-exec-9] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:38:01.295+05:30 DEBUG 969884 --- [document-service] [io-8081-exec-10] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:38:01.296+05:30 DEBUG 969884 --- [document-service] [io-8081-exec-10] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(475408995<open>)] for JPA transaction
+2026-08-17T01:38:01.296+05:30 DEBUG 969884 --- [document-service] [io-8081-exec-10] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@1869ad31]
+2026-08-17T01:38:01.298+05:30 DEBUG 969884 --- [document-service] [io-8081-exec-10] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:38:01.298+05:30 DEBUG 969884 --- [document-service] [io-8081-exec-10] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(475408995<open>)]
+2026-08-17T01:38:01.298+05:30 DEBUG 969884 --- [document-service] [io-8081-exec-10] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(475408995<open>)] after transaction
+2026-08-17T01:38:01.299+05:30  INFO 969884 --- [document-service] [io-8081-exec-10] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:38:05.429+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-1] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:38:05.429+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-1] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(1609321953<open>)] for JPA transaction
+2026-08-17T01:38:05.429+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-1] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@64e5a91e]
+2026-08-17T01:38:05.431+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-1] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:38:05.431+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-1] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(1609321953<open>)]
+2026-08-17T01:38:05.431+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-1] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(1609321953<open>)] after transaction
+2026-08-17T01:38:05.432+05:30  INFO 969884 --- [document-service] [nio-8081-exec-1] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:38:09.014+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-2] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:38:09.015+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-2] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(1860173202<open>)] for JPA transaction
+2026-08-17T01:38:09.015+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-2] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@70027655]
+2026-08-17T01:38:09.018+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-2] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:38:09.018+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-2] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(1860173202<open>)]
+2026-08-17T01:38:09.018+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-2] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(1860173202<open>)] after transaction
+2026-08-17T01:38:09.020+05:30  INFO 969884 --- [document-service] [nio-8081-exec-2] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:38:09.029+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:38:09.029+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(968954870<open>)] for JPA transaction
+2026-08-17T01:38:09.029+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@24f49110]
+2026-08-17T01:38:09.031+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:38:09.032+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(968954870<open>)]
+2026-08-17T01:38:09.032+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-3] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(968954870<open>)] after transaction
+2026-08-17T01:38:09.033+05:30  INFO 969884 --- [document-service] [nio-8081-exec-3] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:40:00.947+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-5] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:40:00.947+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-5] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(1468160510<open>)] for JPA transaction
+2026-08-17T01:40:00.948+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-5] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@2019051c]
+2026-08-17T01:40:00.951+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-5] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:40:00.951+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-5] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(1468160510<open>)]
+2026-08-17T01:40:00.952+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-5] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(1468160510<open>)] after transaction
+2026-08-17T01:40:00.954+05:30  INFO 969884 --- [document-service] [nio-8081-exec-5] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:40:00.964+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-6] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:40:00.964+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-6] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(764810717<open>)] for JPA transaction
+2026-08-17T01:40:00.965+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-6] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@3c7ac00d]
+2026-08-17T01:40:00.967+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-6] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:40:00.967+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-6] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(764810717<open>)]
+2026-08-17T01:40:00.967+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-6] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(764810717<open>)] after transaction
+2026-08-17T01:40:00.969+05:30  INFO 969884 --- [document-service] [nio-8081-exec-6] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
+2026-08-17T01:40:04.930+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Creating new transaction with name [com.documind.document.upload.DocumentUploadService.listDocuments]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2026-08-17T01:40:04.930+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Opened new EntityManager [SessionImpl(1684101330<open>)] for JPA transaction
+2026-08-17T01:40:04.930+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@615830c2]
+2026-08-17T01:40:04.932+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Initiating transaction commit
+2026-08-17T01:40:04.932+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Committing JPA transaction on EntityManager [SessionImpl(1684101330<open>)]
+2026-08-17T01:40:04.932+05:30 DEBUG 969884 --- [document-service] [nio-8081-exec-7] .d.c.t.WorkspaceScopedTransactionManager : Closing JPA EntityManager [SessionImpl(1684101330<open>)] after transaction
+2026-08-17T01:40:04.933+05:30  INFO 969884 --- [document-service] [nio-8081-exec-7] c.d.c.logging.RequestCorrelationFilter   : GET /api/documents responded 200
